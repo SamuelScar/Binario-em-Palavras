@@ -51,26 +51,26 @@
         <!-- Help Session -->
         <div class="row g-4 mb-4">
           
-          <!-- Dictionary -->
+            <!-- Dictionary -->
             <div class="col-md-6 d-grid mx-auto">
-              <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#dictionaryCollapse">
+              <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#dictionaryCollapse" aria-expanded="false" aria-controls="dictionaryCollapse">
                 Dicionário
               </button>
-              <div id="dictionaryCollapse" class="collapse mt-3">
+              <div id="dictionaryCollapse" class="collapse mt-3" data-bs-parent=".row">
                 <input id="dictionarySearch" type="text" class="form-control mb-2" placeholder="Pesquisar no dicionário">
                 <div id="dictionary" class="list-group overflow-auto" style="max-height: 150px;"></div>
               </div>
             </div>
 
-            <!-- Phrases -->
-            <div class="col-md-6 d-grid mx-auto">
-              <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#phrasesCollapse">
-                Frases/Palavras
-              </button>
-              <div id="phrasesCollapse" class="collapse mt-3">
-                <div id="phrases" class="list-group overflow-auto" style="max-height: 150px;"></div>
-              </div>
+          <!-- Phrases -->
+          <div class="col-md-6 d-grid mx-auto">
+            <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#phrasesCollapse" aria-expanded="false" aria-controls="phrasesCollapse">
+              Frases/Palavras
+            </button>
+            <div id="phrasesCollapse" class="collapse mt-3">
+              <div id="phrases" class="list-group overflow-auto" style="max-height: 150px;"></div>
             </div>
+          </div>
 
         </div>
       </div>
