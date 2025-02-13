@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binário ↔ Texto Humano</title>
+
+  <style>
+    #mainContent.blurred {
+      filter: blur(15px);
+      pointer-events: none;
+    }
+  </style>
+
+  <script defer type="module" src="./index.js"></script>
+</head>
+
+<body class="bg-light p-3">
+
+  <div id="mainContent">
+    <div class="container-fluid d-flex justify-content-between align-items-stretch flex-wrap vh-100">
+      <div class="bg-white shadow-lg p-5 rounded flex-grow-1 d-flex flex-column" style="width: 100%; max-width: 72%; height: auto; min-height: 100vh;">
+
+        <div class="row g-4 mb-4">
+          <h1 class="text-center fw-bold mb-4">Conversor Binário ↔ Texto Humano</h1>
+          
+          <button id="clearButton" class="btn btn-primary btn-lg w-100">
+            Limpar
+          </button>
+        </div>
+
+        <!-- Input session -->
+        <div class="row g-4 mb-4">
+          
+          <!-- Brasilian text -->
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Texto PT-BR:</label>
+            <textarea id="textInput" placeholder="Digite um texto aqui" class="form-control fs-2" rows="4"></textarea>
+          </div>
+
+          <!-- Binarie text -->
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Binário:</label>
+            <textarea id="binaryInput" placeholder="Digite um codigo binario aqui" class="form-control fs-2" rows="4"></textarea>
+          </div>
+        </div>
+
+        <hr class="border border-secondary border-1 opacity-50">
+        <h1 class="text-center fw-bold mb-4">Ferramentas</h1>
+
+        <!-- Help Session -->
+        <div class="row g-4 mb-4">
+          
+          <!-- Dictionary -->
+            <div class="col-md-6 d-grid mx-auto">
+              <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#dictionaryCollapse">
+                Dicionário
+              </button>
+              <div id="dictionaryCollapse" class="collapse mt-3">
+                <input id="dictionarySearch" type="text" class="form-control mb-2" placeholder="Pesquisar no dicionário">
+                <div id="dictionary" class="list-group overflow-auto" style="max-height: 150px;"></div>
+              </div>
+            </div>
+
+            <!-- Phrases -->
+            <div class="col-md-6 d-grid mx-auto">
+              <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#phrasesCollapse">
+                Frases/Palavras
+              </button>
+              <div id="phrasesCollapse" class="collapse mt-3">
+                <div id="phrases" class="list-group overflow-auto" style="max-height: 150px;"></div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+
+      <div class="bg-white shadow-lg p-4 rounded d-flex flex-column" style="width: 320px; height: auto; min-height: 100%; max-height: 80vh;">
+        <h4 class="fw-bold text-center">Trechos biblicos</h4>
+          <ul id="biblicalPhrasesContainer" class="list-group w-100 overflow-auto">
+          </ul>
+      </div>
+      
+    </div>
+  </div>
+</body>
+</html>
