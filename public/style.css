@@ -26,10 +26,20 @@
     border-color: #9c0000 !important;
   }
   
+  .btn-custom-secondary {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: white !important;
+  }
+  .btn-custom-secondary:hover {
+    background-color: #a67c52 !important;
+    border-color: #a67c52 !important;
+  }
+
   /* Campos de entrada */
   .input-custom {
     background-color: var(--input-background) !important;
-    color: var(--text-color) !important;
+    color: #4c0000 !important;
     border: 1px solid var(--border-color) !important;
   }
   

@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
   let icon = "info";
   let title = "Ciência e Fé: Explorando o Mundo Digital Através do Binário"
-  let message = `Este conversor é uma ferramenta educativa do projeto Ciência e Fé da Igreja Cristã Maranata (ICM). Seu objetivo é demonstrar, de forma simples e intuitiva, como os computadores interpretam e processam informações através do sistema binário. Com ele, os usuários podem visualizar como textos comuns são convertidos em sequências de zeros e uns, facilitando a compreensão do funcionamento dos sistemas digitais.
-                Este é um protótipo em desenvolvimento e pode conter bugs. A iniciativa busca promover o aprendizado sobre tecnologia e seus princípios, alinhando conhecimento científico com valores educativos acessíveis a todos.`;
-  
+  let message = `Este conversor é uma ferramenta educativa desenvolvida para demonstrar, de forma simples e intuitiva, como os computadores interpretam e processam informações através do sistema binário. Com ele, os usuários podem visualizar como textos comuns são convertidos em sequências de zeros e uns, facilitando a compreensão do funcionamento dos sistemas digitais.  
+                Este é um protótipo em desenvolvimento e pode conter bugs. A iniciativa busca promover o aprendizado sobre tecnologia e seus princípios, tornando o conhecimento acessível a todos.`;
+
   showAlert(title, message, icon, true);
 });
 
@@ -72,7 +72,7 @@ dictionarySearch.addEventListener("input", () => {
 
   dictionaryEl.innerHTML = filtered
     .map(([char, bin]) => 
-      `<button type="button" class="btn-custom-secondary list-group-item list-group-item-action" onclick="addToTextInput('${char}')">${char}: ${bin}</button>`
+      `<button type="button" class="fs-4 fw-bold text-center btn-custom-secondary list-group-item list-group-item-action" onclick="addToTextInput('${char}')">${char} &nbsp;&nbsp;⇒&nbsp;&nbsp; ${bin}</button>`
     )
     .join("");
 });
@@ -87,7 +87,7 @@ window.addToTextInput = function(char) {
 // Popula frases prontas no campo de frases
 phrases.forEach((phrase) => {
   const li = document.createElement("button");
-  li.classList.add("list-group-item", "list-group-item-action");
+  li.classList.add("list-group-item", "list-group-item-action", "btn-custom-secondary", "text-center", "fw-bold", "fs-4");
   li.textContent = phrase;
 
   li.addEventListener("click", () => {
