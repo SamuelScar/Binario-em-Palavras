@@ -1,0 +1,173 @@
+/* Estilo Hacker - Matrix */
+
+/* Fundo escuro e neon verde */
+body {
+  background-color: #0d0d0d !important;
+  color: #00ff00 !important;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Animação no título para efeito de "digitação" */
+@keyframes typing {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+h1 {
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+  animation: typing 2s steps(20, end);
+}
+
+/* Botões com efeito neon */
+.btn-custom-primary {
+  background-color: #008000 !important;
+  border: 1px solid #00ff00 !important;
+  color: #00ff00 !important;
+  text-shadow: 0 0 5px #00ff00;
+  transition: all 0.3s ease-in-out;
+}
+.btn-custom-primary:hover {
+  background-color: #00ff00 !important;
+  color: #000 !important;
+  text-shadow: none;
+}
+
+/* Campos de entrada estilo terminal */
+.input-custom {
+  background-color: #000 !important;
+  color: #00ff00 !important;
+  border: 1px solid #00ff00 !important;
+}
+
+/* Efeito de brilho nos botões ao passar o mouse */
+button:hover {
+  box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+}
+
+/* Lista estilizada */
+.list-group-item {
+  background-color: #0d0d0d !important;
+  border: 1px solid #00ff00 !important;
+  color: #00ff00 !important;
+}
+
+/* Ajuste no container das frases bíblicas */
+.card-custom {
+  background-color: #111 !important;
+  border: 1px solid #00ff00 !important;
+}
+
+/* Efeito sutil ao passar o mouse nos itens */
+.list-group-item:hover {
+  background-color: #00ff00 !important;
+  color: #000 !important;
+}
+
+
+
+
+
+
+
+
+/* Importa fonte estilo terminal */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+/* Define a fonte principal do site */
+body {
+  font-family: 'Share Tech Mono', monospace;
+  background: #000;
+  color: limegreen;
+  cursor: crosshair;
+}
+
+/* Fundo animado estilo Matrix Rain */
+@keyframes rain {
+  0% { opacity: 0; transform: translateY(-100vh); }
+  100% { opacity: 1; transform: translateY(100vh); }
+}
+
+.matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.matrix-rain::before {
+  content: "0101100101011010101010101100101101010010110";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  color: limegreen;
+  text-shadow: 0 0 10px limegreen;
+  opacity: 0.1;
+  animation: rain 3s infinite linear;
+}
+
+/* Efeito de glitch no título */
+@keyframes glitch {
+  0% { text-shadow: 2px 2px 0 lime, -2px -2px 0 green; }
+  20% { text-shadow: -2px -2px 0 lime, 2px 2px 0 green; }
+  40% { text-shadow: 2px -2px 0 lime, -2px 2px 0 green; }
+  60% { text-shadow: -2px 2px 0 lime, 2px -2px 0 green; }
+  80% { text-shadow: 2px 2px 0 lime, -2px -2px 0 green; }
+  100% { text-shadow: -2px -2px 0 lime, 2px 2px 0 green; }
+}
+
+h1 {
+  animation: glitch 0.5s infinite alternate;
+  color: limegreen;
+}
+
+/* Inputs escuros com efeito hacker */
+.input-custom {
+  background-color: black !important;
+  color: limegreen !important;
+  border: 1px solid limegreen !important;
+}
+
+/* Cursor piscante nos inputs */
+.input-custom {
+  border-right: 2px solid limegreen;
+  animation: cursorBlink 0.8s steps(2) infinite;
+}
+
+@keyframes cursorBlink {
+  50% { border-color: transparent; }
+}
+
+/* Efeito de hover brilhante nos botões */
+.btn-custom-primary {
+  background: #008000 !important;
+  border: 1px solid limegreen !important;
+  color: white !important;
+  transition: 0.3s;
+}
+
+.btn-custom-primary:hover {
+  box-shadow: 0 0 20px lime;
+  text-shadow: 0 0 5px lime;
+  background: #00cc00 !important;
+}
+
+/* Estilo das listas estilo terminal */
+.list-group-item {
+  background: black !important;
+  color: limegreen !important;
+  border: 1px solid limegreen !important;
+}
+
+/* Melhorias para manter o layout imersivo */
+.card-custom {
+  background: black !important;
+  border: 1px solid limegreen !important;
+  box-shadow: 0 0 10px limegreen;
+}

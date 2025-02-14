@@ -72,7 +72,7 @@ dictionarySearch.addEventListener("input", () => {
 
   dictionaryEl.innerHTML = filtered
     .map(([char, bin]) => 
-      `<button type="button" class="list-group-item list-group-item-action" onclick="addToTextInput('${char}')">${char}: ${bin}</button>`
+      `<button type="button" class="btn-custom-secondary list-group-item list-group-item-action" onclick="addToTextInput('${char}')">${char}: ${bin}</button>`
     )
     .join("");
 });

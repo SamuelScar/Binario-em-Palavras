@@ -1,0 +1,61 @@
+/* Paleta de Cores Ajustada */
+:root {
+  --primary-color: #7b0000; /* Vermelho escuro */
+  --secondary-color: #a67c52; /* Marrom dourado */
+  --background-color: #f5e6c8; /* Bege claro suavizado */
+  --input-background: #f0e0b8; /* Tom levemente mais escuro que o fundo */
+  --border-color: #8b5e3b; /* Marrom suave */
+  --text-color: #4c3318; /* Marrom escuro para legibilidade */
+  --card-background: #d7b98e; /* Bege médio para cartões */
+}
+
+/* Fundo principal */
+.bg-custom-page {
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Botões */
+.btn-custom-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
+}
+.btn-custom-primary:hover {
+  background-color: #9c0000 !important;
+  border-color: #9c0000 !important;
+}
+
+/* Campos de entrada */
+.input-custom {
+  background-color: var(--input-background) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Seção de cartões (Trechos Bíblicos) */
+.card-custom {
+  background-color: var(--card-background) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Lista */
+.list-group-item-custom {
+  background-color: var(--input-background) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+.list-group-item-custom:hover {
+  background-color: var(--card-background) !important;
+}
+
+/* Títulos */
+h1, h4 {
+  color: var(--primary-color) !important;
+}
+
+/* Bordas arredondadas */
+button, .form-control, .list-group-item {
+  border-radius: 8px !important;
+}
