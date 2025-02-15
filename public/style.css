@@ -12,7 +12,7 @@
   /* Fundo principal */
   .bg-custom-page {
     background-color: var(--background-color) !important;
-    color: var(--text-color) !important;
+    color: var(--text-color);
   }
   
   /* Botões */
@@ -70,3 +70,8 @@
     border-radius: 8px !important;
   }
   
+  .texto-biblico{
+    font-style: italic;
+    font-weight: bold;
+    color: #000000;
+  }
