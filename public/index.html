@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <title>Binário em Palavras</title>
+  
 
   <style>
     #mainContent.blurred {
@@ -12,7 +13,16 @@
       pointer-events: none;
     }
   </style>
-
+  
+  <script>
+    if (window.location.hostname.includes("vercel.app")) {
+      const script = document.createElement("script");
+      script.src = "/_vercel/insights/script.js";
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  </script>
+  
   <script defer type="module" src="./index.js"></script>
 </head>
 
