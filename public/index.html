@@ -23,8 +23,11 @@
       <h1 class="text-center fw-bold">Binário em Palavras</h1>
       
       <div class="d-grid">
-        <button class="btn btn-custom-primary mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#lenguageStudy" aria-expanded="false" aria-controls="lenguageStudy">
-          <h2 class="text-center">Linguagem Binária e a Bíblia</h2>
+        <button class="btn btn-custom-primary btn-pulsante mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#lenguageStudy" aria-expanded="false" aria-controls="lenguageStudy">
+          <h2 class="text-center">
+            Linguagem Binária e a Bíblia
+            <i class="bi bi-arrow-down-up"></i>
+          </h2>
         </button>
       </div>
   
@@ -87,12 +90,17 @@
   </div>
   
       <div class="shadow-lg p-5 rounded flex-grow-1 d-flex flex-column" >
-
+        
         <div class="row g-4 mb-4">
           <h1 class="text-center fw-bold mb-4">Texto ↔ Binário</h1>
+          <h3 class="text-secondary">Sobre a Ferramenta</h3>
+          <p>
+            O <strong>Conversor Binário ↔ Texto permite</strong> transformar texto em código binário e vice-versa de forma simples e rápida. Com um design intuitivo, oferece suporte a dicionário de caracteres e frases para facilitar o aprendizado e uso da linguagem binária.
+          </p>
           
           <button id="clearButton" class="btn btn-custom-primary btn-lg w-100">
-            Limpar
+            <strong>Limpar</strong>
+            <i class="bi bi-stars"></i>
           </button>
         </div>
 
@@ -113,7 +121,7 @@
         </div>
 
         <hr class="border border-danger-subtle border-1 opacity-50">
-        <h2 class="text-center fw-bold mb-4">Ferramentas</h2>
+        <h2 class="text-center fw-bold mb-4">Ferramentas <i class="bi bi-tools"></i></h2>
 
         <!-- Help Session -->
         <div class="row g-4 mb-4">
@@ -122,6 +130,7 @@
             <div class="col-md-6 d-grid mx-auto">
               <button class="btn btn-custom-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#dictionaryCollapse" aria-expanded="false" aria-controls="dictionaryCollapse">
                 Dicionário
+              <i class="bi bi-book"></i>
               </button>
               <div id="dictionaryCollapse" class="collapse mt-3" data-bs-parent=".row">
                 <input id="dictionarySearch" type="text" class="form-control mb-2" placeholder="Pesquisar no dicionário">
@@ -133,6 +142,7 @@
           <div class="col-md-6 d-grid mx-auto">
             <button class="btn btn-custom-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#phrasesCollapse" aria-expanded="false" aria-controls="phrasesCollapse">
               Frases/Palavras
+            <i class="bi bi-alphabet-uppercase"></i>
             </button>
             <div id="phrasesCollapse" class="collapse mt-3">
               <div id="phrases" class="list-group overflow-auto" style="max-height: 450px;"></div>

@@ -124,6 +124,10 @@ if (biblicalPhrasesContainer) {
   });
 }
 
+document.querySelector(".btn-pulsante").addEventListener("click", function() {
+  this.classList.remove("btn-pulsante");
+});
+
 function showAlert(title, text, icon = "info", backgroud = false) {
 
   if(backgroud){

@@ -1,4 +1,6 @@
-/* Paleta de Cores Ajustada */
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+
 :root {
     --primary-color: #7b0000; /* Vermelho escuro */
     --secondary-color: #a67c52; /* Marrom dourado */
@@ -75,3 +77,23 @@
     font-weight: bold;
     color: #000000;
   }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 0 07px rgba(255, 0, 0, 0.8);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+  }
+  
+  .btn-pulsante {
+    animation: pulse 1.5s infinite;
+  }
+  
