@@ -1,7 +1,7 @@
 import { phrases, dictionary, biblicalPhrases } from "./phrases.js";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import './style.css'; // Garante que seu CSS customizado também é carregado
+import './styles/theme-icm.css';
 
 import Swal from 'sweetalert2';
 
@@ -13,6 +13,13 @@ const dictionarySearch = document.getElementById("dictionarySearch");
 const phrasesEl = document.getElementById("phrases");
 const clearButton = document.getElementById("clearButton");
 const biblicalPhrasesContainer = document.getElementById("biblicalPhrasesContainer");
+const themeLink = document.getElementById("themeStylesheet");
+const container = document.getElementById("theme-buttons");
+const themes = [
+  { name: "Tema Icm", file: "theme-icm.css", class: "btn-outline-primary" },
+  { name: "Tema One", file: "theme-one.css", class: "btn-outline-dark" },
+  { name: "Tema Matrix", file: "theme-matrix.css", class: "btn-outline-success" }
+];
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -155,3 +162,34 @@ function showAlert(title, text, icon = "info", backgroud = false) {
     });
   }
 }
+
+window.changeTheme = function changeTheme(newTheme) {
+  
+  if (themeLink) {
+    themeLink.href = `styles/${newTheme}`;
+  } else {
+    console.error("Elemento <link> para tema não encontrado!");
+  }
+
+  // Salvar no localStorage para manter a preferência do usuário
+  localStorage.setItem("selectedTheme", themeLink);
+};
+
+// Aplicar o tema salvo ao carregar a página
+document.addEventListener("DOMContentLoaded", function () {
+  const savedTheme = localStorage.getItem("selectedTheme");
+  if (savedTheme) {
+    changeTheme(savedTheme);
+  }
+});
+
+themes.forEach(theme => {
+  const button = document.createElement("button");
+  button.className = `btn ${theme.class} w-100 mb-2`; 
+  button.textContent = theme.name; 
+  button.onclick = () => changeTheme(theme.file);
+
+  container.appendChild(button);
+});
+
+
