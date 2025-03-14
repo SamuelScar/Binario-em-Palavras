@@ -1,9 +1,9 @@
 import { phrases, dictionary, biblicalPhrases } from "./phrases.js";
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import './styles/theme-icm.css';
+import './styles/themes.css';
 
-import Swal from 'sweetalert2';
 
 // Seleciona os elementos da página
 const binaryInput = document.getElementById("binaryInput");
@@ -13,17 +13,29 @@ const dictionarySearch = document.getElementById("dictionarySearch");
 const phrasesEl = document.getElementById("phrases");
 const clearButton = document.getElementById("clearButton");
 const biblicalPhrasesContainer = document.getElementById("biblicalPhrasesContainer");
-const themeLink = document.getElementById("themeStylesheet");
 const container = document.getElementById("theme-buttons");
+// const savedTheme = localStorage.getItem("selectedTheme") || "theme-icm";
+
 const themes = [
-  { name: "Tema Icm", file: "theme-icm.css", class: "btn-outline-primary" },
-  { name: "Tema One", file: "theme-one.css", class: "btn-outline-dark" },
-  { name: "Tema Matrix", file: "theme-matrix.css", class: "btn-outline-success" }
+  { name: "Tema Icm", class: "theme-icm", btnClass: "btn-outline-primary" },
+  { name: "Tema One", class: "theme-one", btnClass: "btn-outline-dark" },
+  { name: "Tema Matrix", class: "theme-matrix", btnClass: "btn-outline-success" }
 ];
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  
+ 
+  if (container && container.childElementCount === 0) {
+    themes.forEach(theme => {
+      const button = document.createElement("button");
+      button.className = `btn ${theme.btnClass} w-100 mb-2`;
+      button.textContent = theme.name;
+      button.onclick = () => changeTheme(theme.class);
+      console.log(`Botão ${theme.name} clicado, aplicando: ${theme.class}`);
+      container.appendChild(button);
+    });
+  }
+
   let icon = "info";
   let title = "Ciência e Fé: Explorando o Mundo Digital Através do Binário"
   let message = `Este conversor é uma ferramenta educativa desenvolvida para demonstrar, de forma simples e intuitiva, como os computadores interpretam e processam informações através do sistema binário. Com ele, os usuários podem visualizar como textos comuns são convertidos em sequências de zeros e uns, facilitando a compreensão do funcionamento dos sistemas digitais.  
@@ -163,33 +175,30 @@ function showAlert(title, text, icon = "info", backgroud = false) {
   }
 }
 
-window.changeTheme = function changeTheme(newTheme) {
-  
-  if (themeLink) {
-    themeLink.href = `styles/${newTheme}`;
-  } else {
-    console.error("Elemento <link> para tema não encontrado!");
-  }
+function changeTheme(themeClass) {
+  console.log(`Tentando aplicar o tema: ${themeClass}`);
+  console.log("Classes no body antes:", document.body.classList);
 
-  // Salvar no localStorage para manter a preferência do usuário
-  localStorage.setItem("selectedTheme", themeLink);
-};
+  // Remove todas as classes de tema anteriores
+  document.body.classList.forEach(cls => {
+    if (cls.startsWith("theme-")) {
+      document.body.classList.remove(cls);
+    }
+  });
 
-// Aplicar o tema salvo ao carregar a página
-document.addEventListener("DOMContentLoaded", function () {
-  const savedTheme = localStorage.getItem("selectedTheme");
-  if (savedTheme) {
-    changeTheme(savedTheme);
-  }
-});
+  document.body.classList.add(themeClass);
+  localStorage.setItem("selectedTheme", themeClass);
+  updateActiveThemeButton(themeClass);
 
-themes.forEach(theme => {
-  const button = document.createElement("button");
-  button.className = `btn ${theme.class} w-100 mb-2`; 
-  button.textContent = theme.name; 
-  button.onclick = () => changeTheme(theme.file);
+  console.log("Classes no body após mudança:", document.body.classList);
+}
 
-  container.appendChild(button);
-});
-
-
+function updateActiveThemeButton(selectedTheme) {
+  document.querySelectorAll("#theme-buttons button").forEach(button => {
+    button.classList.remove("active");
+    const theme = themes.find(t => t.class === selectedTheme);
+    if (theme && button.textContent === theme.name) {
+      button.classList.add("active");
+    }
+  });
+}
