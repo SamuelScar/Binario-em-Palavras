@@ -1,0 +1,77 @@
+html body.theme-icm {
+    --primary-color: #7b0000;        /* Vermelho escuro */
+    --secondary-color: #a67c52;      /* Marrom dourado */
+    --background-color: #f5e6c8;     /* Bege claro */
+    --input-background: #f0e0b8;     /* Tom levemente mais escuro que o fundo */
+    --border-color: #8b5e3b;         /* Marrom suave */
+    --text-color: #4c3318;           /* Marrom escuro */
+    --card-background: #d7b98e;      /* Bege médio para cartões */
+}
+
+html body.theme-matrix {
+    --primary-color: #008000;        /* Verde */
+    --secondary-color: #00ff00;      /* Verde neon */
+    --background-color: #0d0d0d;     /* Preto */
+    --input-background: #000;        /* Preto */
+    --border-color: #00ff00;         /* Verde neon */
+    --text-color: #00ff00;           /* Verde neon */
+    --card-background: #111;         /* Preto mais suave */
+}
+
+html body.theme-one {
+    --primary-color: #a1d700;        /* Verde claro */
+    --secondary-color: #ffdb70;      /* Amarelo pastel */
+    --background-color: #ffb347;     /* Laranja pastel */
+    --input-background: #ffdb70;     /* Amarelo pastel */
+    --border-color: #ffa64d;         /* Laranja suave */
+    --text-color: #333;              /* Preto suave */
+    --card-background: #ffdb70;      /* Amarelo pastel */
+}
+
+html body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+html body .btn-custom-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+html body .btn-custom-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+html body .input-custom {
+    background-color: var(--input-background);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+html body .card-custom {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+}
+
+html body blockquote {
+    color: var(--text-color);
+    border-left: 4px solid var(--primary-color);
+}
+
+html body h1, html body h2, html body h3, html body h4, html body h5, html body h6 {
+    color: var(--text-color);
+}
+
+html body a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+html body a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
