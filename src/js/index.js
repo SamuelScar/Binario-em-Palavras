@@ -127,8 +127,17 @@ clearButton.addEventListener("click", () => {
   clearButton.textContent = "Limpando...";
 
   setTimeout(() => {
+    const texto = document.createElement("strong");
+    const icon = document.createElement("i");
+    console.log("aqui");
+    debugger
+    texto.textContent = "Limpar ";
+    icon.classList.add("bi", "bi-stars");
+
     clearButton.classList.remove("btn-success");
-    clearButton.textContent = "Limpar";
+    clearButton.textContent = "";
+    clearButton.appendChild(texto);
+    clearButton.appendChild(icon);
   }, 300);
 });
 
