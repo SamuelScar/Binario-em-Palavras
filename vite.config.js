@@ -1,7 +1,7 @@
 export default {
   build: {
     outDir: "dist",
-    emptyOutDir: true,
+    emptyOutDir: true
   },
   publicDir: "public",
   server: {

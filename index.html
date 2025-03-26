@@ -2,21 +2,11 @@
 <html lang="pt-BR">
   <head>
 
-    <script>
-      (function() {
-        let activeTheme = localStorage.getItem("selectedTheme");
-        if ( !activeTheme || activeTheme === 'undefined' ) {
-          activeTheme = "theme-icm";
-          localStorage.setItem("selectedTheme", activeTheme);
-        }
-        document.documentElement.classList.add(activeTheme);
-      })();
-    </script>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-  <link rel="stylesheet" href="src/css/themes.css">
+  <link rel="stylesheet" href="/src/css/themes.css">
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico">  
+  <script defer src="src/js/index.js" type="module"></script>
   <title>Binário em Palavras</title>
   
   <style>
@@ -41,7 +31,6 @@
   })();
   </script>
 
-  <script defer src="src/js/index.js" type="module"></script>
 </head>
 
 <body class="bg-custom-page p-3">
@@ -74,11 +63,9 @@
         </button>
       </div>
   
-      <div class="text-center my-4">
-        <blockquote class="blockquote texto-bilico fs-4">
+      <div class="blockquote texto-bilico fs-4 text-center my-4">
           <strong>"No princípio era o Verbo, e o Verbo estava com Deus, e o Verbo era Deus."</strong>
           <footer class="blockquote-footer mt-1 text-secondary">João 1:1</footer>
-        </blockquote>
       </div>
     
       <div id="lenguageStudy" class="collapse p-4 rounded">
@@ -210,5 +197,16 @@
       </a>
   </p>
 </footer>
+
+<script>
+  (function() {
+    let activeTheme = localStorage.getItem("selectedTheme");
+    if ( !activeTheme || activeTheme === 'undefined' ) {
+      activeTheme = "theme-icm";
+      localStorage.setItem("selectedTheme", activeTheme);
+    }
+    document.body.classList.add(activeTheme);
+  })();
+</script>
 
 </html>
