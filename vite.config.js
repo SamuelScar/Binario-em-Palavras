@@ -1,9 +1,9 @@
 export default {
   build: {
-    outDir: "../dist", // 🔹 Salva a build fora de "public/", diretamente na raiz do projeto
-    emptyOutDir: true, // 🔹 Apaga arquivos antigos antes de criar novos
+    outDir: "dist",
+    emptyOutDir: true,
   },
-  publicDir: "../public", // 🔹 Mantém os arquivos estáticos de "public/" acessíveis
+  publicDir: "public",
   server: {
     watch: {
       usePolling: true,
