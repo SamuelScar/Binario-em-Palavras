@@ -1,8 +1,8 @@
-import { phrases, dictionary, biblicalPhrases } from "./phrases.js";
+import { phrases, dictionary, biblicalPhrases } from "./data/phrases.js";
 import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import './styles/themes.css';
+import '../css/themes.css';
 
 
 // Seleciona os elementos da página
