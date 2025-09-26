@@ -1,3 +1,50 @@
+
+:root {
+    --primary-color: #7b0000; /* Vermelho escuro */
+    --secondary-color: #a67c52; /* Marrom dourado */
+    --background-color: #f5e6c8; /* Bege claro suavizado */
+    --input-background: #f0e0b8; /* Tom levemente mais escuro que o fundo */
+    --border-color: #8b5e3b; /* Marrom suave */
+    --text-color: #4c3318; /* Marrom escuro para legibilidade */
+    --card-background: #d7b98e; /* Bege médio para cartões */
+  }
+
+
+  /* temas dos selects*/
+  body.theme-dark,
+  body.dark { 
+    --primary-color: #ff4d4d;
+    --secondary-color: #d9a066;
+    --background-color: #222;
+    --input-background: #333;
+    --border-color: #555;
+    --text-color: #f5f5f5;
+    --card-background: #444;
+
+  }
+
+  body.theme-vintage {
+    --primary-color: #704214;
+    --secondary-color: #c18f59;
+    --background-color: #f4ecd8;
+    --input-background: #e7d9c1;
+    --border-color: #b0855a;
+    --text-color: #3b2b1c;
+    --card-background: #d6c2a6;
+  }
+
+  body.theme-contrast {
+    --primary-color: yellow;
+    --secondary-color: white;
+    --background-color: black;
+    --input-background: #222;
+    --border-color: white;
+    --text-color: white;
+    --card-background: #111;
+  }
+
+  /* --- fim dos temas --- */
+
 html body.theme-icm {
     --primary-color: #7b0000;        /* Vermelho escuro */
     --secondary-color: #a67c52;      /* Marrom dourado */
