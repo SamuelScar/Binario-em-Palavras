@@ -23,7 +23,58 @@ document.addEventListener("DOMContentLoaded", () => {
                 Este é um protótipo em desenvolvimento e pode conter bugs. A iniciativa busca promover o aprendizado sobre tecnologia e seus princípios, tornando o conhecimento acessível a todos.`;
 
   showAlert(title, message, icon, true);
+  initThemeChanger(); // iniciar o trocador de temas
+
 });
+
+
+function initThemeChanger(selectId = "theme-selector") {
+
+  const themeSelect = document.getElementById(selectId);
+
+  function clearOldThemeClasses() { // limpar temas
+    Array.from(document.body.classList).forEach(theme => {
+      if (theme == 'dark' || theme.startsWith('theme-')) {
+        document.body.classList.remove(theme);
+      }
+    });
+  }
+
+  function ensureBaseBodyClasses() { // isso garante que alguma classes CSS não se percam ao trocar de tema
+    if (!document.body.classList.contains('bg-custom-page')) {
+      document.body.classList.add('bg-custom-page');
+    }
+    if (!document.body.classList.contains('p-3')) {
+      document.body.classList.add('p-3');
+    }
+  }
+
+  function setTheme(themeValue) { // limpa e aplica o tema conforme selecionado
+    
+    clearOldThemeClasses();
+    if (themeValue && themeValue != 'default') {
+      document.body.classList.add(themeValue);
+    }
+
+    ensureBaseBodyClasses();
+
+    sessionStorage.setItem('theme', themeValue || 'default'); // seta o tema escolhido, se não default
+    if(themeSelect){
+      themeSelect.value = themeValue || 'default';
+    } 
+  }
+
+
+  const savedTheme = sessionStorage.getItem('theme') || 'default';
+  
+  setTheme(savedTheme);
+  if (themeSelect) {
+    themeSelect.addEventListener('change', () => {
+      setTheme(themeSelect.value);
+    });
+  }
+
+}
 
 
 // Função de conversão de texto para binário

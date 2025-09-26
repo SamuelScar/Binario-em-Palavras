@@ -33,7 +33,18 @@
 </head>
 
 <body class="bg-custom-page p-3">
-  
+
+<!-- caso você queria mais de um tema, fiz um select ao inves de botão -->
+  <div style="text-align:right; margin-bottom: 10px;">
+    <label for="theme-selector" class="fw-bold me-2">Tema:</label>
+    <select id="theme-selector" class="form-select form-select-sm w-auto d-inline">
+      <option value="default">Padrão</option>
+      <option value="theme-dark">Escuro</option>
+      <option value="theme-vintage">Vintage</option>
+      <option value="theme-contrast">Alto Contraste</option>
+    </select>
+  </div>
+
   <div id="mainContent">
     <div class="bg-custom-page shadow g-4 mb-4">
  
