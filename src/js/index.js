@@ -13,28 +13,7 @@ const dictionarySearch = document.getElementById("dictionarySearch");
 const phrasesEl = document.getElementById("phrases");
 const clearButton = document.getElementById("clearButton");
 const biblicalPhrasesContainer = document.getElementById("biblicalPhrasesContainer");
-const container = document.getElementById("theme-buttons");
-// const savedTheme = localStorage.getItem("selectedTheme") || "theme-icm";
-
-const themes = [
-  { name: "Tema Icm", class: "theme-icm", btnClass: "btn-outline-primary" },
-  { name: "Tema One", class: "theme-one", btnClass: "btn-outline-dark" },
-  { name: "Tema Matrix", class: "theme-matrix", btnClass: "btn-outline-success" }
-];
-
-
 document.addEventListener("DOMContentLoaded", () => {
- 
-  if (container && container.childElementCount === 0) {
-    themes.forEach(theme => {
-      const button = document.createElement("button");
-      button.className = `btn ${theme.btnClass} w-100 mb-2`;
-      button.textContent = theme.name;
-      button.onclick = () => changeTheme(theme.class);
-      console.log(`Botão ${theme.name} clicado, aplicando: ${theme.class}`);
-      container.appendChild(button);
-    });
-  }
 
   let icon = "info";
   let title = "Ciência e Fé: Explorando o Mundo Digital Através do Binário"
@@ -59,7 +38,7 @@ function initThemeChanger(selectId = "theme-selector") {
     });
   }
 
-  function ensureBaseBodyClasses() { // isso garante que alguma classes CSS não se percam ao trocar de tema
+  function ensureBaseBodyClasses() {
     if (!document.body.classList.contains('bg-custom-page')) {
       document.body.classList.add('bg-custom-page');
     }
@@ -68,7 +47,7 @@ function initThemeChanger(selectId = "theme-selector") {
     }
   }
 
-  function setTheme(themeValue) { // limpa e aplica o tema conforme selecionado
+  function setTheme(themeValue) {
     
     clearOldThemeClasses();
     if (themeValue && themeValue != 'default') {
@@ -77,7 +56,7 @@ function initThemeChanger(selectId = "theme-selector") {
 
     ensureBaseBodyClasses();
 
-    sessionStorage.setItem('theme', themeValue || 'default'); // seta o tema escolhido, se não default
+    sessionStorage.setItem('theme', themeValue || 'default');
     if(themeSelect){
       themeSelect.value = themeValue || 'default';
     } 
@@ -96,7 +75,6 @@ function initThemeChanger(selectId = "theme-selector") {
 }
 
 
-// Função de conversão de texto para binário
 function textToBinary(text) {
   return text
     .split("")
@@ -104,7 +82,6 @@ function textToBinary(text) {
     .join(" ");
 }
 
-// Função de conversão de binário para texto
 function binaryToText(binary) {
   const reversedDict = Object.fromEntries(
     Object.entries(dictionary).map(([k, v]) => [v, k])
@@ -115,7 +92,6 @@ function binaryToText(binary) {
     .join("");
 }
 
-// Sincroniza os inputs ao digitar
 binaryInput.addEventListener("input", () => {
   textInput.value = binaryToText(binaryInput.value);
 });
@@ -123,7 +99,6 @@ textInput.addEventListener("input", () => {
   binaryInput.value = textToBinary(textInput.value);
 });
 
-// Validação de entrada
 [binaryInput, textInput].forEach((input) => {
   input.addEventListener("keypress", (e) => {
     if (input.id === "binaryInput" && !["0", "1", " "].includes(e.key)) {
@@ -133,7 +108,6 @@ textInput.addEventListener("input", () => {
   });
 });
 
-// Popula o dicionário dinamicamente
 dictionarySearch.addEventListener("input", () => {
   const search = dictionarySearch.value.toLowerCase();
   const filtered = Object.entries(dictionary).filter(([char]) =>
@@ -148,13 +122,11 @@ dictionarySearch.addEventListener("input", () => {
 });
 dictionarySearch.dispatchEvent(new Event("input"));
 
-// Função para adicionar caracteres ao campo de texto
 window.addToTextInput = function(char) {
   textInput.value += char;
   binaryInput.value = textToBinary(textInput.value);
 };
 
-// Popula frases prontas no campo de frases
 phrases.forEach((phrase) => {
   const li = document.createElement("button");
   li.classList.add("list-group-item", "list-group-item-action", "btn-custom-secondary", "text-center", "fw-bold", "fs-4");
@@ -168,12 +140,10 @@ phrases.forEach((phrase) => {
   phrasesEl.appendChild(li);
 });
 
-// Função de limpar os campos de entrada
 clearButton.addEventListener("click", () => {
   textInput.value = "";
   binaryInput.value = "";
 
-  // Animação do botão ao limpar
   clearButton.classList.add("btn-success");
   clearButton.textContent = "Limpando...";
 
@@ -233,32 +203,4 @@ function showAlert(title, text, icon = "info", backgroud = false) {
       confirmButtonText: "Ok!",   
     });
   }
-}
-
-function changeTheme(themeClass) {
-  console.log(`Tentando aplicar o tema: ${themeClass}`);
-  console.log("Classes no body antes:", document.body.classList);
-
-  // Remove todas as classes de tema anteriores
-  document.body.classList.forEach(cls => {
-    if (cls.startsWith("theme-")) {
-      document.body.classList.remove(cls);
-    }
-  });
-
-  document.body.classList.add(themeClass);
-  localStorage.setItem("selectedTheme", themeClass);
-  updateActiveThemeButton(themeClass);
-
-  console.log("Classes no body após mudança:", document.body.classList);
-}
-
-function updateActiveThemeButton(selectedTheme) {
-  document.querySelectorAll("#theme-buttons button").forEach(button => {
-    button.classList.remove("active");
-    const theme = themes.find(t => t.class === selectedTheme);
-    if (theme && button.textContent === theme.name) {
-      button.classList.add("active");
-    }
-  });
 }

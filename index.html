@@ -48,19 +48,6 @@
 
   <div id="mainContent">
 
-    <!-- <button class="btn btn-custom-primary" data-bs-toggle="offcanvas" data-bs-target="#themeOffcanvas">
-      Escolher Tema
-    </button> -->
-  
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="themeOffcanvas">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Selecionar Tema</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-      </div>
-      <div id="theme-buttons" class="offcanvas-body">
-      </div>
-    </div>
-
     <div class="bg-custom-page shadow g-4 mb-4">
  
       <h1 class="text-center fw-bold">Binário em Palavras</h1>
@@ -208,16 +195,5 @@
       </a>
   </p>
 </footer>
-
-<script>
-  (function() {
-    let activeTheme = localStorage.getItem("selectedTheme");
-    if ( !activeTheme || activeTheme === 'undefined' ) {
-      activeTheme = "theme-icm";
-      localStorage.setItem("selectedTheme", activeTheme);
-    }
-    document.body.classList.add(activeTheme);
-  })();
-</script>
 
 </html>
