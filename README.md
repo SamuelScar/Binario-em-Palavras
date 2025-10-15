@@ -12,12 +12,12 @@ A ferramenta permite converter texto para binário e vice-versa, ajudando no apr
 
 ## 🚀 Funcionalidades
 
-- Converter texto em binário
-- Converter binário em texto
-- Dicionário interativo de códigos binários
-- Frases e trechos bíblicos sobre a língua e comunicação
-- Interface responsiva e intuitiva
-- Uso de alertas interativos para melhor experiência do usuário
+- Conversão texto ↔ binário em tempo real utilizando um dicionário completo de caracteres
+- Validação da entrada binária para impedir caracteres inválidos
+- Dicionário pesquisável com botões que inserem caracteres diretamente no texto
+- Coleção de frases rápidas e trechos bíblicos para ilustrar temas de comunicação e fé
+- Seleção de temas (padrão, escuro, vintage e alto contraste) com persistência via `sessionStorage`
+- Alertas introdutórios e feedback visual para ações como limpeza e destaque de botões
 
 ---
 
@@ -34,19 +34,24 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 
 ---
 
-## 💀 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 Binario-em-Palavras/
-│── node_modules/          # Dependências do projeto
-│── public/                # Arquivos públicos
-│   ├── index.html         # Página principal
-│   └── style.css          # Estilos personalizados
-│── src/                   # Código-fonte principal
-│   ├── index.js           # Script principal
-│   └── phrases.js         # Frases e dicionário binário
-│── .gitignore             # Arquivos ignorados pelo Git
-│── package.json           # Configurações do projeto
+│── index.html             # Entrada principal da aplicação
+│── public/                # Arquivos públicos e favicon
+│   └── favicon.ico        # Ícone da aplicação
+│── src/                   # Código-fonte
+│   ├── css/
+│   │   └── themes.css     # Estilos temáticos e utilidades
+│   └── js/
+│       ├── data/
+│       │   └── phrases.js    # Dicionário, frases e versículos
+│       ├── modules/
+│       │   ├── converter.js  # Funções puras de conversão
+│       │   └── themeManager.js # Gerenciamento de temas
+│       └── index.js          # Inicialização e lógica da interface
+│── package.json           # Scripts e dependências
 │── vite.config.js         # Configuração do Vite
 │── README.md              # Documentação do projeto
 ```
