@@ -74,11 +74,11 @@ function setupConverters({ binaryInput, textInput }) {
   }
 
   binaryInput.addEventListener("input", (event) => {
-    textInput.value = binaryToText(event.target.value, dictionary);
+    textInput.value = binaryToText(event.target.value);
   });
 
   textInput.addEventListener("input", (event) => {
-    binaryInput.value = textToBinary(event.target.value, dictionary);
+    binaryInput.value = textToBinary(event.target.value);
   });
 }
 
@@ -142,7 +142,7 @@ function createDictionaryButton(character, binary, textInput, binaryInput) {
   button.innerHTML = `${character} &nbsp;&nbsp;⇒&nbsp;&nbsp; ${binary}`;
   button.addEventListener("click", () => {
     textInput.value += character;
-    binaryInput.value = textToBinary(textInput.value, dictionary);
+    binaryInput.value = textToBinary(textInput.value);
   });
 
   return button;
@@ -167,7 +167,7 @@ function populateQuickPhrases({ phrasesEl, textInput, binaryInput }) {
     button.textContent = phrase;
     button.addEventListener("click", () => {
       textInput.value += (textInput.value ? " " : "") + phrase;
-      binaryInput.value = textToBinary(textInput.value, dictionary);
+      binaryInput.value = textToBinary(textInput.value);
     });
 
     fragment.appendChild(button);
