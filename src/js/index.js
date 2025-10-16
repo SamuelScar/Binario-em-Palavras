@@ -3,6 +3,7 @@ import { initThemeManager } from "./modules/themeManager.js";
 import { textToBinary, binaryToText } from "./modules/converter.js";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../css/themes.css";
 
