@@ -81,6 +81,32 @@ body .btn-custom-secondary:hover {
     filter: brightness(1.05);
 }
 
+/* Acessibilidade do botão Limpar */
+#clearButton,
+#clearButton strong {
+    color: var(--text-color, #1f2937);
+}
+
+#clearButton.btn-success,
+#clearButton.btn-success strong {
+    color: #ffffff;
+}
+
+#clearButton:not(.btn-success):hover,
+#clearButton:not(.btn-success):active {
+    color: var(--text-color, #1f2937);
+}
+
+#clearButton:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+#clearButton:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
 /* Formulários e conteúdos ------------------------------------------------ */
 body .input-custom {
     background-color: var(--input-background);
@@ -107,6 +133,36 @@ body .list-group-item-custom:hover {
 body blockquote {
     color: var(--text-color);
     border-left: 4px solid var(--primary-color);
+}
+
+body .text-primary {
+    color: var(--primary-color) !important;
+}
+
+body .text-secondary {
+    color: var(--text-color) !important;
+}
+
+body .blockquote-footer {
+    color: var(--text-color) !important;
+}
+
+body .bg-custom-dark {
+    background-color: #2d1a0d;
+    color: #fdf3de;
+}
+
+body .bg-custom-dark a {
+    color: #fef7eb;
+}
+
+body .bg-custom-dark a:hover,
+body .bg-custom-dark a:focus-visible {
+    color: #ffd8a1;
+}
+
+body .text-custom {
+    color: #fdf3de !important;
 }
 
 /* Tipografia ------------------------------------------------------------- */
@@ -164,4 +220,37 @@ body .btn-pulsante {
         transform: scale(1);
         box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
     }
+}
+
+/* Utilidades de acessibilidade ------------------------------------------ */
+body .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
+body .form-control::placeholder,
+body .input-custom::placeholder,
+body textarea::placeholder {
+    color: #815936;
 }
