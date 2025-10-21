@@ -1,3 +1,10 @@
+/* =============================================================================
+   themes.css — Declaração dos temas e tokens de cor da interface
+   -----------------------------------------------------------------------------
+   Define variáveis base e alternativas (dark, vintage, contraste) utilizadas
+   pela aplicação.
+   ========================================================================== */
+
 :root {
     --primary-color: #7b0000; /* Vermelho escuro */
     --secondary-color: #a67c52; /* Marrom dourado */

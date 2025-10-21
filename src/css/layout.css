@@ -1,3 +1,11 @@
+/* =============================================================================
+   layout.css — Estrutura visual e componentes principais da aplicação
+   -----------------------------------------------------------------------------
+   Organiza o posicionamento do shell, cabeçalho, cartões informativos e integra
+   os ajustes necessários para o widget VLibras.
+   ========================================================================== */
+
+/* ---------- Container principal ---------- */
 .app-shell {
   display: flex;
   flex-direction: column;
@@ -5,6 +13,7 @@
   width: 100%;
 }
 
+/* ---------- Cabeçalho e barra de ferramentas ---------- */
 .app-header {
   display: flex;
   justify-content: flex-end;
@@ -34,8 +43,12 @@
   background-color: rgba(255, 255, 255, 0.85);
   color: var(--primary-color);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease,
-    color 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .theme-toggle::after {
@@ -54,7 +67,9 @@
 
 .theme-toggle:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15), 0 0 0 5px currentColor;
+  box-shadow:
+    0 0 0 3px rgba(15, 23, 42, 0.15),
+    0 0 0 5px currentColor;
 }
 
 .theme-dropdown__menu {
@@ -71,7 +86,10 @@
   padding: 0.6rem 0.75rem;
   font-weight: 600;
   color: var(--text-color);
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .theme-dropdown__item .theme-dropdown__check {
@@ -96,10 +114,11 @@
 }
 
 .theme-dropdown__item.is-active .theme-dropdown__check,
-.theme-dropdown__item[aria-pressed='true'] .theme-dropdown__check {
+.theme-dropdown__item[aria-pressed="true"] .theme-dropdown__check {
   opacity: 1;
 }
 
+/* ---------- Cartões e seções ---------- */
 .app-main {
   display: flex;
   flex-direction: column;
@@ -139,6 +158,22 @@
   gap: 0.75rem;
 }
 
+.app-card__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ---------- Listas utilitárias ---------- */
+.dictionary-list {
+  max-height: 400px;
+}
+
+.quick-phrases-list {
+  max-height: 450px;
+}
+
+/* ---------- Rodapé ---------- */
 .app-footer a {
   text-decoration: none;
 }
@@ -148,6 +183,13 @@
   text-decoration: underline;
 }
 
+/* ---------- Feedback visual ---------- */
+#mainContent.blurred {
+  filter: blur(15px);
+  pointer-events: none;
+}
+
+/* ---------- Integração VLibras ---------- */
 body.has-inline-vlibras {
   --acc-toggle-top: calc(50% - 13.25rem);
   --acc-toggle-left: auto;
@@ -168,11 +210,7 @@ body.has-inline-vlibras [vw-access-button] {
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.3);
 }
 
-#mainContent.blurred {
-  filter: blur(15px);
-  pointer-events: none;
-}
-
+/* ---------- Responsividade ---------- */
 @media (max-width: 767px) {
   .app-toolbar {
     width: 100%;
