@@ -149,7 +149,7 @@
 }
 
 body.has-inline-vlibras {
-  --acc-toggle-top: calc(50% - 4.25rem);
+  --acc-toggle-top: calc(50% - 13.25rem);
   --acc-toggle-left: auto;
   --acc-toggle-right: 1.75rem;
   --acc-toggle-translate-y: 0;
