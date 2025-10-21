@@ -45,16 +45,146 @@ export function applyTheme(themeName) {
  * @param {{ selectId?: string }} [options] - Objeto de configuração.
  */
 export function initThemeManager(options = {}) {
-  const { selectId = "theme-selector" } = options;
-  const themeSelect = document.getElementById(selectId);
+  const {
+    selectId = "theme-selector",
+    optionSelector = "[data-theme-option]",
+    toggleSelector = "[data-theme-toggle]",
+  } = options;
+
+  const themeSelect = selectId ? document.getElementById(selectId) : null;
+  const themeOptions = optionSelector
+    ? Array.from(document.querySelectorAll(optionSelector))
+    : [];
+  const themeToggle = toggleSelector
+    ? document.querySelector(toggleSelector)
+    : null;
   const savedTheme = sessionStorage.getItem("theme") || DEFAULT_THEME;
 
   applyTheme(savedTheme);
+  syncThemeSelect(themeSelect, savedTheme);
+  updateThemeOptions(themeOptions, savedTheme);
+  updateThemeToggle(themeToggle, savedTheme, themeOptions);
 
   if (themeSelect) {
     themeSelect.value = savedTheme;
     themeSelect.addEventListener("change", (event) => {
-      applyTheme(event.target.value);
+      const { value } = event.target;
+
+      applyTheme(value);
+      updateThemeOptions(themeOptions, value);
+      updateThemeToggle(themeToggle, value, themeOptions);
     });
   }
+
+  if (themeOptions.length) {
+    themeOptions.forEach((option) => {
+      option.addEventListener("click", () => {
+        const value = getThemeValue(option);
+
+        applyTheme(value);
+        syncThemeSelect(themeSelect, value);
+        updateThemeOptions(themeOptions, value);
+        updateThemeToggle(themeToggle, value, themeOptions);
+      });
+    });
+  }
+}
+
+function syncThemeSelect(themeSelect, value) {
+  if (themeSelect && themeSelect.value !== value) {
+    themeSelect.value = value;
+  }
+}
+
+function updateThemeOptions(themeOptions, activeTheme) {
+  if (!themeOptions.length) {
+    return;
+  }
+
+  themeOptions.forEach((option) => {
+    const value = getThemeValue(option);
+    const isActive = value === activeTheme;
+
+    option.classList.toggle("is-active", isActive);
+    option.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function updateThemeToggle(themeToggle, activeTheme, themeOptions) {
+  if (!themeToggle) {
+    return;
+  }
+
+  const label = resolveThemeLabel(themeOptions, activeTheme);
+  const description = `Selecionar tema (atual: ${label})`;
+
+  themeToggle.setAttribute("aria-label", description);
+  themeToggle.setAttribute("title", description);
+
+  updateThemeTogglePopover(themeToggle, label);
+}
+
+function updateThemeTogglePopover(themeToggle, currentThemeLabel) {
+  if (!themeToggle || typeof bootstrap === "undefined" || !bootstrap.Popover) {
+    return;
+  }
+
+  const baseContent =
+    themeToggle.dataset.themePopoverBaseContent ||
+    themeToggle.getAttribute("data-theme-popover-content") ||
+    "Clique para escolher outra combinação de cores.";
+
+  const popoverTitle =
+    themeToggle.dataset.themePopoverTitle ||
+    themeToggle.getAttribute("data-theme-popover-title") ||
+    "Temas";
+
+  const popoverContent = `Tema atual: ${currentThemeLabel}. ${baseContent}`;
+
+  themeToggle.dataset.themePopoverBaseContent = baseContent;
+  themeToggle.dataset.themePopoverTitle = popoverTitle;
+  themeToggle.dataset.themePopoverContent = popoverContent;
+
+  const existing = bootstrap.Popover.getInstance(themeToggle);
+
+  if (existing) {
+    existing.dispose();
+  }
+
+  bootstrap.Popover.getOrCreateInstance(themeToggle, {
+    trigger: "hover focus",
+    placement: "bottom",
+    container: "body",
+    title: popoverTitle,
+    content: popoverContent,
+  });
+
+  if (!themeToggle.dataset.themePopoverListenersAttached) {
+    themeToggle.addEventListener("show.bs.dropdown", () => {
+      const instance = bootstrap.Popover.getInstance(themeToggle);
+      instance?.hide();
+    });
+
+    themeToggle.dataset.themePopoverListenersAttached = "true";
+  }
+}
+
+function resolveThemeLabel(themeOptions, themeValue) {
+  const activeOption = themeOptions.find(
+    (option) => getThemeValue(option) === themeValue,
+  );
+
+  if (!activeOption) {
+    return themeValue;
+  }
+
+  return (
+    activeOption.dataset.themeLabel ||
+    activeOption.textContent.trim() ||
+    themeValue
+  );
+}
+
+function getThemeValue(option) {
+  return option.dataset.themeOption || option.value || "";
 }

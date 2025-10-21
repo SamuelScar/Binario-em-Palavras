@@ -102,13 +102,72 @@
   <div class="app-shell">
     <header class="app-header">
       <div class="app-toolbar">
-        <label for="theme-selector" class="fw-bold me-2">Tema:</label>
-        <select id="theme-selector" class="form-select form-select-sm w-auto d-inline">
-          <option value="default">Padrão</option>
-          <option value="theme-dark">Escuro</option>
-          <option value="theme-vintage">Vintage</option>
-          <option value="theme-contrast">Alto Contraste</option>
-        </select>
+        <div class="dropdown theme-dropdown">
+          <button
+            class="theme-toggle dropdown-toggle"
+            type="button"
+            id="theme-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            aria-label="Selecionar tema (atual: Padrão)"
+            data-theme-toggle
+            data-theme-popover-title="Temas"
+            data-theme-popover-content="Clique e escolha outra combinação de cores."
+          >
+            <i class="bi bi-palette-fill" aria-hidden="true"></i>
+            <span class="visually-hidden">Selecionar tema</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end theme-dropdown__menu" aria-labelledby="theme-toggle">
+            <li>
+              <button
+                type="button"
+                class="dropdown-item theme-dropdown__item d-flex align-items-center justify-content-between"
+                data-theme-option="default"
+                data-theme-label="Padrão"
+                aria-pressed="false"
+              >
+                <span>Padrão</span>
+                <i class="bi bi-check2 theme-dropdown__check" aria-hidden="true"></i>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="dropdown-item theme-dropdown__item d-flex align-items-center justify-content-between"
+                data-theme-option="theme-dark"
+                data-theme-label="Escuro"
+                aria-pressed="false"
+              >
+                <span>Escuro</span>
+                <i class="bi bi-check2 theme-dropdown__check" aria-hidden="true"></i>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="dropdown-item theme-dropdown__item d-flex align-items-center justify-content-between"
+                data-theme-option="theme-vintage"
+                data-theme-label="Vintage"
+                aria-pressed="false"
+              >
+                <span>Vintage</span>
+                <i class="bi bi-check2 theme-dropdown__check" aria-hidden="true"></i>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="dropdown-item theme-dropdown__item d-flex align-items-center justify-content-between"
+                data-theme-option="theme-contrast"
+                data-theme-label="Alto Contraste"
+                aria-pressed="false"
+              >
+                <span>Alto Contraste</span>
+                <i class="bi bi-check2 theme-dropdown__check" aria-hidden="true"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
 

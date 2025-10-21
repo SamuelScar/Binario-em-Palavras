@@ -127,6 +127,8 @@
       return;
     }
 
+    hideTogglePopover();
+
     if (hideTimeoutId) {
       clearTimeout(hideTimeoutId);
       hideTimeoutId = null;
@@ -302,6 +304,42 @@
     setDisabledState(resetBtn, !hasActiveAdjustments());
   }
 
+  function initTogglePopover() {
+    if (!toggle || typeof bootstrap === 'undefined' || !bootstrap.Popover) {
+      return;
+    }
+
+    var titleAttr =
+      toggle.getAttribute('data-acc-popover-title') || 'Acessibilidade';
+    var contentAttr =
+      toggle.getAttribute('data-acc-popover-content') ||
+      'Ferramentas de acessibilidade';
+
+    toggle.setAttribute('data-bs-toggle', 'popover');
+    toggle.setAttribute('data-bs-trigger', 'hover focus');
+    toggle.setAttribute('data-bs-placement', 'right');
+
+    bootstrap.Popover.getOrCreateInstance(toggle, {
+      trigger: 'hover focus',
+      placement: 'right',
+      container: 'body',
+      title: titleAttr,
+      content: contentAttr
+    });
+  }
+
+  function hideTogglePopover() {
+    if (typeof bootstrap === 'undefined' || !bootstrap.Popover) {
+      return;
+    }
+
+    var instance = bootstrap.Popover.getInstance(toggle);
+
+    if (instance) {
+      instance.hide();
+    }
+  }
+
   panel.addEventListener('transitionend', function (event) {
     if (event.propertyName === 'transform') {
       completeClose();
@@ -314,7 +352,12 @@
     }
   });
 
-  toggle.addEventListener('click', togglePanel);
+  initTogglePopover();
+
+  toggle.addEventListener('click', function () {
+    hideTogglePopover();
+    togglePanel();
+  });
   backdrop.addEventListener('click', closePanel);
 
   Array.prototype.forEach.call(closeTriggers, function (button) {

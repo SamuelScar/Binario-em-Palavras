@@ -18,6 +18,88 @@
   margin-bottom: 0.5rem;
 }
 
+.theme-dropdown {
+  position: relative;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease,
+    color 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-toggle::after {
+  display: none !important;
+  content: none !important;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  transform: translateY(-1px);
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.theme-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15), 0 0 0 5px currentColor;
+}
+
+.theme-dropdown__menu {
+  min-width: 12rem;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color, #cfd8e3);
+  background-color: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+}
+
+.theme-dropdown__item {
+  border-radius: 0.65rem;
+  padding: 0.6rem 0.75rem;
+  font-weight: 600;
+  color: var(--text-color);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-dropdown__item .theme-dropdown__check {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.theme-dropdown__item:hover,
+.theme-dropdown__item:focus {
+  background-color: rgba(11, 94, 215, 0.1);
+  color: var(--primary-color);
+  transform: translateX(2px);
+}
+
+.theme-dropdown__item:focus {
+  outline: none;
+}
+
+.theme-dropdown__item.is-active {
+  background-color: rgba(11, 94, 215, 0.15);
+  color: var(--primary-color);
+}
+
+.theme-dropdown__item.is-active .theme-dropdown__check,
+.theme-dropdown__item[aria-pressed='true'] .theme-dropdown__check {
+  opacity: 1;
+}
+
 .app-main {
   display: flex;
   flex-direction: column;
@@ -99,6 +181,11 @@ body.has-inline-vlibras [vw-access-button] {
 
   .app-card {
     border-radius: 0.75rem;
+  }
+
+  .theme-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
   }
 
   body.has-inline-vlibras {

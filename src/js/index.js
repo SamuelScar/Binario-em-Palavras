@@ -4,8 +4,11 @@ import { textToBinary, binaryToText } from "./modules/converter.js";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import * as bootstrap from "bootstrap";
 import "../css/themes.css";
+
+// Torna os componentes do Bootstrap acessíveis a scripts não-modulares.
+window.bootstrap = bootstrap;
 
 document.addEventListener("DOMContentLoaded", initializeApplication);
 
