@@ -5,17 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/src/css/themes.css">
+  <link rel="stylesheet" href="/src/css/accessibility.css">
+  <link rel="stylesheet" href="/src/css/layout.css">
   <link rel="icon" type="image/x-icon" href="/public/favicon.ico">  
   <script defer src="src/js/index.js" type="module"></script>
+  <script defer src="src/js/accessibility.js"></script>
   <title>Binário em Palavras</title>
-  
-  <style>
-    #mainContent.blurred {
-      filter: blur(15px);
-      pointer-events: none;
-    }
-  </style>
-  
   <script>
     if (window.location.hostname.includes("vercel.app")) {
       const script = document.createElement("script");
@@ -33,166 +28,272 @@
 
 </head>
 
-<body class="bg-custom-page p-3">
+<body class="bg-custom-page p-3 has-inline-vlibras">
 
-<!-- caso você queria mais de um tema, fiz um select ao inves de botão -->
-  <div style="text-align:right; margin-bottom: 10px;">
-    <label for="theme-selector" class="fw-bold me-2">Tema:</label>
-    <select id="theme-selector" class="form-select form-select-sm w-auto d-inline">
-      <option value="default">Padrão</option>
-      <option value="theme-dark">Escuro</option>
-      <option value="theme-vintage">Vintage</option>
-      <option value="theme-contrast">Alto Contraste</option>
-    </select>
-  </div>
+  <button
+    type="button"
+    class="acc-toggle"
+    id="acc-toggle"
+    aria-controls="acc-panel"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-label="Abrir ferramentas de acessibilidade"
+  >
+    <span aria-hidden="true">
+      <i class="bi bi-universal-access-circle"></i> 
+    </span>
+  </button>
 
-  <main id="mainContent">
+  <div class="acc-backdrop" id="acc-backdrop" role="presentation" hidden></div>
 
-    <div class="bg-custom-page shadow g-4 mb-4">
- 
-      <h1 class="text-center fw-bold">Binário em Palavras</h1>
-      
-      <div class="d-grid">
-        <button class="btn btn-custom-primary btn-pulsante mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#lenguageStudy" aria-expanded="false" aria-controls="lenguageStudy">
-          <span class="h2 text-center d-block mb-0">
-            Linguagem Binária e a Bíblia
-            <i class="bi bi-arrow-down-up" aria-hidden="true"></i>
-          </span>
-        </button>
-      </div>
-  
-      <div class="blockquote texto-biblico fs-4 text-center my-4">
-          <strong>"No princípio era o Verbo, e o Verbo estava com Deus, e o Verbo era Deus."</strong>
-          <footer class="blockquote-footer mt-1 text-secondary">João 1:1</footer>
-      </div>
-    
-      <div id="lenguageStudy" class="collapse p-4 rounded" aria-labelledby="lenguageStudyHeading">
-        
-        <h2 class="h3 text-secondary" id="lenguageStudyHeading">A Linguagem de Deus e a Linguagem das Máquinas</h2>
-        <p>
-          Deus criou a linguagem para que os seres humanos pudessem se comunicar entre si, e com Ele. A fala, a escrita e todas as formas de expressão surgiram dessa capacidade dada por Deus. Assim como a linguagem humana foi criada por Deus, o homem, feito à imagem e semelhança do Criador, desenvolveu o <strong>binário</strong>, a linguagem das máquinas.
-        </p>
-    
-        <h2 class="h3 text-secondary">O Binário e a Luz em Gênesis</h2>
-        <p>
-          A linguagem binária funciona a partir de dois estados: <strong>1 (ligado)</strong> e <strong>0 (desligado)</strong>. Isso pode ser comparado com o princípio da criação, onde Deus separou a <strong>luz</strong> das <strong>trevas</strong>:
-        </p>
-        <blockquote class="blockquote texto-biblico">
-          <strong>"Disse Deus: Haja luz. E houve luz."</strong><br>
-          <footer class="blockquote-footer mt-1 text-secondary">Gênesis 1:3</footer>
-        </blockquote>
-        <p>
-          Essa dualidade (luz e trevas) também está presente no sistema binário, onde cada bit representa uma decisão simples: ligado ou desligado, existência ou ausência.
-        </p>
-    
-        <h2 class="h3 text-secondary">A Torre de Babel e a Comunicação Universal</h2>
-        <p>
-          No relato bíblico da <strong>Torre de Babel</strong> (Gênesis 11:7-9), Deus confundiu as línguas para impedir que a humanidade prosseguisse em um projeto desviado de Sua vontade. Hoje, as máquinas falam "diferentes linguagens" (Python, JavaScript, C, entre outras), mas todas são traduzidas para o binário, uma espécie de "linguagem universal das máquinas".
-        </p>
-    
-        <h2 class="h3 text-secondary">O Verbo, o Código e a Identidade</h2>
-        <p>
-          Assim como a Palavra de Deus traz significado e propósito, o código binário traduz comandos para que as máquinas executem tarefas. Deus nos identifica pelo Seu Espírito, assim como os computadores identificam dados através da codificação binária.
-        </p>
-    
-        <h2 class="h3 text-secondary">Aplicação Prática</h2>
-        <p>
-          Na prática, podemos ver essa relação ao transformar palavras em binário. Por exemplo:
-        </p>
-        <ul class="list-group">
-          <li class="list-group-item list-group-item-custom"><strong>Texto:</strong> "Luz"</li>
-          <li class="list-group-item list-group-item-custom text-primary"><strong>Binário:</strong> <code>01001100 01110101 01111010</code></li>
-        </ul>
-        <p class="mt-3">
-          Assim como deciframos o binário para entender seu significado, precisamos do Espírito Santo para interpretar as Escrituras e compreender a vontade de Deus.
-        </p>
-    
-        <hr class="border border-secondary">
-    
-        <h2 class="h3 text-secondary">Conclusão</h2>
-        <p>
-          A linguagem das máquinas são expressões da capacidade que Deus deu ao homem de criar e inovar. O binário, assim como a luz e as trevas em Gênesis, nos lembra que tudo funciona de maneira organizada e compreensível. Ao estudar a tecnologia, também podemos enxergar a mão de Deus em nossa capacidade de comunicar e transformar o mundo ao nosso redor.
-        </p>
-      </div>
-
+  <aside
+    id="acc-panel"
+    class="acc-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="acc-panel-title"
+    hidden
+  >
+    <div class="acc-panel__header">
+      <h2 class="acc-panel__title" id="acc-panel-title" tabindex="-1">Ferramentas de acessibilidade</h2>
+      <button type="button" class="acc-panel__close" data-acc-close aria-label="Fechar painel">
+        <span aria-hidden="true">×</span>
+      </button>
     </div>
 
-    <div class="shadow-lg p-5 rounded flex-grow-1 d-flex flex-column" >
-        
-        <div class="row g-4 mb-4">
-          <h2 class="text-center fw-bold mb-4">
-            <i class="bi bi-alphabet-uppercase" aria-hidden="true"></i> 
-            Texto ↔ Binário
-            <i class="bi bi-file-binary" aria-hidden="true"></i>
-          </h2>
-          <h3>Sobre a Ferramenta</h3>
-          <p>
-            O <strong>Conversor Binário ↔ Texto permite</strong> transformar texto em código binário e vice-versa de forma simples e rápida. Com um design intuitivo, oferece suporte a dicionário de caracteres e frases para facilitar o aprendizado e uso da linguagem binária.
-          </p>
-          
-          <button id="clearButton" class="btn btn-custom-primary btn-lg w-100">
+    <div class="acc-panel__body">
+      <ul class="acc-list" role="list">
+        <li class="acc-list__item">
+          <button type="button" class="acc-btn" data-action="font-increase" aria-pressed="false">Aumentar texto</button>
+        </li>
+        <li class="acc-list__item">
+          <button type="button" class="acc-btn" data-action="font-decrease" aria-pressed="false">Diminuir texto</button>
+        </li>
+        <!-- <li class="acc-list__item">
+          <button type="button" class="acc-btn" data-action="grayscale">Escala de cinza</button>
+        </li>
+        <li class="acc-list__item">
+          <button type="button" class="acc-btn" data-action="high-contrast">Alto contraste</button>
+        </li>
+        <li class="acc-list__item">
+          <button type="button" class="acc-btn" data-action="negative-contrast">Contraste negativo</button>
+        </li>
+        <li class="acc-list__item">
+          <button type="button" class="acc-btn" data-action="light-background">Fundo claro</button>
+        </li>
+        <li class="acc-list__item">
+          <button type="button" class="acc-btn" data-action="readable-font">Fonte legível</button>
+        </li>-->
+        <li class="acc-list__item"> 
+          <button type="button" class="acc-btn" data-action="underline-links" aria-pressed="false">Links sublinhados</button>
+        </li>
+        <li class="acc-list__item">
+          <button type="button" class="acc-btn acc-btn--reset" data-action="reset">Redefinir</button>
+        </li>
+      </ul>
+    </div>
+
+    <footer class="acc-panel__footer">
+      <!-- <a class="acc-link" href="#">Atalhos de teclado</a> -->
+      <button type="button" class="acc-btn acc-btn--secondary" data-acc-close>Fechar</button>
+    </footer>
+  </aside>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-toolbar">
+        <label for="theme-selector" class="fw-bold me-2">Tema:</label>
+        <select id="theme-selector" class="form-select form-select-sm w-auto d-inline">
+          <option value="default">Padrão</option>
+          <option value="theme-dark">Escuro</option>
+          <option value="theme-vintage">Vintage</option>
+          <option value="theme-contrast">Alto Contraste</option>
+        </select>
+      </div>
+    </header>
+
+    <main id="mainContent" class="app-main">
+      <section class="app-section" aria-labelledby="intro-title">
+        <article class="app-card bg-custom-page shadow g-4">
+          <header class="app-card__header text-center">
+            <h1 class="text-center fw-bold mb-4" id="intro-title">Binário em Palavras</h1>
+          </header>
+
+          <div class="d-grid mb-4">
+            <button
+              class="btn btn-custom-primary btn-pulsante mx-auto"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#lenguageStudy"
+              aria-expanded="false"
+              aria-controls="lenguageStudy"
+            >
+              <span class="h2 text-center d-block mb-0">
+                Linguagem Binária e a Bíblia
+                <i class="bi bi-arrow-down-up" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+
+          <div class="blockquote texto-biblico fs-4 text-center my-4">
+            <strong>"No princípio era o Verbo, e o Verbo estava com Deus, e o Verbo era Deus."</strong>
+            <footer class="blockquote-footer mt-1 text-secondary">João 1:1</footer>
+          </div>
+
+          <div id="lenguageStudy" class="collapse p-4 rounded" aria-labelledby="lenguageStudyHeading">
+            <article class="app-article">
+              <section class="app-article__section" aria-labelledby="lenguageStudyHeading">
+                <h2 class="h3 text-secondary" id="lenguageStudyHeading">A Linguagem de Deus e a Linguagem das Máquinas</h2>
+                <p>
+                  Deus criou a linguagem para que os seres humanos pudessem se comunicar entre si, e com Ele. A fala, a escrita e todas as formas de expressão surgiram dessa capacidade dada por Deus. Assim como a linguagem humana foi criada por Deus, o homem, feito à imagem e semelhança do Criador, desenvolveu o <strong>binário</strong>, a linguagem das máquinas.
+                </p>
+              </section>
+
+              <section class="app-article__section">
+                <h2 class="h3 text-secondary">O Binário e a Luz em Gênesis</h2>
+                <p>
+                  A linguagem binária funciona a partir de dois estados: <strong>1 (ligado)</strong> e <strong>0 (desligado)</strong>. Isso pode ser comparado com o princípio da criação, onde Deus separou a <strong>luz</strong> das <strong>trevas</strong>:
+                </p>
+                <blockquote class="blockquote texto-biblico">
+                  <strong>"Disse Deus: Haja luz. E houve luz."</strong><br>
+                  <footer class="blockquote-footer mt-1 text-secondary">Gênesis 1:3</footer>
+                </blockquote>
+                <p>
+                  Essa dualidade (luz e trevas) também está presente no sistema binário, onde cada bit representa uma decisão simples: ligado ou desligado, existência ou ausência.
+                </p>
+              </section>
+
+              <section class="app-article__section">
+                <h2 class="h3 text-secondary">A Torre de Babel e a Comunicação Universal</h2>
+                <p>
+                  No relato bíblico da <strong>Torre de Babel</strong> (Gênesis 11:7-9), Deus confundiu as línguas para impedir que a humanidade prosseguisse em um projeto desviado de Sua vontade. Hoje, as máquinas falam "diferentes linguagens" (Python, JavaScript, C, entre outras), mas todas são traduzidas para o binário, uma espécie de "linguagem universal das máquinas".
+                </p>
+              </section>
+
+              <section class="app-article__section">
+                <h2 class="h3 text-secondary">O Verbo, o Código e a Identidade</h2>
+                <p>
+                  Assim como a Palavra de Deus traz significado e propósito, o código binário traduz comandos para que as máquinas executem tarefas. Deus nos identifica pelo Seu Espírito, assim como os computadores identificam dados através da codificação binária.
+                </p>
+              </section>
+
+              <section class="app-article__section">
+                <h2 class="h3 text-secondary">Aplicação Prática</h2>
+                <p>
+                  Na prática, podemos ver essa relação ao transformar palavras em binário. Por exemplo:
+                </p>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-custom"><strong>Texto:</strong> "Luz"</li>
+                  <li class="list-group-item list-group-item-custom text-primary"><strong>Binário:</strong> <code>01001100 01110101 01111010</code></li>
+                </ul>
+                <p class="mt-3">
+                  Assim como deciframos o binário para entender seu significado, precisamos do Espírito Santo para interpretar as Escrituras e compreender a vontade de Deus.
+                </p>
+              </section>
+
+              <section class="app-article__section">
+                <h2 class="h3 text-secondary">Conclusão</h2>
+                <p>
+                  A linguagem das máquinas são expressões da capacidade que Deus deu ao homem de criar e inovar. O binário, assim como a luz e as trevas em Gênesis, nos lembra que tudo funciona de maneira organizada e compreensível. Ao estudar a tecnologia, também podemos enxergar a mão de Deus em nossa capacidade de comunicar e transformar o mundo ao nosso redor.
+                </p>
+              </section>
+            </article>
+          </div>
+        </article>
+      </section>
+
+      <section class="app-section" aria-labelledby="converter-title">
+        <article class="app-card shadow-lg p-5 rounded d-flex flex-column">
+          <header class="app-card__header text-center mb-4">
+            <h2 class="text-center fw-bold mb-3" id="converter-title">
+              <i class="bi bi-alphabet-uppercase" aria-hidden="true"></i>
+              Texto ↔ Binário
+              <i class="bi bi-file-binary" aria-hidden="true"></i>
+            </h2>
+            <h3 class="app-card__subtitle mb-3">Sobre a Ferramenta</h3>
+            <p>
+              O <strong>Conversor Binário ↔ Texto permite</strong> transformar texto em código binário e vice-versa de forma simples e rápida. Com um design intuitivo, oferece suporte a dicionário de caracteres e frases para facilitar o aprendizado e uso da linguagem binária.
+            </p>
+          </header>
+
+          <button id="clearButton" class="btn btn-custom-primary btn-lg w-100 mb-4">
             <strong>Limpar</strong>
             <i class="bi bi-stars" aria-hidden="true"></i>
           </button>
-        </div>
 
-        <!-- Input session -->
-        <div class="row g-4 mb-4">
-          
-          <!-- Brasilian text -->
-          <div class="col-md-6">
-            <label class="form-label fw-bold" for="textInput">Texto PT-BR:</label>
-            <textarea id="textInput" placeholder="Digite um texto aqui" class="input-custom form-control fs-2" rows="4"></textarea>
-          </div>
+          <section class="app-subsection" aria-labelledby="conversion-inputs">
+            <h3 class="sr-only" id="conversion-inputs">Conversores de texto e binário</h3>
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold" for="textInput">Texto PT-BR:</label>
+                <textarea id="textInput" placeholder="Digite um texto aqui" class="input-custom form-control fs-2" rows="4"></textarea>
+              </div>
 
-          <!-- Binarie text -->
-          <div class="col-md-6">
-            <label class="form-label fw-bold" for="binaryInput">Binário:</label>
-            <textarea id="binaryInput" placeholder="Digite um codigo binario aqui" class="input-custom form-control fs-2" rows="4"></textarea>
-          </div>
-        </div>
-
-        <hr class="border border-danger-subtle border-1 opacity-50">
-        <h2 class="text-center fw-bold mb-4">Ferramentas <i class="bi bi-tools" aria-hidden="true"></i></h2>
-
-        <!-- Help Session -->
-        <div class="row g-4 mb-4">
-          
-            <!-- Dictionary -->
-            <div class="col-md-6 d-grid mx-auto">
-              <button class="btn btn-custom-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#dictionaryCollapse" aria-expanded="false" aria-controls="dictionaryCollapse">
-                Dicionário
-              <i class="bi bi-book" aria-hidden="true"></i>
-              </button>
-              <div id="dictionaryCollapse" class="collapse mt-3" data-bs-parent=".row">
-                <label class="sr-only" for="dictionarySearch">Pesquisar no dicionário</label>
-                <input id="dictionarySearch" type="text" class="form-control mb-2" placeholder="Pesquisar no dicionário">
-                <div id="dictionary" class="list-group overflow-auto" style="max-height: 400px;"></div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold" for="binaryInput">Binário:</label>
+                <textarea id="binaryInput" placeholder="Digite um codigo binario aqui" class="input-custom form-control fs-2" rows="4"></textarea>
               </div>
             </div>
+          </section>
 
-          <!-- Phrases -->
-          <div class="col-md-6 d-grid mx-auto">
-            <button class="btn btn-custom-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#phrasesCollapse" aria-expanded="false" aria-controls="phrasesCollapse">
-              Frases/Palavras
-            <i class="bi bi-alphabet-uppercase" aria-hidden="true"></i>
-            </button>
-            <div id="phrasesCollapse" class="collapse mt-3">
-              <div id="phrases" class="list-group overflow-auto" style="max-height: 450px;"></div>
+          <hr class="border border-danger-subtle border-1 opacity-50 my-4">
+
+          <section class="app-subsection" aria-labelledby="toolbox-title">
+            <h2 class="text-center fw-bold mb-4" id="toolbox-title">
+              Ferramentas
+              <i class="bi bi-tools" aria-hidden="true"></i>
+            </h2>
+            <div class="row g-4" id="toolbox-accordions">
+              <div class="col-md-6 d-grid mx-auto">
+                <button
+                  class="btn btn-custom-primary btn-lg"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#dictionaryCollapse"
+                  aria-expanded="false"
+                  aria-controls="dictionaryCollapse"
+                >
+                  Dicionário
+                  <i class="bi bi-book" aria-hidden="true"></i>
+                </button>
+                <div id="dictionaryCollapse" class="collapse mt-3" data-bs-parent="#toolbox-accordions">
+                  <label class="sr-only" for="dictionarySearch">Pesquisar no dicionário</label>
+                  <input id="dictionarySearch" type="text" class="form-control mb-2" placeholder="Pesquisar no dicionário">
+                  <div id="dictionary" class="list-group overflow-auto" style="max-height: 400px;"></div>
+                </div>
+              </div>
+
+              <div class="col-md-6 d-grid mx-auto">
+                <button
+                  class="btn btn-custom-primary btn-lg"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#phrasesCollapse"
+                  aria-expanded="false"
+                  aria-controls="phrasesCollapse"
+                >
+                  Frases/Palavras
+                  <i class="bi bi-alphabet-uppercase" aria-hidden="true"></i>
+                </button>
+                <div id="phrasesCollapse" class="collapse mt-3" data-bs-parent="#toolbox-accordions">
+                  <div id="phrases" class="list-group overflow-auto" style="max-height: 450px;"></div>
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
+        </article>
+      </section>
+    </main>
 
-        </div>
-      </div>
-</main>
-  <footer class="bg-custom-dark text-center py-3 mt-4">
-    <p class="mb-0 text-custom">
-        Desenvolvido por <strong>Samuel de Souza</strong> | 
+    <footer class="app-footer bg-custom-dark text-center py-3">
+      <p class="mb-0 text-custom">
+        Desenvolvido por <strong>Samuel de Souza</strong> |
         <a href="https://github.com/SamuelScar/Binario-em-Palavras" target="_blank" class="text-custom fw-bold">
-            <i class="bi bi-github" aria-hidden="true"></i> GitHub
+          <i class="bi bi-github" aria-hidden="true"></i> GitHub
         </a>
-    </p>
-  </footer>
+      </p>
+    </footer>
+  </div>
 
    <div vw class="enabled">
     <div vw-access-button class="active"></div>
