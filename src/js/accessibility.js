@@ -309,8 +309,6 @@
       return;
     }
 
-    var titleAttr =
-      toggle.getAttribute('data-acc-popover-title') || 'Acessibilidade';
     var contentAttr =
       toggle.getAttribute('data-acc-popover-content') ||
       'Ferramentas de acessibilidade';
@@ -323,7 +321,7 @@
       trigger: 'hover focus',
       placement: 'right',
       container: 'body',
-      title: titleAttr,
+      title: '',
       content: contentAttr
     });
   }

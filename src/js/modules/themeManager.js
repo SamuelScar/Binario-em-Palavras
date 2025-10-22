@@ -115,13 +115,13 @@ function updateThemeToggle(themeToggle, activeTheme, themeOptions) {
     return;
   }
 
-  const label = resolveThemeLabel(themeOptions, activeTheme);
-  const description = `Selecionar tema (atual: ${label})`;
+  const rawLabel = resolveThemeLabel(themeOptions, activeTheme);
+  const friendlyLabel = formatThemeLabel(rawLabel);
+  const description = `Selecionar tema (atual: ${friendlyLabel})`;
 
   themeToggle.setAttribute("aria-label", description);
-  themeToggle.setAttribute("title", description);
 
-  updateThemeTogglePopover(themeToggle, label);
+  updateThemeTogglePopover(themeToggle, friendlyLabel);
 }
 
 function updateThemeTogglePopover(themeToggle, currentThemeLabel) {
@@ -134,15 +134,10 @@ function updateThemeTogglePopover(themeToggle, currentThemeLabel) {
     themeToggle.getAttribute("data-theme-popover-content") ||
     "Clique para escolher outra combinação de cores.";
 
-  const popoverTitle =
-    themeToggle.dataset.themePopoverTitle ||
-    themeToggle.getAttribute("data-theme-popover-title") ||
-    "Temas";
-
-  const popoverContent = `Tema atual: ${currentThemeLabel}. ${baseContent}`;
+  const friendlyLabel = formatThemeLabel(currentThemeLabel);
+  const popoverContent = `Tema atual: ${friendlyLabel}. ${baseContent}`;
 
   themeToggle.dataset.themePopoverBaseContent = baseContent;
-  themeToggle.dataset.themePopoverTitle = popoverTitle;
   themeToggle.dataset.themePopoverContent = popoverContent;
 
   const existing = bootstrap.Popover.getInstance(themeToggle);
@@ -155,7 +150,7 @@ function updateThemeTogglePopover(themeToggle, currentThemeLabel) {
     trigger: "hover focus",
     placement: "bottom",
     container: "body",
-    title: popoverTitle,
+    title: "",
     content: popoverContent,
   });
 
@@ -187,4 +182,21 @@ function resolveThemeLabel(themeOptions, themeValue) {
 
 function getThemeValue(option) {
   return option.dataset.themeOption || option.value || "";
+}
+
+function formatThemeLabel(label) {
+  if (!label) {
+    return "";
+  }
+
+  if (label.startsWith(THEME_PREFIX)) {
+    return label
+      .slice(THEME_PREFIX.length)
+      .split("-")
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+  }
+
+  return label;
 }
