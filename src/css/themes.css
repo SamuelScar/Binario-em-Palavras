@@ -17,6 +17,7 @@
     --divider-color: rgba(139, 94, 59, 0.5);
     --footer-background: #2d1a0d;
     --footer-text: #fdf3de;
+    --clear-button-text: #ffffff;
 }
 
 /* Temas alternativos ----------------------------------------------------- */
@@ -33,6 +34,7 @@ body.dark {
     --divider-color: rgba(255, 77, 77, 0.45);
     --footer-background: #0f0f0f;
     --footer-text: #f5f5f5;
+    --clear-button-text: #f5f5f5;
 }
 
 body.theme-vintage {
@@ -47,6 +49,7 @@ body.theme-vintage {
     --divider-color: rgba(112, 66, 20, 0.5);
     --footer-background: #48311f;
     --footer-text: #fdf3de;
+    --clear-button-text: #fdf3de;
 }
 
 body.theme-contrast {
@@ -61,6 +64,7 @@ body.theme-contrast {
     --divider-color: rgba(255, 255, 0, 0.55);
     --footer-background: #000000;
     --footer-text: #ffffff;
+    --clear-button-text: #000000;
 }
 
 body.theme-matrix {
@@ -75,6 +79,7 @@ body.theme-matrix {
     --divider-color: rgba(0, 255, 156, 0.35);
     --footer-background: rgba(0, 18, 12, 0.9);
     --footer-text: #d0ffe9;
+    --clear-button-text: #d0ffe9;
     font-family: "Courier New", Courier, monospace;
     letter-spacing: 0.025em;
     position: relative;
@@ -125,7 +130,7 @@ body .btn-custom-secondary:hover {
 /* Acessibilidade do botão Limpar */
 #clearButton,
 #clearButton strong {
-    color: var(--text-color, #1f2937);
+    color: var(--clear-button-text, var(--text-color, #1f2937));
 }
 
 #clearButton.btn-success,
