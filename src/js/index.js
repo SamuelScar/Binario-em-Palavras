@@ -27,6 +27,7 @@ function initializeApplication() {
   populateBiblicalPhrases(elements);
   setupClearButton(elements);
   setupPulseButton(elements);
+  setupFeedbackForm();
 }
 
 /**
@@ -45,6 +46,213 @@ function getDomElements() {
     mainContent: document.getElementById("mainContent"),
     pulseButton: document.querySelector(".btn-pulsante"),
   };
+}
+
+const FEEDBACK_STORAGE_KEY = "binario:feedbackType";
+const FEEDBACK_MAX_LENGTH = 1000;
+function setupFeedbackForm() {
+  const form = document.getElementById("feedbackForm");
+
+  if (!form) {
+    return;
+  }
+
+  const typeRadios = Array.from(form.querySelectorAll("[data-feedback-radio]"));
+  const submitButton = form.querySelector("[data-feedback-submit]");
+  const submitText = form.querySelector("[data-feedback-submit-text]");
+  const mailtoLink = form.querySelector("[data-feedback-mailto]");
+  const messageField = form.querySelector('[data-feedback-field="message"]');
+  const nameField = form.querySelector('[data-feedback-field="name"]');
+  const emailField = form.querySelector('[data-feedback-field="email"]');
+  const counterEl = form.querySelector("[data-feedback-counter]");
+  const errorEl = form.querySelector("[data-feedback-error]");
+  const statusEl = form.querySelector("[data-feedback-status]");
+
+  let currentType = getStoredFeedbackType() || "suggestion";
+
+  function setStoredFeedbackType(type) {
+    try {
+      localStorage.setItem(FEEDBACK_STORAGE_KEY, type);
+    } catch {
+      // Ignora falhas de armazenamento
+    }
+  }
+
+  function getStoredFeedbackType() {
+    try {
+      return localStorage.getItem(FEEDBACK_STORAGE_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  function updateCounter() {
+    if (!counterEl || !messageField) {
+      return;
+    }
+    const length = (messageField.value || "").length;
+    counterEl.textContent = `${length}/${FEEDBACK_MAX_LENGTH}`;
+  }
+
+  function setActiveType(type) {
+    currentType = type;
+    typeRadios.forEach((radio) => {
+      radio.checked = radio.value === type;
+    });
+    setStoredFeedbackType(type);
+  }
+
+  function setStatusMessage(message, variant = "muted") {
+    if (!statusEl) {
+      return;
+    }
+    statusEl.textContent = message || "";
+    statusEl.className = `feedback-status mt-3 text-${variant}`;
+  }
+
+  function showFieldError(message) {
+    if (!errorEl) {
+      return;
+    }
+    errorEl.textContent = message || "";
+  }
+
+  setActiveType(currentType);
+  updateCounter();
+  showFieldError("");
+  setStatusMessage("");
+
+  typeRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (!radio.checked) {
+        return;
+      }
+      const type = radio.value || "suggestion";
+      setActiveType(type);
+      if (messageField) {
+        messageField.focus();
+      }
+    });
+  });
+
+  if (messageField) {
+    messageField.addEventListener("input", () => {
+      updateCounter();
+      if (messageField.value.trim().length > 0) {
+        showFieldError("");
+      }
+    });
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setStatusMessage("");
+
+    if (!messageField || !emailField) {
+      return;
+    }
+
+    const trimmedMessage = messageField.value.trim();
+    const trimmedEmail = emailField.value.trim();
+
+    if (!trimmedMessage) {
+      showFieldError("Descreva o bug ou sugestão antes de enviar.");
+      messageField.focus();
+      return;
+    }
+
+    emailField.value = trimmedEmail;
+    emailField.setCustomValidity("");
+
+    if (!trimmedEmail) {
+      emailField.setCustomValidity("Informe um e-mail para que possamos retornar o contato.");
+      emailField.reportValidity();
+      emailField.focus();
+      setStatusMessage("Informe um e-mail válido antes de enviar.", "danger");
+      return;
+    }
+
+    if (!emailField.checkValidity()) {
+      emailField.reportValidity();
+      emailField.focus();
+      setStatusMessage("Verifique o e-mail digitado e tente novamente.", "danger");
+      return;
+    }
+
+    const payload = {
+      type: currentType,
+      name: nameField ? nameField.value.trim() : "",
+      email: trimmedEmail,
+      message: trimmedMessage,
+      page: window.location.href,
+      userAgent: navigator.userAgent,
+    };
+
+    disableSubmit();
+
+    try {
+      const response = await fetch("/api/send-feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Falha ao enviar feedback");
+      }
+
+      await response.json();
+
+      await showAlert({
+        title: "Obrigado pelo feedback!",
+        text: "Recebemos sua mensagem e iremos analisá-la com carinho.",
+        icon: "success",
+        confirmButtonText: "Fechar",
+      });
+
+      form.reset();
+      updateCounter();
+      showFieldError("");
+      setStatusMessage("Feedback enviado com sucesso. Obrigado!", "success");
+      setActiveType(currentType); // Reaplica estado visual
+      if (messageField) {
+        messageField.focus();
+      }
+    } catch (error) {
+      console.error("Erro ao enviar feedback:", error);
+      showFieldError("Não foi possível enviar agora. Tente novamente ou use o botão de e-mail.");
+      setStatusMessage("Envio falhou. Caso o problema persista, utilize o e-mail.", "danger");
+      if (mailtoLink) {
+        mailtoLink.focus();
+      }
+      await showAlert({
+        title: "Ops! Algo deu errado",
+        text: "Não conseguimos enviar sua mensagem. Você pode tentar novamente ou enviar diretamente por e-mail.",
+        icon: "error",
+        confirmButtonText: "Entendi",
+      });
+    } finally {
+      enableSubmit();
+    }
+  });
+
+  function disableSubmit() {
+    if (!submitButton || !submitText) {
+      return;
+    }
+    submitButton.setAttribute("disabled", "disabled");
+    submitButton.setAttribute("aria-disabled", "true");
+    submitText.textContent = "Enviando...";
+  }
+
+  function enableSubmit() {
+    if (!submitButton || !submitText) {
+      return;
+    }
+    submitButton.removeAttribute("disabled");
+    submitButton.removeAttribute("aria-disabled");
+    submitText.textContent = "Enviar feedback";
+  }
 }
 
 /**
