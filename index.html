@@ -49,6 +49,7 @@
       aria-haspopup="dialog"
       aria-expanded="false"
       aria-label="Abrir ferramentas de acessibilidade"
+      data-acc-grayscale-target
     >
       <span aria-hidden="true">
         <i class="bi bi-universal-access-circle"></i>
@@ -75,33 +76,71 @@
       <div class="acc-panel__body">
         <ul class="acc-list" role="list">
           <li class="acc-list__item">
-            <button type="button" class="acc-btn" data-action="font-increase" aria-pressed="false">Aumentar texto</button>
+            <button type="button" class="acc-btn" data-action="font-increase" aria-pressed="false">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                <span>Aumentar texto</span>
+              </span>
+            </button>
           </li>
           <li class="acc-list__item">
-            <button type="button" class="acc-btn" data-action="font-decrease" aria-pressed="false">Diminuir texto</button>
-          </li>
-          <!-- <li class="acc-list__item">
-            <button type="button" class="acc-btn" data-action="grayscale">Escala de cinza</button>
-          </li>
-          <li class="acc-list__item">
-            <button type="button" class="acc-btn" data-action="high-contrast">Alto contraste</button>
-          </li>
-          <li class="acc-list__item">
-            <button type="button" class="acc-btn" data-action="negative-contrast">Contraste negativo</button>
+            <button type="button" class="acc-btn" data-action="font-decrease" aria-pressed="false">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-dash-circle" aria-hidden="true"></i>
+                <span>Diminuir texto</span>
+              </span>
+            </button>
           </li>
           <li class="acc-list__item">
-            <button type="button" class="acc-btn" data-action="light-background">Fundo claro</button>
+            <button type="button" class="acc-btn" data-action="grayscale" aria-pressed="false">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-slash-circle" aria-hidden="true"></i>
+                <span>Escala de cinza</span>
+              </span>
+            </button>
           </li>
           <li class="acc-list__item">
-            <button type="button" class="acc-btn" data-action="readable-font">Fonte legível</button>
-          </li>-->
-          <li class="acc-list__item">
-            <button type="button" class="acc-btn" data-action="underline-links" aria-pressed="false">Links sublinhados</button>
+            <button type="button" class="acc-btn" data-action="high-contrast" aria-pressed="false">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-brightness-high" aria-hidden="true"></i>
+                <span>Alto contraste</span>
+              </span>
+            </button>
           </li>
           <li class="acc-list__item">
-            <button type="button" class="acc-btn acc-btn--reset" data-action="reset">Redefinir</button>
+            <button type="button" class="acc-btn" data-action="negative-contrast" aria-pressed="false">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-eye" aria-hidden="true"></i>
+                <span>Contraste negativo</span>
+              </span>
+            </button>
+          </li>
+          <li class="acc-list__item">
+            <button type="button" class="acc-btn" data-action="light-background" aria-pressed="false">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-sun" aria-hidden="true"></i>
+                <span>Fundo claro</span>
+              </span>
+            </button>
+          </li>
+          <li class="acc-list__item">
+            <button type="button" class="acc-btn" data-action="underline-links" aria-pressed="false">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-type-underline" aria-hidden="true"></i>
+                <span>Links sublinhados</span>
+              </span>
+            </button>
+          </li>
+          <li class="acc-list__item">
+            <button type="button" class="acc-btn acc-btn--reset" data-action="reset">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+                <span>Redefinir</span>
+              </span>
+            </button>
           </li>
         </ul>
+        <p class="acc-panel__hint" id="acc-theme-lock-hint">O trocador de temas fica temporariamente indisponível enquanto um modo de cor estiver ativo.</p>
       </div>
 
       <footer class="acc-panel__footer">
@@ -111,7 +150,7 @@
     </aside>
 
     <!-- Layout principal -->
-    <div class="app-shell">
+    <div class="app-shell" data-acc-grayscale-target>
       <header class="app-header">
         <div class="app-toolbar">
           <div class="dropdown theme-dropdown">

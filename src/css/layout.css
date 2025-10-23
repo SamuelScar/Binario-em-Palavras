@@ -72,6 +72,14 @@
     0 0 0 5px currentColor;
 }
 
+.theme-toggle[disabled],
+.theme-toggle[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
 .theme-dropdown__menu {
   min-width: 12rem;
   padding: 0.5rem;
@@ -116,6 +124,12 @@
 .theme-dropdown__item.is-active .theme-dropdown__check,
 .theme-dropdown__item[aria-pressed="true"] .theme-dropdown__check {
   opacity: 1;
+}
+
+.theme-dropdown__item[disabled],
+.theme-dropdown__item[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ---------- Cartões e seções ---------- */

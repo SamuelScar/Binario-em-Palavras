@@ -173,6 +173,12 @@ body.is-open {
   gap: 0.5rem;
 }
 
+.acc-panel__hint {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: rgba(31, 41, 51, 0.75);
+}
+
 /* ---------- Botões ---------- */
 .acc-btn {
   display: inline-flex;
@@ -273,6 +279,153 @@ body.is-open {
 
 a.is-acc-underlined {
   text-decoration: underline !important;
+}
+
+/* ---------- Modos de cor ---------- */
+body.acc-mode--grayscale [data-acc-grayscale-target] {
+  filter: grayscale(100%);
+}
+
+body.acc-mode--high-contrast {
+  --primary-color: #ffd400;
+  --secondary-color: #ffffff;
+  --background-color: #000000;
+  --input-background: #000000;
+  --border-color: #ffd400;
+  --text-color: #ffd400;
+  --card-background: #000000;
+  --placeholder-color: rgba(255, 212, 0, 0.7);
+  --divider-color: rgba(255, 212, 0, 0.6);
+  --footer-background: #000000;
+  --footer-text: #ffffff;
+  --clear-button-text: #000000;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.acc-mode--negative-contrast {
+  --primary-color: #ffffff;
+  --secondary-color: #d0d0d0;
+  --background-color: #1a1a1a;
+  --input-background: #262626;
+  --border-color: #3d3d3d;
+  --text-color: #f5f5f5;
+  --card-background: #212121;
+  --placeholder-color: rgba(245, 245, 245, 0.6);
+  --divider-color: rgba(255, 255, 255, 0.35);
+  --footer-background: #111111;
+  --footer-text: #f5f5f5;
+  --clear-button-text: #f5f5f5;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.acc-mode--light-background {
+  --primary-color: #1a56db;
+  --secondary-color: #2563eb;
+  --background-color: #f8fafc;
+  --input-background: #ffffff;
+  --border-color: #cbd5f5;
+  --text-color: #111827;
+  --card-background: #ffffff;
+  --placeholder-color: rgba(15, 23, 42, 0.5);
+  --divider-color: rgba(148, 163, 184, 0.6);
+  --footer-background: #e2e8f0;
+  --footer-text: #0f172a;
+  --clear-button-text: #0f172a;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.acc-mode--high-contrast .bg-custom-page,
+body.acc-mode--negative-contrast .bg-custom-page,
+body.acc-mode--light-background .bg-custom-page {
+  background-color: var(--card-background);
+  color: var(--text-color);
+}
+
+body.acc-mode--high-contrast a,
+body.acc-mode--negative-contrast a,
+body.acc-mode--light-background a {
+  color: var(--primary-color);
+}
+
+body.acc-mode--high-contrast .acc-panel__hint,
+body.acc-mode--negative-contrast .acc-panel__hint,
+body.acc-mode--light-background .acc-panel__hint {
+  color: var(--text-color);
+}
+
+body.acc-mode--high-contrast .acc-toggle,
+body.acc-mode--negative-contrast .acc-toggle {
+  background-color: var(--primary-color);
+  color: #000000;
+}
+
+body.acc-mode--light-background .acc-toggle {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+body.acc-mode--negative-contrast .btn-custom-primary,
+body.acc-mode--negative-contrast .btn-custom-primary:hover,
+body.acc-mode--negative-contrast .btn-custom-primary:focus,
+body.acc-mode--negative-contrast .btn-custom-primary:active,
+body.acc-mode--negative-contrast .btn-custom-secondary,
+body.acc-mode--negative-contrast .btn-custom-secondary:hover,
+body.acc-mode--negative-contrast .btn-custom-secondary:focus,
+body.acc-mode--negative-contrast .btn-custom-secondary:active {
+  color: #0f0f0f;
+}
+
+body.acc-mode--negative-contrast .btn-custom-primary strong,
+body.acc-mode--negative-contrast .btn-custom-secondary strong,
+body.acc-mode--negative-contrast .btn-custom-primary span,
+body.acc-mode--negative-contrast .btn-custom-secondary span,
+body.acc-mode--negative-contrast .btn-custom-primary i,
+body.acc-mode--negative-contrast .btn-custom-secondary i {
+  color: currentColor;
+}
+
+body.acc-mode--negative-contrast #clearButton,
+body.acc-mode--negative-contrast #clearButton:hover,
+body.acc-mode--negative-contrast #clearButton:focus {
+  color: #0f0f0f;
+}
+body.acc-mode--negative-contrast #clearButton strong,
+body.acc-mode--negative-contrast #clearButton span,
+body.acc-mode--negative-contrast #clearButton i {
+  color: #0f0f0f;
+}
+
+body.acc-mode--negative-contrast .btn-success,
+body.acc-mode--negative-contrast .btn-success:hover,
+body.acc-mode--negative-contrast .btn-success:focus,
+body.acc-mode--negative-contrast .btn-success:active {
+  color: #ffffff;
+}
+
+body.acc-mode--negative-contrast .btn-success strong,
+body.acc-mode--negative-contrast .btn-success span,
+body.acc-mode--negative-contrast .btn-success i {
+  color: currentColor;
+}
+
+body.acc-mode--light-background .btn-custom-primary,
+body.acc-mode--light-background .btn-custom-secondary,
+body.acc-mode--light-background .btn-custom-primary:hover,
+body.acc-mode--light-background .btn-custom-secondary:hover,
+body.acc-mode--light-background .btn-custom-primary:focus,
+body.acc-mode--light-background .btn-custom-secondary:focus,
+body.acc-mode--light-background .btn-custom-primary:active,
+body.acc-mode--light-background .btn-custom-secondary:active {
+  color: #ffffff;
+}
+
+body.acc-mode--light-background #clearButton,
+body.acc-mode--light-background #clearButton:hover,
+body.acc-mode--light-background #clearButton:focus {
+  color: var(--clear-button-text);
 }
 
 /* ---------- Preferências do usuário ---------- */

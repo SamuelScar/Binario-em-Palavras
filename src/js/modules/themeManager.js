@@ -2,6 +2,10 @@ const DEFAULT_THEME = "default";
 const THEME_PREFIX = "theme-";
 const BASE_BODY_CLASSES = ["bg-custom-page", "p-3"];
 
+let trackedThemeSelect = null;
+let trackedThemeOptions = [];
+let trackedThemeToggle = null;
+
 /**
  * Remove classes de tema anteriores do body, preservando as classes base.
  */
@@ -58,6 +62,9 @@ export function initThemeManager(options = {}) {
   const themeToggle = toggleSelector
     ? document.querySelector(toggleSelector)
     : null;
+  trackedThemeSelect = themeSelect;
+  trackedThemeOptions = themeOptions;
+  trackedThemeToggle = themeToggle;
   const savedTheme = sessionStorage.getItem("theme") || DEFAULT_THEME;
 
   applyTheme(savedTheme);
@@ -199,4 +206,23 @@ function formatThemeLabel(label) {
   }
 
   return label;
+}
+
+export function getActiveTheme() {
+  return sessionStorage.getItem("theme") || DEFAULT_THEME;
+}
+
+export function setTheme(themeName) {
+  const value = themeName || DEFAULT_THEME;
+
+  applyTheme(value);
+  syncThemeSelect(trackedThemeSelect, value);
+  updateThemeOptions(trackedThemeOptions, value);
+  updateThemeToggle(trackedThemeToggle, value, trackedThemeOptions);
+}
+
+if (typeof window !== "undefined") {
+  window.ThemeManager = window.ThemeManager || {};
+  window.ThemeManager.setTheme = setTheme;
+  window.ThemeManager.getActiveTheme = getActiveTheme;
 }
