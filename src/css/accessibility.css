@@ -428,6 +428,42 @@ body.acc-mode--light-background #clearButton:focus {
   color: var(--clear-button-text);
 }
 
+body.acc-mode--high-contrast .btn-outline-secondary {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+body.acc-mode--high-contrast .btn-outline-secondary:hover,
+body.acc-mode--high-contrast .btn-outline-secondary:focus-visible {
+  background-color: rgba(255, 212, 0, 0.2);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+body.acc-mode--negative-contrast .btn-outline-secondary {
+  border-color: rgba(255, 255, 255, 0.65);
+  color: inherit;
+}
+
+body.acc-mode--negative-contrast .btn-outline-secondary:hover,
+body.acc-mode--negative-contrast .btn-outline-secondary:focus-visible {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.85);
+  color: inherit;
+}
+
+body.acc-mode--light-background .btn-outline-secondary {
+  border-color: rgba(148, 163, 184, 0.6);
+  color: var(--text-color);
+}
+
+body.acc-mode--light-background .btn-outline-secondary:hover,
+body.acc-mode--light-background .btn-outline-secondary:focus-visible {
+  background-color: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.7);
+  color: var(--text-color);
+}
+
 /* ---------- Preferências do usuário ---------- */
 @media (prefers-reduced-motion: reduce) {
   .acc-toggle,

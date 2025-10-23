@@ -178,6 +178,109 @@
   gap: 0.75rem;
 }
 
+.app-card--feedback {
+  border-radius: 1rem;
+  border: 1px solid var(--border-color, rgba(207, 216, 227, 0.8));
+}
+
+.feedback-type-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.feedback-type-group .form-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.feedback-type-group .form-check-input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+  cursor: pointer;
+}
+
+.feedback-type-group .form-check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.feedback-type-group .form-check-input:checked + .form-check-label {
+  color: var(--primary-color);
+}
+
+.feedback-type-group .form-check-input:focus-visible + .form-check-label {
+  outline: 2px solid rgba(59, 130, 246, 0.35);
+  outline-offset: 2px;
+}
+
+.feedback-trigger .btn {
+  border-radius: 1rem;
+}
+
+.feedback-trigger .btn:not(.collapsed) [data-feedback-chevron] {
+  transform: rotate(180deg);
+}
+
+.feedback-trigger [data-feedback-chevron] {
+  transition: transform 0.2s ease;
+}
+
+.app-feedback-collapse {
+  margin-top: 1.5rem;
+}
+
+.feedback-form .form-label {
+  font-size: 0.95rem;
+}
+
+.feedback-counter {
+  font-size: 0.85rem;
+}
+
+.feedback-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.feedback-status {
+  min-height: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.btn-outline-secondary {
+  border-width: 2px;
+  border-color: rgba(148, 163, 184, 0.6);
+  color: inherit;
+  background-color: transparent;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus-visible {
+  background-color: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.8);
+  color: inherit;
+}
+
 /* ---------- Listas utilitárias ---------- */
 .dictionary-list {
   max-height: 400px;

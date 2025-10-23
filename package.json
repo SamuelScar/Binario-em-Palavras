@@ -20,6 +20,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "nodemailer": "^6.9.13",
     "sweetalert2": "^11.16.0"
   }
 }
