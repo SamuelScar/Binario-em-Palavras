@@ -67,23 +67,36 @@ body.theme-contrast {
     --clear-button-text: #000000;
 }
 
+[data-theme="matrix"],
 body.theme-matrix {
-    --primary-color: #00ff9c;
-    --secondary-color: #01b368;
-    --background-color: #010709;
-    --input-background: rgba(0, 12, 8, 0.75);
-    --border-color: rgba(0, 255, 156, 0.45);
-    --text-color: #d0ffe9;
-    --card-background: rgba(0, 18, 12, 0.82);
-    --placeholder-color: rgba(0, 255, 156, 0.45);
-    --divider-color: rgba(0, 255, 156, 0.35);
-    --footer-background: rgba(0, 18, 12, 0.9);
-    --footer-text: #d0ffe9;
-    --clear-button-text: #d0ffe9;
-    font-family: "Courier New", Courier, monospace;
-    letter-spacing: 0.025em;
-    position: relative;
-    overflow: hidden;
+    --color-bg: #000000;
+    --color-bg-alt: #020d07;
+    --color-fg: #00ff00;
+    --color-fg-muted: #1ade1a;
+    --color-primary: #00ff66;
+    --color-accent: #00c853;
+    --color-highlight: rgba(0, 255, 102, 0.15);
+    --btn-bg: rgba(0, 25, 0, 0.75);
+    --btn-fg: #00ff66;
+    --btn-border: rgba(0, 255, 102, 0.4);
+    --btn-pill-blue: #007bff;
+    --btn-pill-red: #ff0000;
+    --border: rgba(0, 255, 110, 0.45);
+    --shadow: 0 0 18px rgba(0, 255, 110, 0.35);
+    --matrix-font: "VT323", "IBM Plex Mono", "Fira Code", "SFMono-Regular", "Courier New", Courier, monospace;
+    --primary-color: var(--color-primary);
+    --secondary-color: var(--color-fg-muted);
+    --background-color: var(--color-bg);
+    --input-background: rgba(0, 40, 0, 0.65);
+    --border-color: var(--border);
+    --text-color: #caffca;
+    --card-background: rgba(0, 32, 0, 0.8);
+    --placeholder-color: rgba(0, 255, 128, 0.5);
+    --divider-color: rgba(0, 255, 128, 0.3);
+    --footer-background: rgba(0, 25, 0, 0.9);
+    --footer-text: #caffca;
+    --clear-button-text: #caffca;
+    color-scheme: dark;
 }
 
 /* Layout base ------------------------------------------------------------ */
@@ -91,6 +104,32 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+[data-theme="matrix"] body,
+body.theme-matrix {
+    background-color: var(--color-bg);
+    background-image:
+        radial-gradient(circle at top, rgba(0, 255, 128, 0.08), transparent 55%),
+        radial-gradient(circle at bottom, rgba(0, 128, 0, 0.12), transparent 65%),
+        repeating-linear-gradient(90deg, rgba(0, 50, 0, 0.45) 0px, rgba(0, 50, 0, 0.45) 1px, transparent 1px, transparent 4px);
+    color: var(--text-color);
+    font-family: var(--matrix-font);
+    letter-spacing: 0.025em;
+    text-shadow: 0 0 6px rgba(0, 255, 110, 0.25);
+    position: relative;
+    overflow-x: hidden;
+}
+
+[data-theme="matrix"] body::before,
+body.theme-matrix::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(0deg, rgba(0, 255, 110, 0.05), transparent 80%);
+    mix-blend-mode: screen;
+    z-index: -1;
 }
 
 body.bg-custom-page,
@@ -116,6 +155,18 @@ body .btn-custom-primary:hover {
     border-color: var(--secondary-color);
 }
 
+[data-theme="matrix"] .btn-custom-primary,
+body.theme-matrix .btn-custom-primary {
+    box-shadow: var(--shadow);
+    text-shadow: 0 0 4px rgba(0, 255, 110, 0.45);
+}
+
+[data-theme="matrix"] .btn-custom-primary:hover,
+body.theme-matrix .btn-custom-primary:hover {
+    box-shadow: 0 0 22px rgba(0, 255, 128, 0.55);
+    filter: brightness(1.05);
+}
+
 body .btn-custom-secondary {
     background-color: var(--secondary-color);
     border-color: var(--secondary-color);
@@ -125,6 +176,35 @@ body .btn-custom-secondary {
 
 body .btn-custom-secondary:hover {
     filter: brightness(1.05);
+}
+
+[data-theme="matrix"] .btn-custom-secondary,
+body.theme-matrix .btn-custom-secondary {
+    color: var(--btn-fg);
+    background-color: var(--btn-bg);
+    border-color: var(--btn-border);
+    box-shadow: var(--shadow);
+}
+
+[data-theme="matrix"] .btn-custom-secondary:hover,
+body.theme-matrix .btn-custom-secondary:hover {
+    box-shadow: 0 0 22px rgba(0, 255, 128, 0.45);
+}
+
+[data-theme="matrix"] .btn-pill-blue,
+body.theme-matrix .btn-pill-blue {
+    background-color: var(--btn-pill-blue);
+    color: #ffffff;
+    border-color: rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 18px rgba(0, 123, 255, 0.45);
+}
+
+[data-theme="matrix"] .btn-pill-red,
+body.theme-matrix .btn-pill-red {
+    background-color: var(--btn-pill-red);
+    color: #ffffff;
+    border-color: rgba(255, 0, 0, 0.45);
+    box-shadow: 0 0 18px rgba(255, 0, 0, 0.45);
 }
 
 /* Acessibilidade do botão Limpar */
@@ -225,6 +305,30 @@ body h4 {
     color: var(--primary-color);
 }
 
+[data-theme="matrix"] h1,
+[data-theme="matrix"] h2,
+[data-theme="matrix"] h3,
+[data-theme="matrix"] h4,
+[data-theme="matrix"] h5,
+[data-theme="matrix"] h6,
+body.theme-matrix h1,
+body.theme-matrix h2,
+body.theme-matrix h3,
+body.theme-matrix h4,
+body.theme-matrix h5,
+body.theme-matrix h6 {
+    color: var(--color-fg);
+    text-shadow:
+        0 0 8px rgba(0, 255, 128, 0.35),
+        0 0 16px rgba(0, 255, 128, 0.2);
+    letter-spacing: 0.04em;
+}
+
+[data-theme="matrix"] h1.typing,
+body.theme-matrix h1.typing {
+    max-width: 100%;
+}
+
 /* Links ------------------------------------------------------------------ */
 body a {
     color: var(--primary-color);
@@ -234,6 +338,21 @@ body a {
 body a:hover {
     color: var(--secondary-color);
     text-decoration: underline;
+}
+
+[data-theme="matrix"] a,
+body.theme-matrix a {
+    color: var(--color-fg);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+[data-theme="matrix"] a:hover,
+[data-theme="matrix"] a:focus-visible,
+body.theme-matrix a:hover,
+body.theme-matrix a:focus-visible {
+    color: var(--color-primary);
+    text-decoration: none;
+    text-shadow: 0 0 15px rgba(0, 255, 128, 0.6);
 }
 
 /* Ajustes diversos ------------------------------------------------------- */
@@ -260,6 +379,62 @@ body .btn-pulsante {
     animation: pulse 1.5s infinite;
 }
 
+[data-theme="matrix"] .glitch,
+body.theme-matrix .glitch {
+    position: relative;
+    display: inline-block;
+    color: var(--color-fg);
+    text-shadow:
+        0 0 6px rgba(0, 255, 128, 0.4),
+        0 0 12px rgba(0, 255, 128, 0.2);
+    animation: matrixGlitch 2.75s infinite steps(12);
+}
+
+[data-theme="matrix"] .glitch::before,
+[data-theme="matrix"] .glitch::after,
+body.theme-matrix .glitch::before,
+body.theme-matrix .glitch::after {
+    content: attr(data-glitch);
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    mix-blend-mode: screen;
+    opacity: 0.65;
+}
+
+[data-theme="matrix"] .glitch::before,
+body.theme-matrix .glitch::before {
+    color: rgba(0, 255, 140, 0.8);
+    transform: translate3d(-2px, -1px, 0);
+    clip-path: inset(0 0 60% 0);
+}
+
+[data-theme="matrix"] .glitch::after,
+body.theme-matrix .glitch::after {
+    color: rgba(0, 200, 255, 0.55);
+    transform: translate3d(2px, 1px, 0);
+    clip-path: inset(40% 0 0 0);
+}
+
+[data-theme="matrix"] .typing,
+body.theme-matrix .typing {
+    display: inline-block;
+    overflow: hidden;
+    border-right: 0.15em solid var(--color-accent);
+    white-space: nowrap;
+    animation:
+        matrixType 3s steps(40, end),
+        matrixCaret 0.7s steps(1, end) infinite;
+}
+
+[data-theme="matrix"] .btn-pill-blue:hover,
+[data-theme="matrix"] .btn-pill-red:hover,
+body.theme-matrix .btn-pill-blue:hover,
+body.theme-matrix .btn-pill-red:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 24px rgba(0, 255, 128, 0.4);
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -272,6 +447,66 @@ body .btn-pulsante {
     100% {
         transform: scale(1);
         box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+}
+
+@keyframes matrixGlitch {
+    0%,
+    100% {
+        clip-path: inset(0 0 0 0);
+        transform: translate3d(0, 0, 0);
+    }
+    30% {
+        clip-path: inset(10% 0 85% 0);
+        transform: translate3d(2px, -2px, 0);
+    }
+    55% {
+        clip-path: inset(60% 0 15% 0);
+        transform: translate3d(-2px, 2px, 0);
+    }
+    80% {
+        clip-path: inset(20% 0 65% 0);
+        transform: translate3d(1px, -1px, 0);
+    }
+}
+
+@keyframes matrixType {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes matrixCaret {
+    0%,
+    50% {
+        border-color: transparent;
+    }
+    50.01%,
+    100% {
+        border-color: var(--color-accent);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-theme="matrix"] .glitch,
+    body.theme-matrix .glitch {
+        animation: none;
+    }
+
+    [data-theme="matrix"] .glitch::before,
+    [data-theme="matrix"] .glitch::after,
+    body.theme-matrix .glitch::before,
+    body.theme-matrix .glitch::after {
+        display: none;
+    }
+
+    [data-theme="matrix"] .typing,
+    body.theme-matrix .typing {
+        animation: none;
+        border-right: none;
     }
 }
 
