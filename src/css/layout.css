@@ -306,6 +306,125 @@
   pointer-events: none;
 }
 
+/* ---------- Skeleton de carregamento ---------- */
+.app-loading-skeleton {
+  display: none;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+[data-app-loading="true"] .app-loading-skeleton {
+  display: flex;
+}
+
+[data-app-loading="true"] .app-shell > :not(.app-loading-skeleton) {
+  display: none !important;
+}
+
+.app-loading-skeleton__card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background-color: var(--card-background, rgba(255, 255, 255, 0.85));
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.skeleton-text-group,
+.skeleton-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.skeleton-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.skeleton-grid--columns {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.skeleton-grid--equal {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.skeleton-line,
+.skeleton-pill,
+.skeleton-block {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(148, 163, 184, 0.18);
+  border-radius: 999px;
+}
+
+.skeleton-line {
+  height: 1rem;
+  width: 100%;
+}
+
+.skeleton-line--title {
+  height: 1.4rem;
+  max-width: 55%;
+}
+
+.skeleton-line--subtitle {
+  height: 1.05rem;
+  max-width: 40%;
+}
+
+.skeleton-line--short {
+  max-width: 45%;
+}
+
+.skeleton-pill {
+  height: 2.75rem;
+  min-width: 8rem;
+  border-radius: 1.75rem;
+}
+
+.skeleton-block {
+  border-radius: 1rem;
+}
+
+.skeleton-block--textarea {
+  height: 180px;
+}
+
+.skeleton-block--list {
+  height: 200px;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: skeleton-shine 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shine {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ---------- Integração VLibras ---------- */
 body.has-inline-vlibras {
   --acc-toggle-top: calc(50% - 13.25rem);
