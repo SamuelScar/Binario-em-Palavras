@@ -1,3 +1,10 @@
+/* =============================================================================
+   themes.css — Declaração dos temas e tokens de cor da interface
+   -----------------------------------------------------------------------------
+   Define variáveis base e alternativas (dark, vintage, contraste) utilizadas
+   pela aplicação.
+   ========================================================================== */
+
 :root {
     --primary-color: #7b0000; /* Vermelho escuro */
     --secondary-color: #a67c52; /* Marrom dourado */
@@ -6,6 +13,11 @@
     --border-color: #8b5e3b; /* Marrom suave */
     --text-color: #4c3318; /* Marrom escuro para legibilidade */
     --card-background: #d7b98e; /* Bege médio para cartões */
+    --placeholder-color: rgba(76, 51, 24, 0.6);
+    --divider-color: rgba(139, 94, 59, 0.5);
+    --footer-background: #2d1a0d;
+    --footer-text: #fdf3de;
+    --clear-button-text: #ffffff;
 }
 
 /* Temas alternativos ----------------------------------------------------- */
@@ -18,6 +30,11 @@ body.dark {
     --border-color: #555;
     --text-color: #f5f5f5;
     --card-background: #444;
+    --placeholder-color: rgba(245, 245, 245, 0.55);
+    --divider-color: rgba(255, 77, 77, 0.45);
+    --footer-background: #0f0f0f;
+    --footer-text: #f5f5f5;
+    --clear-button-text: #f5f5f5;
 }
 
 body.theme-vintage {
@@ -28,6 +45,11 @@ body.theme-vintage {
     --border-color: #b0855a;
     --text-color: #3b2b1c;
     --card-background: #d6c2a6;
+    --placeholder-color: rgba(59, 43, 28, 0.55);
+    --divider-color: rgba(112, 66, 20, 0.5);
+    --footer-background: #48311f;
+    --footer-text: #fdf3de;
+    --clear-button-text: #fdf3de;
 }
 
 body.theme-contrast {
@@ -38,6 +60,30 @@ body.theme-contrast {
     --border-color: white;
     --text-color: white;
     --card-background: #111;
+    --placeholder-color: rgba(255, 255, 255, 0.6);
+    --divider-color: rgba(255, 255, 0, 0.55);
+    --footer-background: #000000;
+    --footer-text: #ffffff;
+    --clear-button-text: #000000;
+}
+
+body.theme-matrix {
+    --primary-color: #00ff9c;
+    --secondary-color: #01b368;
+    --background-color: #010709;
+    --input-background: rgba(0, 12, 8, 0.75);
+    --border-color: rgba(0, 255, 156, 0.45);
+    --text-color: #d0ffe9;
+    --card-background: rgba(0, 18, 12, 0.82);
+    --placeholder-color: rgba(0, 255, 156, 0.45);
+    --divider-color: rgba(0, 255, 156, 0.35);
+    --footer-background: rgba(0, 18, 12, 0.9);
+    --footer-text: #d0ffe9;
+    --clear-button-text: #d0ffe9;
+    font-family: "Courier New", Courier, monospace;
+    letter-spacing: 0.025em;
+    position: relative;
+    overflow: hidden;
 }
 
 /* Layout base ------------------------------------------------------------ */
@@ -81,6 +127,32 @@ body .btn-custom-secondary:hover {
     filter: brightness(1.05);
 }
 
+/* Acessibilidade do botão Limpar */
+#clearButton,
+#clearButton strong {
+    color: var(--clear-button-text, var(--text-color, #1f2937));
+}
+
+#clearButton.btn-success,
+#clearButton.btn-success strong {
+    color: #ffffff;
+}
+
+#clearButton:not(.btn-success):hover,
+#clearButton:not(.btn-success):active {
+    color: var(--text-color, #1f2937);
+}
+
+#clearButton:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+#clearButton:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
 /* Formulários e conteúdos ------------------------------------------------ */
 body .input-custom {
     background-color: var(--input-background);
@@ -107,6 +179,37 @@ body .list-group-item-custom:hover {
 body blockquote {
     color: var(--text-color);
     border-left: 4px solid var(--primary-color);
+}
+
+body .text-primary {
+    color: var(--primary-color) !important;
+}
+
+body .text-secondary {
+    color: var(--text-color) !important;
+}
+
+body .blockquote-footer {
+    color: var(--text-color) !important;
+}
+
+body .bg-custom-dark {
+    background-color: var(--footer-background);
+    color: var(--footer-text);
+}
+
+body .bg-custom-dark a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+body .bg-custom-dark a:hover,
+body .bg-custom-dark a:focus-visible {
+    color: var(--secondary-color);
+}
+
+body .text-custom {
+    color: var(--footer-text) !important;
 }
 
 /* Tipografia ------------------------------------------------------------- */
@@ -146,6 +249,12 @@ body .texto-biblico {
     color: var(--text-color);
 }
 
+.app-divider {
+    border: 0;
+    border-top: 2px solid var(--divider-color, rgba(0, 0, 0, 0.25));
+    opacity: 1;
+}
+
 /* Animações -------------------------------------------------------------- */
 body .btn-pulsante {
     animation: pulse 1.5s infinite;
@@ -164,4 +273,37 @@ body .btn-pulsante {
         transform: scale(1);
         box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
     }
+}
+
+/* Utilidades de acessibilidade ------------------------------------------ */
+body .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
+body .form-control::placeholder,
+body .input-custom::placeholder,
+body textarea::placeholder {
+    color: var(--placeholder-color, rgba(0, 0, 0, 0.45));
 }
