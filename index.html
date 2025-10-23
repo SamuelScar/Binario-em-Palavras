@@ -39,7 +39,7 @@
     </script>
   </head>
 
-  <body class="bg-custom-page p-3 has-inline-vlibras">
+  <body class="bg-custom-page p-3 has-inline-vlibras" data-app-loading="true">
     <!-- Controles de acessibilidade -->
     <button
       type="button"
@@ -151,6 +151,35 @@
 
     <!-- Layout principal -->
     <div class="app-shell" data-acc-grayscale-target>
+      <section id="loadingSkeleton" class="app-loading-skeleton" role="status" aria-live="polite">
+        <span class="sr-only">Carregando conteúdo, aguarde...</span>
+        <div class="app-loading-skeleton__card" aria-hidden="true">
+          <div class="skeleton-line skeleton-line--title skeleton-shimmer"></div>
+          <div class="skeleton-line skeleton-line--subtitle skeleton-shimmer"></div>
+          <div class="skeleton-pill-group">
+            <span class="skeleton-pill skeleton-shimmer"></span>
+          </div>
+          <div class="skeleton-text-group">
+            <span class="skeleton-line skeleton-shimmer"></span>
+            <span class="skeleton-line skeleton-shimmer"></span>
+            <span class="skeleton-line skeleton-line--short skeleton-shimmer"></span>
+          </div>
+        </div>
+        <div class="app-loading-skeleton__card" aria-hidden="true">
+          <div class="skeleton-line skeleton-line--title skeleton-shimmer"></div>
+          <div class="skeleton-grid skeleton-grid--columns">
+            <div class="skeleton-block skeleton-block--textarea skeleton-shimmer"></div>
+            <div class="skeleton-block skeleton-block--textarea skeleton-shimmer"></div>
+          </div>
+        </div>
+        <div class="app-loading-skeleton__card" aria-hidden="true">
+          <div class="skeleton-line skeleton-line--title skeleton-shimmer"></div>
+          <div class="skeleton-grid skeleton-grid--equal">
+            <div class="skeleton-block skeleton-block--list skeleton-shimmer"></div>
+            <div class="skeleton-block skeleton-block--list skeleton-shimmer"></div>
+          </div>
+        </div>
+      </section>
       <header class="app-header">
         <div class="app-toolbar">
           <div class="dropdown theme-dropdown">
@@ -221,7 +250,7 @@
         </div>
       </header>
 
-      <main id="mainContent" class="app-main">
+      <main id="mainContent" class="app-main" aria-busy="true">
         <!-- Seção introdutória -->
         <section class="app-section" aria-labelledby="intro-title">
           <article class="app-card bg-custom-page shadow g-4">

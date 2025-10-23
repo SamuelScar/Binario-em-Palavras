@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", initializeApplication);
 function initializeApplication() {
   const elements = getDomElements();
 
+  setAppLoadingState(true);
   initThemeManager();
   showStartupAlert(elements.mainContent);
   setupConverters(elements);
@@ -28,6 +29,7 @@ function initializeApplication() {
   setupClearButton(elements);
   setupPulseButton(elements);
   setupFeedbackForm();
+  setAppLoadingState(false);
 }
 
 /**
@@ -46,6 +48,34 @@ function getDomElements() {
     mainContent: document.getElementById("mainContent"),
     pulseButton: document.querySelector(".btn-pulsante"),
   };
+}
+
+/**
+ * Alterna o estado de carregamento inicial entre skeleton e conteúdo real.
+ * @param {boolean} isLoading - Quando true mantém o skeleton visível.
+ */
+function setAppLoadingState(isLoading) {
+  const body = document.body;
+  const mainContent = document.getElementById("mainContent");
+  const skeleton = document.getElementById("loadingSkeleton");
+
+  if (body) {
+    body.dataset.appLoading = String(isLoading);
+  }
+
+  if (mainContent) {
+    mainContent.setAttribute("aria-busy", String(isLoading));
+  }
+
+  if (skeleton) {
+    if (isLoading) {
+      skeleton.hidden = false;
+      skeleton.setAttribute("aria-hidden", "false");
+    } else {
+      skeleton.hidden = true;
+      skeleton.setAttribute("aria-hidden", "true");
+    }
+  }
 }
 
 const FEEDBACK_STORAGE_KEY = "binario:feedbackType";
