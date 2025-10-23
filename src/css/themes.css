@@ -193,18 +193,36 @@ body.theme-matrix .btn-custom-secondary:hover {
 
 [data-theme="matrix"] .btn-pill-blue,
 body.theme-matrix .btn-pill-blue {
-    background-color: var(--btn-pill-blue);
-    color: #ffffff;
-    border-color: rgba(0, 123, 255, 0.5);
-    box-shadow: 0 0 18px rgba(0, 123, 255, 0.45);
+    background-image: linear-gradient(135deg, rgba(0, 123, 255, 0.85), rgba(30, 150, 255, 0.95));
+    color: #e6f4ff;
+    border: 1px solid rgba(0, 180, 255, 0.65);
+    box-shadow:
+        0 0 22px rgba(0, 180, 255, 0.45),
+        0 0 12px rgba(0, 255, 128, 0.25);
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
 }
 
 [data-theme="matrix"] .btn-pill-red,
 body.theme-matrix .btn-pill-red {
-    background-color: var(--btn-pill-red);
-    color: #ffffff;
-    border-color: rgba(255, 0, 0, 0.45);
-    box-shadow: 0 0 18px rgba(255, 0, 0, 0.45);
+    background-image: linear-gradient(135deg, rgba(255, 32, 32, 0.85), rgba(255, 0, 0, 0.95));
+    color: #ffe6e6;
+    border: 1px solid rgba(255, 90, 90, 0.65);
+    box-shadow:
+        0 0 22px rgba(255, 60, 60, 0.45),
+        0 0 12px rgba(0, 255, 128, 0.25);
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
 }
 
 /* Acessibilidade do botão Limpar */
@@ -303,6 +321,57 @@ body h6 {
 body h1,
 body h4 {
     color: var(--primary-color);
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-default,
+body.theme-matrix #toolbox-title .toolbox-title-default {
+    display: none;
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-matrix,
+body.theme-matrix #toolbox-title .toolbox-title-matrix {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-matrix.glitch,
+body.theme-matrix #toolbox-title .toolbox-title-matrix.glitch {
+    animation-duration: 4.5s;
+    animation-timing-function: steps(14);
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-matrix.glitch::before,
+body.theme-matrix #toolbox-title .toolbox-title-matrix.glitch::before {
+    transform: translate3d(-1px, -0.5px, 0);
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-matrix.glitch::after,
+body.theme-matrix #toolbox-title .toolbox-title-matrix.glitch::after {
+    transform: translate3d(1px, 0.5px, 0);
+}
+
+#toolbox-title .toolbox-title-matrix {
+    display: none;
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-icon-default,
+body.theme-matrix #toolbox-title .toolbox-icon-default {
+    display: none;
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-icon-matrix,
+body.theme-matrix #toolbox-title .toolbox-icon-matrix {
+    display: inline-flex;
+    filter:
+        drop-shadow(0 0 6px rgba(0, 255, 128, 0.4))
+        drop-shadow(0 0 8px rgba(255, 0, 0, 0.35));
+}
+
+#toolbox-title .toolbox-icon-matrix {
+    display: none;
 }
 
 [data-theme="matrix"] h1,
@@ -431,8 +500,19 @@ body.theme-matrix .typing {
 [data-theme="matrix"] .btn-pill-red:hover,
 body.theme-matrix .btn-pill-blue:hover,
 body.theme-matrix .btn-pill-red:hover {
-    filter: brightness(1.1);
-    box-shadow: 0 0 24px rgba(0, 255, 128, 0.4);
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    box-shadow:
+        0 0 28px rgba(0, 255, 128, 0.3),
+        0 0 24px rgba(0, 255, 128, 0.35);
+}
+
+[data-theme="matrix"] .btn-pill-blue:focus-visible,
+[data-theme="matrix"] .btn-pill-red:focus-visible,
+body.theme-matrix .btn-pill-blue:focus-visible,
+body.theme-matrix .btn-pill-red:focus-visible {
+    outline: 2px solid rgba(0, 255, 128, 0.75);
+    outline-offset: 4px;
 }
 
 @keyframes pulse {
@@ -541,4 +621,22 @@ body .form-control::placeholder,
 body .input-custom::placeholder,
 body textarea::placeholder {
     color: var(--placeholder-color, rgba(0, 0, 0, 0.45));
+}
+[data-theme="matrix"] .form-control:focus,
+[data-theme="matrix"] .input-custom:focus,
+body.theme-matrix .form-control:focus,
+body.theme-matrix .input-custom:focus {
+    background-color: var(--input-background);
+    color: var(--text-color);
+    border-color: rgba(0, 255, 128, 0.6);
+    box-shadow:
+        0 0 0 0.25rem rgba(0, 255, 128, 0.25),
+        0 0 12px rgba(0, 255, 128, 0.35);
+}
+
+[data-theme="matrix"] .form-control:focus::placeholder,
+[data-theme="matrix"] .input-custom:focus::placeholder,
+body.theme-matrix .form-control:focus::placeholder,
+body.theme-matrix .input-custom:focus::placeholder {
+    color: rgba(0, 255, 128, 0.6);
 }

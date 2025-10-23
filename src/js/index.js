@@ -17,17 +17,19 @@ document.addEventListener("DOMContentLoaded", initializeApplication);
  */
 function initializeApplication() {
   const elements = getDomElements();
+  const counterController = createAnimatedBinaryCounter(elements.characterCounter);
+  const context = { ...elements, counterController };
 
   setAppLoadingState(true);
   initThemeManager();
   showStartupAlert(elements.mainContent);
-  setupConverters(elements);
-  setupBinaryValidation(elements);
-  setupDictionary(elements);
-  populateQuickPhrases(elements);
-  populateBiblicalPhrases(elements);
-  setupClearButton(elements);
-  setupPulseButton(elements);
+  setupConverters(context);
+  setupBinaryValidation(context);
+  setupDictionary(context);
+  populateQuickPhrases(context);
+  populateBiblicalPhrases(context);
+  setupClearButton(context);
+  setupPulseButton(context);
   setupFeedbackForm();
   setAppLoadingState(false);
 }
@@ -47,6 +49,7 @@ function getDomElements() {
     biblicalPhrasesContainer: document.getElementById("biblicalPhrasesContainer"),
     mainContent: document.getElementById("mainContent"),
     pulseButton: document.querySelector(".btn-pulsante"),
+    characterCounter: document.querySelector("[data-binary-counter]"),
   };
 }
 
@@ -307,21 +310,183 @@ Este é um protótipo em desenvolvimento e pode conter bugs. A iniciativa busca 
 }
 
 /**
- * Configura a sincronização entre os campos de texto e binário.
- * @param {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null}} elements - Elementos de DOM relevantes.
+ * Cria o controlador do contador animado de caracteres convertidos.
+ * @param {HTMLElement|null} container - Elemento raiz do contador.
+ * @returns {{update(value: number): void}} Controlador com API de atualização.
  */
-function setupConverters({ binaryInput, textInput }) {
+function createAnimatedBinaryCounter(container) {
+  if (!container) {
+    return {
+      update() {},
+    };
+  }
+
+  const binaryEl = container.querySelector("[data-counter-binary]");
+  const decimalEl = container.querySelector("[data-counter-decimal]");
+  const srEl = container.querySelector("[data-counter-sr]");
+  const reduceMotionQuery = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : { matches: false, addEventListener() {}, removeEventListener() {}, addListener() {} };
+  let prefersReducedMotion = Boolean(reduceMotionQuery.matches);
+  let currentValue = Number.parseInt(container.dataset.counterValue || "0", 10) || 0;
+  let pendingTimeoutId = null;
+
+  if (reduceMotionQuery.addEventListener) {
+    reduceMotionQuery.addEventListener("change", (event) => {
+      prefersReducedMotion = event.matches;
+    });
+  } else if (reduceMotionQuery.addListener) {
+    reduceMotionQuery.addListener((event) => {
+      prefersReducedMotion = event.matches;
+    });
+  }
+
+  const formatBinary = (value) => {
+    const safeValue = Math.max(0, Math.floor(value));
+    const binaryString = safeValue.toString(2);
+    const paddedLength = Math.max(4, Math.ceil(binaryString.length / 4) * 4);
+    const paddedBinary = binaryString.padStart(paddedLength, "0");
+    return paddedBinary.replace(/(.{4})/g, "$1 ").trim();
+  };
+
+  const render = (value) => {
+    const safeValue = Math.max(0, Math.floor(value));
+
+    if (binaryEl) {
+      binaryEl.textContent = `${formatBinary(safeValue)}\u2082`;
+    }
+
+    if (decimalEl) {
+      decimalEl.textContent = `(${safeValue})`;
+    }
+
+    if (srEl) {
+      const label = safeValue === 1 ? "caractere convertido" : "caracteres convertidos";
+      srEl.textContent = `${safeValue} ${label}`;
+    }
+
+    container.dataset.counterValue = String(safeValue);
+  };
+
+  const buildAnimationFrames = (start, target) => {
+    if (start === target) {
+      return [];
+    }
+
+    const frames = [];
+    const direction = target > start ? 1 : -1;
+    let value = start;
+    let step = 1;
+
+    while (value !== target && frames.length < 12) {
+      value += direction * step;
+
+      if ((direction > 0 && value > target) || (direction < 0 && value < target)) {
+        value = target;
+      }
+
+      frames.push(value);
+      const remaining = Math.abs(target - value);
+
+      if (remaining === 0) {
+        break;
+      }
+
+      step = Math.min(step * 2, remaining);
+    }
+
+    if (frames[frames.length - 1] !== target) {
+      frames.push(target);
+    }
+
+    return frames;
+  };
+
+  const stopAnimation = () => {
+    if (pendingTimeoutId) {
+      window.clearTimeout(pendingTimeoutId);
+      pendingTimeoutId = null;
+    }
+
+    container.classList.remove("conversion-stats--counting");
+  };
+
+  const playFrames = (frames) => {
+    if (!frames.length) {
+      stopAnimation();
+      return;
+    }
+
+    const interval = Math.max(48, 260 / frames.length);
+    let frameIndex = 0;
+
+    const tick = () => {
+      currentValue = frames[frameIndex];
+      render(currentValue);
+      frameIndex += 1;
+
+      if (frameIndex < frames.length) {
+        pendingTimeoutId = window.setTimeout(tick, interval);
+      } else {
+        pendingTimeoutId = window.setTimeout(() => {
+          container.classList.remove("conversion-stats--counting");
+          pendingTimeoutId = null;
+        }, 140);
+      }
+    };
+
+    tick();
+  };
+
+  render(currentValue);
+
+  return {
+    update(nextValue) {
+      const numericValue = Number(nextValue);
+      const targetValue = Number.isFinite(numericValue) ? Math.max(0, Math.floor(numericValue)) : 0;
+
+      if (prefersReducedMotion) {
+        stopAnimation();
+        currentValue = targetValue;
+        render(currentValue);
+        return;
+      }
+
+      if (targetValue === currentValue) {
+        render(currentValue);
+        return;
+      }
+
+      stopAnimation();
+      container.classList.add("conversion-stats--counting");
+      const frames = buildAnimationFrames(currentValue, targetValue);
+      playFrames(frames);
+    },
+  };
+}
+
+/**
+ * Configura a sincronização entre os campos de texto e binário.
+ * @param {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}}} elements - Elementos de DOM relevantes.
+ */
+function setupConverters({ binaryInput, textInput, counterController = { update() {} } }) {
   if (!binaryInput || !textInput) {
     return;
   }
 
   binaryInput.addEventListener("input", (event) => {
-    textInput.value = binaryToText(event.target.value);
+    const convertedText = binaryToText(event.target.value);
+    textInput.value = convertedText;
+    counterController.update(convertedText.length);
   });
 
   textInput.addEventListener("input", (event) => {
-    binaryInput.value = textToBinary(event.target.value);
+    const value = event.target.value;
+    binaryInput.value = textToBinary(value);
+    counterController.update(value.length);
   });
+
+  counterController.update(textInput.value.length);
 }
 
 /**
@@ -343,9 +508,15 @@ function setupBinaryValidation({ binaryInput }) {
 
 /**
  * Monta a lista dinâmica do dicionário com base na pesquisa do usuário.
- * @param {{dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null}} elements - Elementos de DOM relevantes.
+ * @param {{dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}}} elements - Elementos de DOM relevantes.
  */
-function setupDictionary({ dictionaryEl, dictionarySearch, textInput, binaryInput }) {
+function setupDictionary({
+  dictionaryEl,
+  dictionarySearch,
+  textInput,
+  binaryInput,
+  counterController = { update() {} },
+}) {
   if (!dictionaryEl || !dictionarySearch || !textInput || !binaryInput) {
     return;
   }
@@ -357,7 +528,9 @@ function setupDictionary({ dictionaryEl, dictionarySearch, textInput, binaryInpu
     Object.entries(dictionary)
       .filter(([character]) => character.toLowerCase().includes(query))
       .forEach(([character, binary]) => {
-        fragment.appendChild(createDictionaryButton(character, binary, textInput, binaryInput));
+        fragment.appendChild(
+          createDictionaryButton(character, binary, textInput, binaryInput, counterController),
+        );
       });
 
     dictionaryEl.innerHTML = "";
@@ -374,9 +547,16 @@ function setupDictionary({ dictionaryEl, dictionarySearch, textInput, binaryInpu
  * @param {string} binary - Representação binária.
  * @param {HTMLTextAreaElement} textInput - Área de texto que recebe o caractere.
  * @param {HTMLTextAreaElement} binaryInput - Área de texto que recebe o binário convertido.
+ * @param {{update(value: number): void}} counterController - Controlador do contador animado.
  * @returns {HTMLButtonElement} Botão configurado.
  */
-function createDictionaryButton(character, binary, textInput, binaryInput) {
+function createDictionaryButton(
+  character,
+  binary,
+  textInput,
+  binaryInput,
+  counterController = { update() {} },
+) {
   const button = document.createElement("button");
   button.type = "button";
   button.className =
@@ -385,6 +565,7 @@ function createDictionaryButton(character, binary, textInput, binaryInput) {
   button.addEventListener("click", () => {
     textInput.value += character;
     binaryInput.value = textToBinary(textInput.value);
+    counterController.update(textInput.value.length);
   });
 
   return button;
@@ -392,9 +573,9 @@ function createDictionaryButton(character, binary, textInput, binaryInput) {
 
 /**
  * Preenche o painel de frases rápidas com botões que inserem textos pré-definidos.
- * @param {{phrasesEl: HTMLElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null}} elements - Elementos de DOM relevantes.
+ * @param {{phrasesEl: HTMLElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}}} elements - Elementos de DOM relevantes.
  */
-function populateQuickPhrases({ phrasesEl, textInput, binaryInput }) {
+function populateQuickPhrases({ phrasesEl, textInput, binaryInput, counterController = { update() {} } }) {
   if (!phrasesEl || !textInput || !binaryInput) {
     return;
   }
@@ -410,6 +591,7 @@ function populateQuickPhrases({ phrasesEl, textInput, binaryInput }) {
     button.addEventListener("click", () => {
       textInput.value += (textInput.value ? " " : "") + phrase;
       binaryInput.value = textToBinary(textInput.value);
+      counterController.update(textInput.value.length);
     });
 
     fragment.appendChild(button);
@@ -443,9 +625,9 @@ function populateBiblicalPhrases({ biblicalPhrasesContainer }) {
 
 /**
  * Define o comportamento do botão limpar, incluindo o estado temporário de carregamento.
- * @param {{clearButton: HTMLButtonElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null}} elements - Elementos de DOM relevantes.
+ * @param {{clearButton: HTMLButtonElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}}} elements - Elementos de DOM relevantes.
  */
-function setupClearButton({ clearButton, textInput, binaryInput }) {
+function setupClearButton({ clearButton, textInput, binaryInput, counterController = { update() {} } }) {
   if (!clearButton || !textInput || !binaryInput) {
     return;
   }
@@ -455,6 +637,7 @@ function setupClearButton({ clearButton, textInput, binaryInput }) {
   clearButton.addEventListener("click", () => {
     textInput.value = "";
     binaryInput.value = "";
+    counterController.update(0);
 
     clearButton.classList.add("btn-success");
     clearButton.textContent = "Limpando...";

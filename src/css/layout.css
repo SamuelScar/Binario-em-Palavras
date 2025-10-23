@@ -290,6 +290,156 @@
   max-height: 450px;
 }
 
+/* ---------- Microinterações ---------- */
+.link-scanline {
+  position: relative;
+}
+
+body.theme-matrix .link-scanline,
+[data-theme="matrix"] .link-scanline {
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+body.theme-matrix .link-scanline::after,
+[data-theme="matrix"] .link-scanline::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 45%,
+    var(--primary-color) 50%,
+    transparent 55%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: translateY(65%);
+  transition: opacity 0.18s ease;
+}
+
+body.theme-matrix .link-scanline:hover,
+body.theme-matrix .link-scanline:focus-visible,
+[data-theme="matrix"] .link-scanline:hover,
+[data-theme="matrix"] .link-scanline:focus-visible {
+  transform: translateY(-1px);
+}
+
+body.theme-matrix .link-scanline:hover::after,
+body.theme-matrix .link-scanline:focus-visible::after,
+[data-theme="matrix"] .link-scanline:hover::after,
+[data-theme="matrix"] .link-scanline:focus-visible::after {
+  opacity: 0.4;
+  animation: link-scanline-sweep 320ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+body.theme-matrix .link-scanline:focus-visible,
+[data-theme="matrix"] .link-scanline:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+
+@keyframes link-scanline-sweep {
+  0% {
+    transform: translateY(65%);
+  }
+  100% {
+    transform: translateY(-65%);
+  }
+}
+
+/* ---------- Contador de conversão ---------- */
+.conversion-stats {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.85rem;
+  border: 1px solid var(--border-color, rgba(148, 163, 184, 0.35));
+  background: linear-gradient(
+    135deg,
+    rgba(148, 163, 184, 0.08) 0%,
+    rgba(148, 163, 184, 0.04) 40%,
+    rgba(148, 163, 184, 0.02) 100%
+  );
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.conversion-stats::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.16) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: translateX(-45%);
+}
+
+.conversion-stats__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary-color, var(--primary-color));
+}
+
+.conversion-stats__value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--matrix-font, "Fira Code", "Source Code Pro", "Courier New", Courier, monospace);
+  color: var(--primary-color);
+}
+
+.conversion-stats__binary {
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 0.65em currentColor;
+}
+
+.conversion-stats__decimal {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--secondary-color, currentColor);
+}
+
+.conversion-stats--counting {
+  border-color: var(--primary-color);
+  box-shadow:
+    0 0 0 2px rgba(15, 23, 42, 0.08),
+    0 20px 32px rgba(15, 23, 42, 0.15);
+}
+
+.conversion-stats--counting::after {
+  opacity: 1;
+  animation: conversion-stats-sweep 420ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@keyframes conversion-stats-sweep {
+  0% {
+    transform: translateX(-45%);
+  }
+  100% {
+    transform: translateX(45%);
+  }
+}
+
 /* ---------- Rodapé ---------- */
 .app-footer a {
   text-decoration: none;
@@ -421,6 +571,27 @@
   .skeleton-shimmer::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    transform: none !important;
+  }
+
+  body.theme-matrix .link-scanline,
+  [data-theme="matrix"] .link-scanline,
+  .conversion-stats {
+    transition-duration: 0.01ms !important;
+  }
+
+  body.theme-matrix .link-scanline::after,
+  [data-theme="matrix"] .link-scanline::after,
+  .conversion-stats::after,
+  .conversion-stats--counting::after {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  body.theme-matrix .link-scanline:hover,
+  body.theme-matrix .link-scanline:focus-visible,
+  [data-theme="matrix"] .link-scanline:hover,
+  [data-theme="matrix"] .link-scanline:focus-visible {
     transform: none !important;
   }
 }

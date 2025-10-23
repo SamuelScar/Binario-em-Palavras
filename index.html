@@ -387,19 +387,35 @@
                   <textarea id="binaryInput" placeholder="Digite um codigo binario aqui" class="input-custom form-control fs-2" rows="4"></textarea>
                 </div>
               </div>
+
+              <div class="conversion-stats mt-4" data-binary-counter>
+                <span class="conversion-stats__label">Caracteres convertidos</span>
+                <div class="conversion-stats__value" aria-hidden="true">
+                  <span class="conversion-stats__binary" data-counter-binary>0000&#8322;</span>
+                  <span class="conversion-stats__decimal" data-counter-decimal>(0)</span>
+                </div>
+                <span class="sr-only" data-counter-sr aria-live="polite">0 caracteres convertidos</span>
+              </div>
             </section>
 
             <hr class="app-divider my-4" />
 
             <section class="app-subsection" aria-labelledby="toolbox-title">
               <h2 class="text-center fw-bold mb-4" id="toolbox-title">
-                Ferramentas
-                <i class="bi bi-tools" aria-hidden="true"></i>
+                <span class="toolbox-title-default">Ferramentas</span>
+                <span
+                  class="toolbox-title-matrix glitch"
+                  data-glitch="Escolha a sua pílula"
+                >
+                  Escolha a sua pílula
+                </span>
+                <i class="bi bi-tools toolbox-icon-default" aria-hidden="true"></i>
+                <i class="bi bi-capsule toolbox-icon-matrix" aria-hidden="true"></i>
               </h2>
               <div class="row g-4" id="toolbox-accordions">
                 <div class="col-md-6 d-grid mx-auto">
                   <button
-                    class="btn btn-custom-primary btn-lg"
+                    class="btn btn-custom-primary btn-lg btn-pill-blue"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#dictionaryCollapse"
@@ -418,7 +434,7 @@
 
                 <div class="col-md-6 d-grid mx-auto">
                   <button
-                    class="btn btn-custom-primary btn-lg"
+                    class="btn btn-custom-primary btn-lg btn-pill-red"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#phrasesCollapse"
@@ -559,7 +575,7 @@
                 </button>
                 <a
                   href="mailto:souzacarvalhosamuel@gmail.com"
-                  class="btn btn-outline-secondary btn-lg"
+                  class="btn btn-outline-secondary btn-lg link-scanline"
                   data-feedback-mailto
                 >
                   <i class="bi bi-envelope" aria-hidden="true"></i>
@@ -575,7 +591,11 @@
       <footer class="app-footer bg-custom-dark text-center py-3">
         <p class="mb-0 text-custom">
           Desenvolvido por <strong>Samuel de Souza</strong> |
-          <a href="https://github.com/SamuelScar/Binario-em-Palavras" target="_blank" class="text-custom fw-bold">
+          <a
+            href="https://github.com/SamuelScar/Binario-em-Palavras"
+            target="_blank"
+            class="text-custom fw-bold link-scanline"
+          >
             <i class="bi bi-github" aria-hidden="true"></i> GitHub
           </a>
         </p>
