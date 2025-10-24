@@ -132,6 +132,135 @@
   cursor: not-allowed;
 }
 
+/* ---------- Controles de áudio compactos ---------- */
+[data-theme="matrix"] .matrix-audio-mini,
+body.theme-matrix .matrix-audio-mini {
+  display: inline-flex;
+}
+
+.matrix-audio-mini {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.5rem;
+}
+
+.matrix-audio-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, rgba(148, 163, 184, 0.55));
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--primary-color);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.matrix-audio-btn i {
+  font-size: 1.1rem;
+}
+
+.matrix-audio-btn:hover,
+.matrix-audio-btn:focus-visible {
+  transform: translateY(-1px);
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+}
+
+.matrix-audio-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(15, 23, 42, 0.15),
+    0 0 0 5px currentColor;
+}
+
+.matrix-audio-btn.is-active {
+  border-color: var(--primary-color);
+  box-shadow:
+    0 0 0 2px rgba(15, 23, 42, 0.12),
+    0 0 18px rgba(15, 23, 42, 0.15);
+}
+
+.matrix-audio-btn:disabled,
+.matrix-audio-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---------- SweetAlert — integrado aos temas ---------- */
+body .swal2-popup {
+  background: var(--card-background, var(--background-color));
+  color: var(--text-color);
+  border: 1px solid var(--border-color, rgba(148, 163, 184, 0.45));
+  box-shadow:
+    0 16px 32px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(15, 23, 42, 0.06);
+  border-radius: 1rem;
+}
+
+body .swal2-title {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+body .swal2-html-container {
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+body .swal2-confirm {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--clear-button-text, #ffffff);
+  border-radius: 999px;
+  padding: 0.6rem 1.8rem;
+  font-weight: 600;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+body .swal2-confirm:hover,
+body .swal2-confirm:focus-visible {
+  transform: translateY(-1px);
+  background-color: var(--secondary-color, var(--primary-color));
+  box-shadow:
+    0 12px 22px rgba(15, 23, 42, 0.18),
+    0 0 0 2px rgba(15, 23, 42, 0.06);
+  outline: none;
+}
+
+body .swal2-icon {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.14);
+}
+
+body .swal2-icon.swal2-warning {
+  border-color: var(--secondary-color, var(--primary-color));
+  color: var(--secondary-color, var(--primary-color));
+}
+
+body .swal2-icon.swal2-success .swal2-success-ring {
+  border: 0.25em solid rgba(15, 23, 42, 0.08);
+}
+
+body .swal2-icon.swal2-success [class^="swal2-success-line"],
+body .swal2-icon.swal2-success [class*=" swal2-success-line"],
+body .swal2-icon.swal2-success .swal2-success-fix {
+  background-color: var(--primary-color);
+}
+
 /* ---------- Cartões e seções ---------- */
 .app-main {
   display: flex;
@@ -227,6 +356,26 @@
   outline-offset: 2px;
 }
 
+.feedback-type-group .form-check-label i {
+  transition:
+    transform 0.3s ease,
+    text-shadow 0.3s ease,
+    color 0.3s ease;
+  font-size: 1.15rem;
+}
+
+.feedback-type-group .form-check-input:focus-visible + .form-check-label i {
+  transform: scale(1.05);
+}
+
+.feedback-type-group .form-check-input:checked + .form-check-label .bi-bug {
+  animation: bug-walk 1.8s ease-in-out infinite;
+}
+
+.feedback-type-group .form-check-input:checked + .form-check-label .bi-lightbulb {
+  animation: bulb-glow 1.6s ease-in-out infinite;
+}
+
 .feedback-trigger .btn {
   border-radius: 1rem;
 }
@@ -288,6 +437,156 @@
 
 .quick-phrases-list {
   max-height: 450px;
+}
+
+/* ---------- Microinterações ---------- */
+.link-scanline {
+  position: relative;
+}
+
+body.theme-matrix .link-scanline,
+[data-theme="matrix"] .link-scanline {
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+body.theme-matrix .link-scanline::after,
+[data-theme="matrix"] .link-scanline::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 45%,
+    var(--primary-color) 50%,
+    transparent 55%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: translateY(65%);
+  transition: opacity 0.18s ease;
+}
+
+body.theme-matrix .link-scanline:hover,
+body.theme-matrix .link-scanline:focus-visible,
+[data-theme="matrix"] .link-scanline:hover,
+[data-theme="matrix"] .link-scanline:focus-visible {
+  transform: translateY(-1px);
+}
+
+body.theme-matrix .link-scanline:hover::after,
+body.theme-matrix .link-scanline:focus-visible::after,
+[data-theme="matrix"] .link-scanline:hover::after,
+[data-theme="matrix"] .link-scanline:focus-visible::after {
+  opacity: 0.4;
+  animation: link-scanline-sweep 320ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+body.theme-matrix .link-scanline:focus-visible,
+[data-theme="matrix"] .link-scanline:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+
+@keyframes link-scanline-sweep {
+  0% {
+    transform: translateY(65%);
+  }
+  100% {
+    transform: translateY(-65%);
+  }
+}
+
+/* ---------- Contador de conversão ---------- */
+.conversion-stats {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.85rem;
+  border: 1px solid var(--border-color, rgba(148, 163, 184, 0.35));
+  background: linear-gradient(
+    135deg,
+    rgba(148, 163, 184, 0.08) 0%,
+    rgba(148, 163, 184, 0.04) 40%,
+    rgba(148, 163, 184, 0.02) 100%
+  );
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.conversion-stats::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.16) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: translateX(-45%);
+}
+
+.conversion-stats__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary-color, var(--primary-color));
+}
+
+.conversion-stats__value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--matrix-font, "Fira Code", "Source Code Pro", "Courier New", Courier, monospace);
+  color: var(--primary-color);
+}
+
+.conversion-stats__binary {
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 0.65em currentColor;
+}
+
+.conversion-stats__decimal {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--secondary-color, currentColor);
+}
+
+.conversion-stats--counting {
+  border-color: var(--primary-color);
+  box-shadow:
+    0 0 0 2px rgba(15, 23, 42, 0.08),
+    0 20px 32px rgba(15, 23, 42, 0.15);
+}
+
+.conversion-stats--counting::after {
+  opacity: 1;
+  animation: conversion-stats-sweep 420ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@keyframes conversion-stats-sweep {
+  0% {
+    transform: translateX(-45%);
+  }
+  100% {
+    transform: translateX(45%);
+  }
 }
 
 /* ---------- Rodapé ---------- */
@@ -417,11 +716,86 @@
   }
 }
 
+@keyframes bug-walk {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+    text-shadow: none;
+  }
+  25% {
+    transform: translateX(2px) rotate(4deg);
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+  }
+  50% {
+    transform: translateX(-1px) rotate(-4deg);
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+  }
+  75% {
+    transform: translateX(1px) rotate(3deg);
+  }
+}
+
+@keyframes bulb-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 6px rgba(255, 255, 204, 0.25);
+    color: inherit;
+  }
+  40% {
+    text-shadow:
+      0 0 8px rgba(255, 255, 140, 0.65),
+      0 0 18px rgba(255, 255, 90, 0.4);
+    color: #ffd54f;
+  }
+  60% {
+    text-shadow:
+      0 0 10px rgba(255, 255, 180, 0.75),
+      0 0 24px rgba(255, 255, 120, 0.45);
+    color: #fff176;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transform: none !important;
+  }
+
+  body.theme-matrix .link-scanline,
+  [data-theme="matrix"] .link-scanline,
+  .conversion-stats,
+  .matrix-audio-btn,
+  body .swal2-confirm {
+    transition-duration: 0.01ms !important;
+  }
+
+  body.theme-matrix .link-scanline::after,
+  [data-theme="matrix"] .link-scanline::after,
+  .conversion-stats::after,
+  .conversion-stats--counting::after {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  body.theme-matrix .link-scanline:hover,
+  body.theme-matrix .link-scanline:focus-visible,
+  [data-theme="matrix"] .link-scanline:hover,
+  [data-theme="matrix"] .link-scanline:focus-visible {
+    transform: none !important;
+  }
+
+  .matrix-audio-btn:hover,
+  body .swal2-confirm:hover,
+  body .swal2-confirm:focus-visible {
+    transform: none !important;
+  }
+
+  .feedback-type-group .form-check-input:checked + .form-check-label .bi-bug,
+  .feedback-type-group .form-check-input:checked + .form-check-label .bi-lightbulb {
+    animation: none !important;
+    transform: none !important;
+    text-shadow: none !important;
   }
 }
 

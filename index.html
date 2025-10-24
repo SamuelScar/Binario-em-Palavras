@@ -182,6 +182,38 @@
       </section>
       <header class="app-header">
         <div class="app-toolbar">
+          <div class="matrix-audio-mini" data-matrix-audio>
+            <button
+              type="button"
+              class="matrix-audio-btn"
+              data-matrix-effects-toggle
+              data-audio-effect="toggle"
+              data-bs-toggle="popover"
+              data-bs-trigger="hover focus"
+              data-bs-placement="bottom"
+              data-bs-content="Ativar efeitos Matrix"
+              aria-label="Alternar efeitos sonoros Matrix"
+              aria-pressed="false"
+            >
+              <i class="bi bi-volume-mute" data-matrix-icon="effects" aria-hidden="true"></i>
+              <span class="visually-hidden">Efeitos Matrix</span>
+            </button>
+            <button
+              type="button"
+              class="matrix-audio-btn"
+              data-matrix-audio-toggle
+              data-audio-effect="toggle"
+              data-bs-toggle="popover"
+              data-bs-trigger="hover focus"
+              data-bs-placement="bottom"
+              data-bs-content="Ativar trilha Matrix"
+              aria-label="Alternar trilha de fundo Matrix"
+              aria-pressed="false"
+            >
+              <i class="bi bi-ban" data-matrix-icon="background" aria-hidden="true"></i>
+              <span class="visually-hidden">Trilha Matrix</span>
+            </button>
+          </div>
           <div class="dropdown theme-dropdown">
             <button
               class="theme-toggle dropdown-toggle"
@@ -356,7 +388,11 @@
               </p>
             </header>
 
-            <button id="clearButton" class="btn btn-custom-primary btn-lg w-100 mb-4">
+            <button
+              id="clearButton"
+              class="btn btn-custom-primary btn-lg w-100 mb-4"
+              data-audio-effect="clear"
+            >
               <strong>Limpar</strong>
               <i class="bi bi-stars" aria-hidden="true"></i>
             </button>
@@ -374,24 +410,41 @@
                   <textarea id="binaryInput" placeholder="Digite um codigo binario aqui" class="input-custom form-control fs-2" rows="4"></textarea>
                 </div>
               </div>
+
+              <div class="conversion-stats mt-4" data-binary-counter>
+                <span class="conversion-stats__label">Caracteres convertidos</span>
+                <div class="conversion-stats__value" aria-hidden="true">
+                  <span class="conversion-stats__binary" data-counter-binary>0000&#8322;</span>
+                  <span class="conversion-stats__decimal" data-counter-decimal>(0)</span>
+                </div>
+                <span class="sr-only" data-counter-sr aria-live="polite">0 caracteres convertidos</span>
+              </div>
             </section>
 
             <hr class="app-divider my-4" />
 
             <section class="app-subsection" aria-labelledby="toolbox-title">
               <h2 class="text-center fw-bold mb-4" id="toolbox-title">
-                Ferramentas
-                <i class="bi bi-tools" aria-hidden="true"></i>
+                <span class="toolbox-title-default">Ferramentas</span>
+                <span
+                  class="toolbox-title-matrix glitch"
+                  data-glitch="Escolha a sua pílula"
+                >
+                  Escolha a sua pílula
+                </span>
+                <i class="bi bi-tools toolbox-icon-default" aria-hidden="true"></i>
+                <i class="bi bi-capsule toolbox-icon-matrix" aria-hidden="true"></i>
               </h2>
               <div class="row g-4" id="toolbox-accordions">
                 <div class="col-md-6 d-grid mx-auto">
                   <button
-                    class="btn btn-custom-primary btn-lg"
+                    class="btn btn-custom-primary btn-lg btn-pill-blue"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#dictionaryCollapse"
                     aria-expanded="false"
                     aria-controls="dictionaryCollapse"
+                    data-audio-effect="toggle"
                   >
                     Dicionário
                     <i class="bi bi-book" aria-hidden="true"></i>
@@ -405,12 +458,13 @@
 
                 <div class="col-md-6 d-grid mx-auto">
                   <button
-                    class="btn btn-custom-primary btn-lg"
+                    class="btn btn-custom-primary btn-lg btn-pill-red"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#phrasesCollapse"
                     aria-expanded="false"
                     aria-controls="phrasesCollapse"
+                    data-audio-effect="toggle"
                   >
                     Frases/Palavras
                     <i class="bi bi-alphabet-uppercase" aria-hidden="true"></i>
@@ -434,6 +488,7 @@
             data-bs-target="#feedbackCollapse"
             aria-expanded="false"
             aria-controls="feedbackCollapse"
+            data-audio-effect="toggle"
           >
             <i class="bi bi-chat-dots" aria-hidden="true"></i>
             Compartilhe seu feedback
@@ -546,7 +601,7 @@
                 </button>
                 <a
                   href="mailto:souzacarvalhosamuel@gmail.com"
-                  class="btn btn-outline-secondary btn-lg"
+                  class="btn btn-outline-secondary btn-lg link-scanline"
                   data-feedback-mailto
                 >
                   <i class="bi bi-envelope" aria-hidden="true"></i>
@@ -562,7 +617,11 @@
       <footer class="app-footer bg-custom-dark text-center py-3">
         <p class="mb-0 text-custom">
           Desenvolvido por <strong>Samuel de Souza</strong> |
-          <a href="https://github.com/SamuelScar/Binario-em-Palavras" target="_blank" class="text-custom fw-bold">
+          <a
+            href="https://github.com/SamuelScar/Binario-em-Palavras"
+            target="_blank"
+            class="text-custom fw-bold link-scanline"
+          >
             <i class="bi bi-github" aria-hidden="true"></i> GitHub
           </a>
         </p>

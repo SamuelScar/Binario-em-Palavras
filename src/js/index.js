@@ -1,6 +1,7 @@
 import { phrases, dictionary, biblicalPhrases } from "./data/phrases.js";
-import { initThemeManager } from "./modules/themeManager.js";
+import { initThemeManager, applyTheme } from "./modules/themeManager.js";
 import { textToBinary, binaryToText } from "./modules/converter.js";
+import { initMatrixAudioManager } from "./modules/matrixAudioManager.js";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -12,29 +13,50 @@ window.bootstrap = bootstrap;
 
 document.addEventListener("DOMContentLoaded", initializeApplication);
 
+const MATRIX_SECRET_TEXT = "O ARQUITETO";
+const MATRIX_SECRET_BINARY = textToBinary(MATRIX_SECRET_TEXT);
+const MATRIX_SECRET_BINARY_NORMALIZED = normalizeBinarySequence(MATRIX_SECRET_BINARY);
+
 /**
  * Orquestra a inicialização da interface assim que o DOM estiver pronto.
  */
 function initializeApplication() {
   const elements = getDomElements();
+  const counterController = createAnimatedBinaryCounter(elements.characterCounter);
+  const audioController = initMatrixAudioManager({
+    container: elements.matrixAudioContainer,
+    toggleButton: elements.matrixAudioToggle,
+    effectsToggle: elements.matrixEffectsToggle,
+  });
+  const context = { ...elements, counterController, audioController };
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-audio-effect]");
+    if (!trigger) {
+      return;
+    }
+    const effectType = trigger.dataset.audioEffect || "ui";
+    audioController.playEffect(effectType);
+  });
 
   setAppLoadingState(true);
   initThemeManager();
   showStartupAlert(elements.mainContent);
-  setupConverters(elements);
-  setupBinaryValidation(elements);
-  setupDictionary(elements);
-  populateQuickPhrases(elements);
-  populateBiblicalPhrases(elements);
-  setupClearButton(elements);
-  setupPulseButton(elements);
-  setupFeedbackForm();
+  setupConverters(context);
+  setupBinaryValidation(context);
+  setupDictionary(context);
+  populateQuickPhrases(context);
+  populateBiblicalPhrases(context);
+  setupClearButton(context);
+  setupPulseButton(context);
+  setupFeedbackForm(context);
+  initializeAudioPopovers(context);
   setAppLoadingState(false);
 }
 
 /**
  * Centraliza as referências de DOM utilizadas no módulo.
- * @returns {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null, dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, phrasesEl: HTMLElement|null, clearButton: HTMLButtonElement|null, biblicalPhrasesContainer: HTMLElement|null, mainContent: HTMLElement|null, pulseButton: HTMLButtonElement|null}}
+ * @returns {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null, dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, phrasesEl: HTMLElement|null, clearButton: HTMLButtonElement|null, biblicalPhrasesContainer: HTMLElement|null, mainContent: HTMLElement|null, pulseButton: HTMLButtonElement|null, characterCounter: HTMLElement|null, matrixAudioContainer: HTMLElement|null, matrixAudioToggle: HTMLButtonElement|null, matrixEffectsToggle: HTMLButtonElement|null}}
  */
 function getDomElements() {
   return {
@@ -47,6 +69,10 @@ function getDomElements() {
     biblicalPhrasesContainer: document.getElementById("biblicalPhrasesContainer"),
     mainContent: document.getElementById("mainContent"),
     pulseButton: document.querySelector(".btn-pulsante"),
+    characterCounter: document.querySelector("[data-binary-counter]"),
+    matrixAudioContainer: document.querySelector("[data-matrix-audio]"),
+    matrixAudioToggle: document.querySelector("[data-matrix-audio-toggle]"),
+    matrixEffectsToggle: document.querySelector("[data-matrix-effects-toggle]"),
   };
 }
 
@@ -80,7 +106,7 @@ function setAppLoadingState(isLoading) {
 
 const FEEDBACK_STORAGE_KEY = "binario:feedbackType";
 const FEEDBACK_MAX_LENGTH = 1000;
-function setupFeedbackForm() {
+function setupFeedbackForm({ audioController = { playEffect() {} } } = {}) {
   const form = document.getElementById("feedbackForm");
 
   if (!form) {
@@ -97,6 +123,7 @@ function setupFeedbackForm() {
   const counterEl = form.querySelector("[data-feedback-counter]");
   const errorEl = form.querySelector("[data-feedback-error]");
   const statusEl = form.querySelector("[data-feedback-status]");
+  const interactiveFields = [nameField, emailField, messageField];
 
   let currentType = getStoredFeedbackType() || "suggestion";
 
@@ -152,11 +179,28 @@ function setupFeedbackForm() {
   showFieldError("");
   setStatusMessage("");
 
+  interactiveFields.forEach((field) => {
+    if (!field) {
+      return;
+    }
+
+    field.dataset.audioEffect = field.dataset.audioEffect || "effect";
+    field.addEventListener("focus", () => {
+      audioController.playEffect("effect");
+    });
+    field.addEventListener("input", () => {
+      audioController.playEffect("type");
+      triggerMatrixInputEffect(field);
+    });
+  });
+
   typeRadios.forEach((radio) => {
+    radio.dataset.audioEffect = radio.dataset.audioEffect || "toggle";
     radio.addEventListener("change", () => {
       if (!radio.checked) {
         return;
       }
+      audioController.playEffect("toggle");
       const type = radio.value || "suggestion";
       setActiveType(type);
       if (messageField) {
@@ -307,21 +351,195 @@ Este é um protótipo em desenvolvimento e pode conter bugs. A iniciativa busca 
 }
 
 /**
- * Configura a sincronização entre os campos de texto e binário.
- * @param {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null}} elements - Elementos de DOM relevantes.
+ * Cria o controlador do contador animado de caracteres convertidos.
+ * @param {HTMLElement|null} container - Elemento raiz do contador.
+ * @returns {{update(value: number): void}} Controlador com API de atualização.
  */
-function setupConverters({ binaryInput, textInput }) {
+function createAnimatedBinaryCounter(container) {
+  if (!container) {
+    return {
+      update() {},
+    };
+  }
+
+  const binaryEl = container.querySelector("[data-counter-binary]");
+  const decimalEl = container.querySelector("[data-counter-decimal]");
+  const srEl = container.querySelector("[data-counter-sr]");
+  const reduceMotionQuery = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : { matches: false, addEventListener() {}, removeEventListener() {}, addListener() {} };
+  let prefersReducedMotion = Boolean(reduceMotionQuery.matches);
+  let currentValue = Number.parseInt(container.dataset.counterValue || "0", 10) || 0;
+  let pendingTimeoutId = null;
+
+  if (reduceMotionQuery.addEventListener) {
+    reduceMotionQuery.addEventListener("change", (event) => {
+      prefersReducedMotion = event.matches;
+    });
+  } else if (reduceMotionQuery.addListener) {
+    reduceMotionQuery.addListener((event) => {
+      prefersReducedMotion = event.matches;
+    });
+  }
+
+  const formatBinary = (value) => {
+    const safeValue = Math.max(0, Math.floor(value));
+    const binaryString = safeValue.toString(2);
+    const paddedLength = Math.max(4, Math.ceil(binaryString.length / 4) * 4);
+    const paddedBinary = binaryString.padStart(paddedLength, "0");
+    return paddedBinary.replace(/(.{4})/g, "$1 ").trim();
+  };
+
+  const render = (value) => {
+    const safeValue = Math.max(0, Math.floor(value));
+
+    if (binaryEl) {
+      binaryEl.textContent = `${formatBinary(safeValue)}\u2082`;
+    }
+
+    if (decimalEl) {
+      decimalEl.textContent = `(${safeValue})`;
+    }
+
+    if (srEl) {
+      const label = safeValue === 1 ? "caractere convertido" : "caracteres convertidos";
+      srEl.textContent = `${safeValue} ${label}`;
+    }
+
+    container.dataset.counterValue = String(safeValue);
+  };
+
+  const buildAnimationFrames = (start, target) => {
+    if (start === target) {
+      return [];
+    }
+
+    const frames = [];
+    const direction = target > start ? 1 : -1;
+    let value = start;
+    let step = 1;
+
+    while (value !== target && frames.length < 12) {
+      value += direction * step;
+
+      if ((direction > 0 && value > target) || (direction < 0 && value < target)) {
+        value = target;
+      }
+
+      frames.push(value);
+      const remaining = Math.abs(target - value);
+
+      if (remaining === 0) {
+        break;
+      }
+
+      step = Math.min(step * 2, remaining);
+    }
+
+    if (frames[frames.length - 1] !== target) {
+      frames.push(target);
+    }
+
+    return frames;
+  };
+
+  const stopAnimation = () => {
+    if (pendingTimeoutId) {
+      window.clearTimeout(pendingTimeoutId);
+      pendingTimeoutId = null;
+    }
+
+    container.classList.remove("conversion-stats--counting");
+  };
+
+  const playFrames = (frames) => {
+    if (!frames.length) {
+      stopAnimation();
+      return;
+    }
+
+    const interval = Math.max(48, 260 / frames.length);
+    let frameIndex = 0;
+
+    const tick = () => {
+      currentValue = frames[frameIndex];
+      render(currentValue);
+      frameIndex += 1;
+
+      if (frameIndex < frames.length) {
+        pendingTimeoutId = window.setTimeout(tick, interval);
+      } else {
+        pendingTimeoutId = window.setTimeout(() => {
+          container.classList.remove("conversion-stats--counting");
+          pendingTimeoutId = null;
+        }, 140);
+      }
+    };
+
+    tick();
+  };
+
+  render(currentValue);
+
+  return {
+    update(nextValue) {
+      const numericValue = Number(nextValue);
+      const targetValue = Number.isFinite(numericValue) ? Math.max(0, Math.floor(numericValue)) : 0;
+
+      if (prefersReducedMotion) {
+        stopAnimation();
+        currentValue = targetValue;
+        render(currentValue);
+        return;
+      }
+
+      if (targetValue === currentValue) {
+        render(currentValue);
+        return;
+      }
+
+      stopAnimation();
+      container.classList.add("conversion-stats--counting");
+      const frames = buildAnimationFrames(currentValue, targetValue);
+      playFrames(frames);
+    },
+  };
+}
+
+/**
+ * Configura a sincronização entre os campos de texto e binário.
+ * @param {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}, audioController?: {playEffect(type: string): void}}} elements - Elementos de DOM relevantes.
+ */
+function setupConverters({
+  binaryInput,
+  textInput,
+  mainContent,
+  counterController = { update() {} },
+  audioController = { playEffect() {} },
+}) {
   if (!binaryInput || !textInput) {
     return;
   }
 
   binaryInput.addEventListener("input", (event) => {
-    textInput.value = binaryToText(event.target.value);
+    const convertedText = binaryToText(event.target.value);
+    textInput.value = convertedText;
+    counterController.update(convertedText.length);
+    triggerMatrixInputEffect(event.target);
+    audioController.playEffect("type");
+    maybeUnlockMatrixTheme(binaryInput.value, mainContent);
   });
 
   textInput.addEventListener("input", (event) => {
-    binaryInput.value = textToBinary(event.target.value);
+    const value = event.target.value;
+    binaryInput.value = textToBinary(value);
+    counterController.update(value.length);
+    triggerMatrixInputEffect(event.target);
+    audioController.playEffect("type");
+    maybeUnlockMatrixTheme(binaryInput.value, mainContent);
   });
+
+  counterController.update(textInput.value.length);
 }
 
 /**
@@ -336,19 +554,36 @@ function setupBinaryValidation({ binaryInput }) {
   binaryInput.addEventListener("keypress", (event) => {
     if (!["0", "1", " "].includes(event.key)) {
       event.preventDefault();
-      alert("Apenas 0, 1 e espaços são permitidos!");
+      Swal.fire({
+        title: "Entrada inválida",
+        text: "Apenas 0, 1 e espaços são permitidos!",
+        icon: "warning",
+        confirmButtonText: "Entendi",
+      });
     }
   });
 }
 
 /**
  * Monta a lista dinâmica do dicionário com base na pesquisa do usuário.
- * @param {{dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null}} elements - Elementos de DOM relevantes.
+ * @param {{dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}, audioController?: {playEffect(type: string): void}}} elements - Elementos de DOM relevantes.
  */
-function setupDictionary({ dictionaryEl, dictionarySearch, textInput, binaryInput }) {
+function setupDictionary({
+  dictionaryEl,
+  dictionarySearch,
+  textInput,
+  binaryInput,
+  counterController = { update() {} },
+  audioController = { playEffect() {} },
+}) {
   if (!dictionaryEl || !dictionarySearch || !textInput || !binaryInput) {
     return;
   }
+
+  dictionarySearch.dataset.audioEffect = dictionarySearch.dataset.audioEffect || "type";
+  dictionarySearch.addEventListener("focus", () => {
+    audioController.playEffect("effect");
+  });
 
   const renderDictionary = () => {
     const query = dictionarySearch.value.toLowerCase();
@@ -357,14 +592,27 @@ function setupDictionary({ dictionaryEl, dictionarySearch, textInput, binaryInpu
     Object.entries(dictionary)
       .filter(([character]) => character.toLowerCase().includes(query))
       .forEach(([character, binary]) => {
-        fragment.appendChild(createDictionaryButton(character, binary, textInput, binaryInput));
+        fragment.appendChild(
+          createDictionaryButton(
+            character,
+            binary,
+            textInput,
+            binaryInput,
+            counterController,
+            audioController,
+          ),
+        );
       });
 
     dictionaryEl.innerHTML = "";
     dictionaryEl.appendChild(fragment);
   };
 
-  dictionarySearch.addEventListener("input", renderDictionary);
+  dictionarySearch.addEventListener("input", () => {
+    audioController.playEffect("type");
+    triggerMatrixInputEffect(dictionarySearch);
+    renderDictionary();
+  });
   renderDictionary();
 }
 
@@ -374,17 +622,30 @@ function setupDictionary({ dictionaryEl, dictionarySearch, textInput, binaryInpu
  * @param {string} binary - Representação binária.
  * @param {HTMLTextAreaElement} textInput - Área de texto que recebe o caractere.
  * @param {HTMLTextAreaElement} binaryInput - Área de texto que recebe o binário convertido.
+ * @param {{update(value: number): void}} counterController - Controlador do contador animado.
+ * @param {{playEffect(type: string): void}} audioController - Controlador de áudio Matrix.
  * @returns {HTMLButtonElement} Botão configurado.
  */
-function createDictionaryButton(character, binary, textInput, binaryInput) {
+function createDictionaryButton(
+  character,
+  binary,
+  textInput,
+  binaryInput,
+  counterController = { update() {} },
+  audioController = { playEffect() {} },
+) {
   const button = document.createElement("button");
   button.type = "button";
   button.className =
     "fs-4 fw-bold text-center btn-custom-secondary list-group-item list-group-item-action";
   button.innerHTML = `${character} &nbsp;&nbsp;⇒&nbsp;&nbsp; ${binary}`;
+  button.dataset.audioEffect = "insert";
   button.addEventListener("click", () => {
     textInput.value += character;
     binaryInput.value = textToBinary(textInput.value);
+    counterController.update(textInput.value.length);
+    triggerMatrixInputEffect(textInput);
+    audioController.playEffect("type");
   });
 
   return button;
@@ -392,9 +653,15 @@ function createDictionaryButton(character, binary, textInput, binaryInput) {
 
 /**
  * Preenche o painel de frases rápidas com botões que inserem textos pré-definidos.
- * @param {{phrasesEl: HTMLElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null}} elements - Elementos de DOM relevantes.
+ * @param {{phrasesEl: HTMLElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}, audioController?: {playEffect(type: string): void}}} elements - Elementos de DOM relevantes.
  */
-function populateQuickPhrases({ phrasesEl, textInput, binaryInput }) {
+function populateQuickPhrases({
+  phrasesEl,
+  textInput,
+  binaryInput,
+  counterController = { update() {} },
+  audioController = { playEffect() {} },
+}) {
   if (!phrasesEl || !textInput || !binaryInput) {
     return;
   }
@@ -407,9 +674,13 @@ function populateQuickPhrases({ phrasesEl, textInput, binaryInput }) {
     button.className =
       "list-group-item list-group-item-action btn-custom-secondary text-center fw-bold fs-4";
     button.textContent = phrase;
+    button.dataset.audioEffect = "effect";
     button.addEventListener("click", () => {
       textInput.value += (textInput.value ? " " : "") + phrase;
       binaryInput.value = textToBinary(textInput.value);
+      counterController.update(textInput.value.length);
+      triggerMatrixInputEffect(textInput);
+      audioController.playEffect("type");
     });
 
     fragment.appendChild(button);
@@ -443,18 +714,22 @@ function populateBiblicalPhrases({ biblicalPhrasesContainer }) {
 
 /**
  * Define o comportamento do botão limpar, incluindo o estado temporário de carregamento.
- * @param {{clearButton: HTMLButtonElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null}} elements - Elementos de DOM relevantes.
+ * @param {{clearButton: HTMLButtonElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}}} elements - Elementos de DOM relevantes.
  */
-function setupClearButton({ clearButton, textInput, binaryInput }) {
+function setupClearButton({ clearButton, textInput, binaryInput, counterController = { update() {} } }) {
   if (!clearButton || !textInput || !binaryInput) {
     return;
   }
 
   const defaultContent = clearButton.innerHTML;
+  if (!clearButton.dataset.audioEffect) {
+    clearButton.dataset.audioEffect = "clear";
+  }
 
   clearButton.addEventListener("click", () => {
     textInput.value = "";
     binaryInput.value = "";
+    counterController.update(0);
 
     clearButton.classList.add("btn-success");
     clearButton.textContent = "Limpando...";
@@ -473,6 +748,10 @@ function setupClearButton({ clearButton, textInput, binaryInput }) {
 function setupPulseButton({ pulseButton }) {
   if (!pulseButton) {
     return;
+  }
+
+  if (!pulseButton.dataset.audioEffect) {
+    pulseButton.dataset.audioEffect = "toggle";
   }
 
   pulseButton.addEventListener("click", () => {
@@ -523,3 +802,101 @@ function showAlert(config) {
     }
   });
 }
+const MATRIX_INPUT_EFFECT_TIMEOUT = 220;
+
+/**
+ * Inicializa popovers Bootstrap para os controles de áudio Matrix.
+ * @param {{matrixAudioToggle: HTMLButtonElement|null, matrixEffectsToggle: HTMLButtonElement|null}} elements
+ */
+function initializeAudioPopovers({ matrixAudioToggle, matrixEffectsToggle }) {
+  const { Popover } = window.bootstrap ?? {};
+
+  if (!Popover) {
+    return;
+  }
+
+  [matrixAudioToggle, matrixEffectsToggle]
+    .filter(Boolean)
+    .forEach((trigger) => {
+      Popover.getOrCreateInstance(trigger, {
+        container: "body",
+        trigger: "hover focus",
+        placement: "bottom",
+      });
+    });
+}
+
+function normalizeBinarySequence(value = "") {
+  return String(value).replace(/[^01]/g, "");
+}
+
+function maybeUnlockMatrixTheme(binaryValue, mainContent) {
+  const normalizedInput = normalizeBinarySequence(binaryValue);
+
+  if (!normalizedInput) {
+    return;
+  }
+
+  if (normalizedInput !== MATRIX_SECRET_BINARY_NORMALIZED) {
+    return;
+  }
+
+  if (document.body.classList.contains("theme-matrix")) {
+    return;
+  }
+
+  applyTheme("matrix");
+
+  showAlert({
+    title: "Bem-vindo à Matrix",
+    text: "Código binário decifrado. Mantenha-se atento à chuva verde!",
+    icon: "success",
+    confirmButtonText: "Entrar",
+    shouldBlur: true,
+    target: mainContent,
+  });
+}
+
+/**
+ * Aplica um pulso rápido nos campos de texto quando há interação no tema Matrix.
+ * @param {HTMLElement} element - Campo que receberá o efeito.
+ */
+function triggerMatrixInputEffect(element) {
+  if (!element) {
+    return;
+  }
+
+  element.classList.add("matrix-input-typing");
+
+  if (element._matrixInputEffectTimeout) {
+    window.clearTimeout(element._matrixInputEffectTimeout);
+  }
+
+  element._matrixInputEffectTimeout = window.setTimeout(() => {
+    element.classList.remove("matrix-input-typing");
+    element._matrixInputEffectTimeout = null;
+  }, MATRIX_INPUT_EFFECT_TIMEOUT);
+}
+  interactiveFields.forEach((field) => {
+    if (!field) {
+      return;
+    }
+
+    field.addEventListener("focus", () => {
+      window.dispatchEvent(
+        new CustomEvent("binario:audio-effect", {
+          detail: { type: "effect" },
+        }),
+      );
+      field.dataset.audioEffect = field.dataset.audioEffect || "effect";
+    });
+
+    field.addEventListener("input", () => {
+      window.dispatchEvent(
+        new CustomEvent("binario:audio-effect", {
+          detail: { type: "type" },
+        }),
+      );
+      triggerMatrixInputEffect(field);
+    });
+  });

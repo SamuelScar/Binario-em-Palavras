@@ -1,10 +1,18 @@
 const DEFAULT_THEME = "default";
+const MATRIX_THEME_VALUE = "matrix";
+const MATRIX_THEME_CLASS = "theme-matrix";
 const THEME_PREFIX = "theme-";
 const BASE_BODY_CLASSES = ["bg-custom-page", "p-3"];
+const DATA_THEME_ATTR = "data-theme";
 
 let trackedThemeSelect = null;
 let trackedThemeOptions = [];
 let trackedThemeToggle = null;
+let matrixRainModule = null;
+let matrixRainModulePromise = null;
+let shouldRunMatrixEffect = false;
+let isMatrixEffectActive = false;
+let currentThemeValue = DEFAULT_THEME;
 
 /**
  * Remove classes de tema anteriores do body, preservando as classes base.
@@ -33,14 +41,31 @@ function ensureBaseClasses() {
  * @param {string} themeName - Classe de tema ou "default" para os estilos base.
  */
 export function applyTheme(themeName) {
+  const value = themeName || DEFAULT_THEME;
+
+  if (value === currentThemeValue) {
+    setThemeAttribute(value);
+    manageMatrixEffect(value);
+    ensureBaseClasses();
+    persistTheme(value);
+    notifyThemeChange(value);
+    return;
+  }
+
   clearThemeClasses();
 
-  if (themeName && themeName !== DEFAULT_THEME) {
-    document.body.classList.add(themeName);
+  const themeClass = resolveThemeClass(value);
+
+  if (themeClass) {
+    document.body.classList.add(themeClass);
   }
 
   ensureBaseClasses();
-  sessionStorage.setItem("theme", themeName || DEFAULT_THEME);
+  setThemeAttribute(value);
+  manageMatrixEffect(value);
+  persistTheme(value);
+  currentThemeValue = value;
+  notifyThemeChange(value);
 }
 
 /**
@@ -65,7 +90,9 @@ export function initThemeManager(options = {}) {
   trackedThemeSelect = themeSelect;
   trackedThemeOptions = themeOptions;
   trackedThemeToggle = themeToggle;
-  const savedTheme = sessionStorage.getItem("theme") || DEFAULT_THEME;
+  const storedTheme = sessionStorage.getItem("theme");
+  const savedTheme =
+    storedTheme && storedTheme !== MATRIX_THEME_VALUE ? storedTheme : DEFAULT_THEME;
 
   applyTheme(savedTheme);
   syncThemeSelect(themeSelect, savedTheme);
@@ -95,6 +122,144 @@ export function initThemeManager(options = {}) {
       });
     });
   }
+}
+
+function resolveThemeClass(themeName) {
+  if (!themeName || themeName === DEFAULT_THEME) {
+    return null;
+  }
+
+  if (themeName === MATRIX_THEME_VALUE) {
+    return MATRIX_THEME_CLASS;
+  }
+
+  if (themeName === "dark") {
+    return "dark";
+  }
+
+  return themeName;
+}
+
+function sanitizeThemeKey(themeName) {
+  if (!themeName) {
+    return DEFAULT_THEME;
+  }
+
+  if (themeName === MATRIX_THEME_VALUE) {
+    return MATRIX_THEME_VALUE;
+  }
+
+  if (themeName === DEFAULT_THEME) {
+    return DEFAULT_THEME;
+  }
+
+  if (themeName.startsWith(THEME_PREFIX)) {
+    return themeName.slice(THEME_PREFIX.length);
+  }
+
+  return themeName;
+}
+
+function setThemeAttribute(themeName) {
+  const root = document.documentElement;
+
+  if (!root) {
+    return;
+  }
+
+  const sanitized = sanitizeThemeKey(themeName);
+
+  if (!sanitized || sanitized === DEFAULT_THEME) {
+    root.removeAttribute(DATA_THEME_ATTR);
+    return;
+  }
+
+  root.setAttribute(DATA_THEME_ATTR, sanitized);
+}
+
+function manageMatrixEffect(themeName) {
+  const sanitized = sanitizeThemeKey(themeName);
+  shouldRunMatrixEffect = sanitized === MATRIX_THEME_VALUE;
+
+  if (shouldRunMatrixEffect) {
+    startMatrixEffect();
+    return;
+  }
+
+  stopMatrixEffect();
+}
+
+function notifyThemeChange(themeName) {
+  const sanitized = sanitizeThemeKey(themeName);
+  const detail = { theme: sanitized };
+  document.dispatchEvent(new CustomEvent("binario:theme-change", { detail }));
+}
+
+function startMatrixEffect() {
+  if (isMatrixEffectActive) {
+    return;
+  }
+
+  if (matrixRainModule) {
+    try {
+      matrixRainModule.init({ container: document.body });
+      isMatrixEffectActive = true;
+    } catch (error) {
+      console.error("ThemeManager: falha ao iniciar efeito Matrix.", error);
+      isMatrixEffectActive = false;
+    }
+    return;
+  }
+
+  if (!matrixRainModulePromise) {
+    matrixRainModulePromise = import("./matrixRain.js")
+      .then((module) => {
+        matrixRainModule = module;
+
+        if (!shouldRunMatrixEffect) {
+          return;
+        }
+
+        module.init({ container: document.body });
+        isMatrixEffectActive = true;
+      })
+      .catch((error) => {
+        console.error("ThemeManager: não foi possível carregar matrixRain.js.", error);
+        isMatrixEffectActive = false;
+      })
+      .finally(() => {
+        matrixRainModulePromise = null;
+      });
+  }
+}
+
+function stopMatrixEffect() {
+  if (matrixRainModulePromise) {
+    matrixRainModulePromise
+      .then((module) => {
+        if (shouldRunMatrixEffect) {
+          return;
+        }
+
+        if (typeof module.cleanup === "function") {
+          module.cleanup();
+          isMatrixEffectActive = false;
+        }
+      })
+      .catch(() => {
+        // Ignora erros de limpeza após o carregamento do módulo.
+      });
+  }
+
+  if (matrixRainModule && typeof matrixRainModule.cleanup === "function") {
+    try {
+      matrixRainModule.cleanup();
+    } catch (error) {
+      console.error("ThemeManager: falha ao limpar efeito Matrix.", error);
+    }
+  }
+
+  isMatrixEffectActive = false;
 }
 
 function syncThemeSelect(themeSelect, value) {
@@ -209,7 +374,11 @@ function formatThemeLabel(label) {
 }
 
 export function getActiveTheme() {
-  return sessionStorage.getItem("theme") || DEFAULT_THEME;
+  const stored = sessionStorage.getItem("theme");
+  if (!stored || stored === MATRIX_THEME_VALUE) {
+    return DEFAULT_THEME;
+  }
+  return stored;
 }
 
 export function setTheme(themeName) {
@@ -219,6 +388,14 @@ export function setTheme(themeName) {
   syncThemeSelect(trackedThemeSelect, value);
   updateThemeOptions(trackedThemeOptions, value);
   updateThemeToggle(trackedThemeToggle, value, trackedThemeOptions);
+}
+
+function persistTheme(themeName) {
+  if (themeName && themeName !== MATRIX_THEME_VALUE) {
+    sessionStorage.setItem("theme", themeName);
+  } else {
+    sessionStorage.removeItem("theme");
+  }
 }
 
 if (typeof window !== "undefined") {
