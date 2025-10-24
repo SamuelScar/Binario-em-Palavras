@@ -877,26 +877,3 @@ function triggerMatrixInputEffect(element) {
     element._matrixInputEffectTimeout = null;
   }, MATRIX_INPUT_EFFECT_TIMEOUT);
 }
-  interactiveFields.forEach((field) => {
-    if (!field) {
-      return;
-    }
-
-    field.addEventListener("focus", () => {
-      window.dispatchEvent(
-        new CustomEvent("binario:audio-effect", {
-          detail: { type: "effect" },
-        }),
-      );
-      field.dataset.audioEffect = field.dataset.audioEffect || "effect";
-    });
-
-    field.addEventListener("input", () => {
-      window.dispatchEvent(
-        new CustomEvent("binario:audio-effect", {
-          detail: { type: "type" },
-        }),
-      );
-      triggerMatrixInputEffect(field);
-    });
-  });
