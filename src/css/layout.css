@@ -132,6 +132,65 @@
   cursor: not-allowed;
 }
 
+/* ---------- Controles de áudio compactos ---------- */
+.matrix-audio-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.5rem;
+}
+
+.matrix-audio-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, rgba(148, 163, 184, 0.55));
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--primary-color);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.matrix-audio-btn i {
+  font-size: 1.1rem;
+}
+
+.matrix-audio-btn:hover,
+.matrix-audio-btn:focus-visible {
+  transform: translateY(-1px);
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+}
+
+.matrix-audio-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(15, 23, 42, 0.15),
+    0 0 0 5px currentColor;
+}
+
+.matrix-audio-btn.is-active {
+  border-color: var(--primary-color);
+  box-shadow:
+    0 0 0 2px rgba(15, 23, 42, 0.12),
+    0 0 18px rgba(15, 23, 42, 0.15);
+}
+
+.matrix-audio-btn:disabled,
+.matrix-audio-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* ---------- Cartões e seções ---------- */
 .app-main {
   display: flex;
@@ -576,7 +635,8 @@ body.theme-matrix .link-scanline:focus-visible,
 
   body.theme-matrix .link-scanline,
   [data-theme="matrix"] .link-scanline,
-  .conversion-stats {
+  .conversion-stats,
+  .matrix-audio-btn {
     transition-duration: 0.01ms !important;
   }
 
@@ -592,6 +652,10 @@ body.theme-matrix .link-scanline:focus-visible,
   body.theme-matrix .link-scanline:focus-visible,
   [data-theme="matrix"] .link-scanline:hover,
   [data-theme="matrix"] .link-scanline:focus-visible {
+    transform: none !important;
+  }
+
+  .matrix-audio-btn:hover {
     transform: none !important;
   }
 }

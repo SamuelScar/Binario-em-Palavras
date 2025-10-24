@@ -1,6 +1,7 @@
 import { phrases, dictionary, biblicalPhrases } from "./data/phrases.js";
 import { initThemeManager } from "./modules/themeManager.js";
 import { textToBinary, binaryToText } from "./modules/converter.js";
+import { initMatrixAudioManager } from "./modules/matrixAudioManager.js";
 import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -18,7 +19,21 @@ document.addEventListener("DOMContentLoaded", initializeApplication);
 function initializeApplication() {
   const elements = getDomElements();
   const counterController = createAnimatedBinaryCounter(elements.characterCounter);
-  const context = { ...elements, counterController };
+  const audioController = initMatrixAudioManager({
+    container: elements.matrixAudioContainer,
+    toggleButton: elements.matrixAudioToggle,
+    effectsToggle: elements.matrixEffectsToggle,
+  });
+  const context = { ...elements, counterController, audioController };
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-audio-effect]");
+    if (!trigger) {
+      return;
+    }
+    const effectType = trigger.dataset.audioEffect || "ui";
+    audioController.playEffect(effectType);
+  });
 
   setAppLoadingState(true);
   initThemeManager();
@@ -30,13 +45,14 @@ function initializeApplication() {
   populateBiblicalPhrases(context);
   setupClearButton(context);
   setupPulseButton(context);
-  setupFeedbackForm();
+  setupFeedbackForm(context);
+  initializeAudioPopovers(context);
   setAppLoadingState(false);
 }
 
 /**
  * Centraliza as referências de DOM utilizadas no módulo.
- * @returns {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null, dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, phrasesEl: HTMLElement|null, clearButton: HTMLButtonElement|null, biblicalPhrasesContainer: HTMLElement|null, mainContent: HTMLElement|null, pulseButton: HTMLButtonElement|null}}
+ * @returns {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null, dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, phrasesEl: HTMLElement|null, clearButton: HTMLButtonElement|null, biblicalPhrasesContainer: HTMLElement|null, mainContent: HTMLElement|null, pulseButton: HTMLButtonElement|null, characterCounter: HTMLElement|null, matrixAudioContainer: HTMLElement|null, matrixAudioToggle: HTMLButtonElement|null, matrixEffectsToggle: HTMLButtonElement|null}}
  */
 function getDomElements() {
   return {
@@ -50,6 +66,9 @@ function getDomElements() {
     mainContent: document.getElementById("mainContent"),
     pulseButton: document.querySelector(".btn-pulsante"),
     characterCounter: document.querySelector("[data-binary-counter]"),
+    matrixAudioContainer: document.querySelector("[data-matrix-audio]"),
+    matrixAudioToggle: document.querySelector("[data-matrix-audio-toggle]"),
+    matrixEffectsToggle: document.querySelector("[data-matrix-effects-toggle]"),
   };
 }
 
@@ -83,7 +102,7 @@ function setAppLoadingState(isLoading) {
 
 const FEEDBACK_STORAGE_KEY = "binario:feedbackType";
 const FEEDBACK_MAX_LENGTH = 1000;
-function setupFeedbackForm() {
+function setupFeedbackForm({ audioController = { playEffect() {} } } = {}) {
   const form = document.getElementById("feedbackForm");
 
   if (!form) {
@@ -100,6 +119,7 @@ function setupFeedbackForm() {
   const counterEl = form.querySelector("[data-feedback-counter]");
   const errorEl = form.querySelector("[data-feedback-error]");
   const statusEl = form.querySelector("[data-feedback-status]");
+  const interactiveFields = [nameField, emailField, messageField];
 
   let currentType = getStoredFeedbackType() || "suggestion";
 
@@ -155,11 +175,28 @@ function setupFeedbackForm() {
   showFieldError("");
   setStatusMessage("");
 
+  interactiveFields.forEach((field) => {
+    if (!field) {
+      return;
+    }
+
+    field.dataset.audioEffect = field.dataset.audioEffect || "effect";
+    field.addEventListener("focus", () => {
+      audioController.playEffect("effect");
+    });
+    field.addEventListener("input", () => {
+      audioController.playEffect("type");
+      triggerMatrixInputEffect(field);
+    });
+  });
+
   typeRadios.forEach((radio) => {
+    radio.dataset.audioEffect = radio.dataset.audioEffect || "toggle";
     radio.addEventListener("change", () => {
       if (!radio.checked) {
         return;
       }
+      audioController.playEffect("toggle");
       const type = radio.value || "suggestion";
       setActiveType(type);
       if (messageField) {
@@ -467,9 +504,14 @@ function createAnimatedBinaryCounter(container) {
 
 /**
  * Configura a sincronização entre os campos de texto e binário.
- * @param {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}}} elements - Elementos de DOM relevantes.
+ * @param {{binaryInput: HTMLTextAreaElement|null, textInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}, audioController?: {playEffect(type: string): void}}} elements - Elementos de DOM relevantes.
  */
-function setupConverters({ binaryInput, textInput, counterController = { update() {} } }) {
+function setupConverters({
+  binaryInput,
+  textInput,
+  counterController = { update() {} },
+  audioController = { playEffect() {} },
+}) {
   if (!binaryInput || !textInput) {
     return;
   }
@@ -478,12 +520,16 @@ function setupConverters({ binaryInput, textInput, counterController = { update(
     const convertedText = binaryToText(event.target.value);
     textInput.value = convertedText;
     counterController.update(convertedText.length);
+    triggerMatrixInputEffect(event.target);
+    audioController.playEffect("type");
   });
 
   textInput.addEventListener("input", (event) => {
     const value = event.target.value;
     binaryInput.value = textToBinary(value);
     counterController.update(value.length);
+    triggerMatrixInputEffect(event.target);
+    audioController.playEffect("type");
   });
 
   counterController.update(textInput.value.length);
@@ -508,7 +554,7 @@ function setupBinaryValidation({ binaryInput }) {
 
 /**
  * Monta a lista dinâmica do dicionário com base na pesquisa do usuário.
- * @param {{dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}}} elements - Elementos de DOM relevantes.
+ * @param {{dictionaryEl: HTMLElement|null, dictionarySearch: HTMLInputElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}, audioController?: {playEffect(type: string): void}}} elements - Elementos de DOM relevantes.
  */
 function setupDictionary({
   dictionaryEl,
@@ -516,10 +562,16 @@ function setupDictionary({
   textInput,
   binaryInput,
   counterController = { update() {} },
+  audioController = { playEffect() {} },
 }) {
   if (!dictionaryEl || !dictionarySearch || !textInput || !binaryInput) {
     return;
   }
+
+  dictionarySearch.dataset.audioEffect = dictionarySearch.dataset.audioEffect || "type";
+  dictionarySearch.addEventListener("focus", () => {
+    audioController.playEffect("effect");
+  });
 
   const renderDictionary = () => {
     const query = dictionarySearch.value.toLowerCase();
@@ -529,7 +581,14 @@ function setupDictionary({
       .filter(([character]) => character.toLowerCase().includes(query))
       .forEach(([character, binary]) => {
         fragment.appendChild(
-          createDictionaryButton(character, binary, textInput, binaryInput, counterController),
+          createDictionaryButton(
+            character,
+            binary,
+            textInput,
+            binaryInput,
+            counterController,
+            audioController,
+          ),
         );
       });
 
@@ -537,7 +596,11 @@ function setupDictionary({
     dictionaryEl.appendChild(fragment);
   };
 
-  dictionarySearch.addEventListener("input", renderDictionary);
+  dictionarySearch.addEventListener("input", () => {
+    audioController.playEffect("type");
+    triggerMatrixInputEffect(dictionarySearch);
+    renderDictionary();
+  });
   renderDictionary();
 }
 
@@ -548,6 +611,7 @@ function setupDictionary({
  * @param {HTMLTextAreaElement} textInput - Área de texto que recebe o caractere.
  * @param {HTMLTextAreaElement} binaryInput - Área de texto que recebe o binário convertido.
  * @param {{update(value: number): void}} counterController - Controlador do contador animado.
+ * @param {{playEffect(type: string): void}} audioController - Controlador de áudio Matrix.
  * @returns {HTMLButtonElement} Botão configurado.
  */
 function createDictionaryButton(
@@ -556,16 +620,20 @@ function createDictionaryButton(
   textInput,
   binaryInput,
   counterController = { update() {} },
+  audioController = { playEffect() {} },
 ) {
   const button = document.createElement("button");
   button.type = "button";
   button.className =
     "fs-4 fw-bold text-center btn-custom-secondary list-group-item list-group-item-action";
   button.innerHTML = `${character} &nbsp;&nbsp;⇒&nbsp;&nbsp; ${binary}`;
+  button.dataset.audioEffect = "insert";
   button.addEventListener("click", () => {
     textInput.value += character;
     binaryInput.value = textToBinary(textInput.value);
     counterController.update(textInput.value.length);
+    triggerMatrixInputEffect(textInput);
+    audioController.playEffect("type");
   });
 
   return button;
@@ -573,9 +641,15 @@ function createDictionaryButton(
 
 /**
  * Preenche o painel de frases rápidas com botões que inserem textos pré-definidos.
- * @param {{phrasesEl: HTMLElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}}} elements - Elementos de DOM relevantes.
+ * @param {{phrasesEl: HTMLElement|null, textInput: HTMLTextAreaElement|null, binaryInput: HTMLTextAreaElement|null, counterController?: {update(value: number): void}, audioController?: {playEffect(type: string): void}}} elements - Elementos de DOM relevantes.
  */
-function populateQuickPhrases({ phrasesEl, textInput, binaryInput, counterController = { update() {} } }) {
+function populateQuickPhrases({
+  phrasesEl,
+  textInput,
+  binaryInput,
+  counterController = { update() {} },
+  audioController = { playEffect() {} },
+}) {
   if (!phrasesEl || !textInput || !binaryInput) {
     return;
   }
@@ -588,10 +662,13 @@ function populateQuickPhrases({ phrasesEl, textInput, binaryInput, counterContro
     button.className =
       "list-group-item list-group-item-action btn-custom-secondary text-center fw-bold fs-4";
     button.textContent = phrase;
+    button.dataset.audioEffect = "effect";
     button.addEventListener("click", () => {
       textInput.value += (textInput.value ? " " : "") + phrase;
       binaryInput.value = textToBinary(textInput.value);
       counterController.update(textInput.value.length);
+      triggerMatrixInputEffect(textInput);
+      audioController.playEffect("type");
     });
 
     fragment.appendChild(button);
@@ -633,6 +710,9 @@ function setupClearButton({ clearButton, textInput, binaryInput, counterControll
   }
 
   const defaultContent = clearButton.innerHTML;
+  if (!clearButton.dataset.audioEffect) {
+    clearButton.dataset.audioEffect = "clear";
+  }
 
   clearButton.addEventListener("click", () => {
     textInput.value = "";
@@ -656,6 +736,10 @@ function setupClearButton({ clearButton, textInput, binaryInput, counterControll
 function setupPulseButton({ pulseButton }) {
   if (!pulseButton) {
     return;
+  }
+
+  if (!pulseButton.dataset.audioEffect) {
+    pulseButton.dataset.audioEffect = "toggle";
   }
 
   pulseButton.addEventListener("click", () => {
@@ -706,3 +790,70 @@ function showAlert(config) {
     }
   });
 }
+const MATRIX_INPUT_EFFECT_TIMEOUT = 220;
+
+/**
+ * Inicializa popovers Bootstrap para os controles de áudio Matrix.
+ * @param {{matrixAudioToggle: HTMLButtonElement|null, matrixEffectsToggle: HTMLButtonElement|null}} elements
+ */
+function initializeAudioPopovers({ matrixAudioToggle, matrixEffectsToggle }) {
+  const { Popover } = window.bootstrap ?? {};
+
+  if (!Popover) {
+    return;
+  }
+
+  [matrixAudioToggle, matrixEffectsToggle]
+    .filter(Boolean)
+    .forEach((trigger) => {
+      Popover.getOrCreateInstance(trigger, {
+        container: "body",
+        trigger: "hover focus",
+        placement: "bottom",
+      });
+    });
+}
+
+/**
+ * Aplica um pulso rápido nos campos de texto quando há interação no tema Matrix.
+ * @param {HTMLElement} element - Campo que receberá o efeito.
+ */
+function triggerMatrixInputEffect(element) {
+  if (!element) {
+    return;
+  }
+
+  element.classList.add("matrix-input-typing");
+
+  if (element._matrixInputEffectTimeout) {
+    window.clearTimeout(element._matrixInputEffectTimeout);
+  }
+
+  element._matrixInputEffectTimeout = window.setTimeout(() => {
+    element.classList.remove("matrix-input-typing");
+    element._matrixInputEffectTimeout = null;
+  }, MATRIX_INPUT_EFFECT_TIMEOUT);
+}
+  interactiveFields.forEach((field) => {
+    if (!field) {
+      return;
+    }
+
+    field.addEventListener("focus", () => {
+      window.dispatchEvent(
+        new CustomEvent("binario:audio-effect", {
+          detail: { type: "effect" },
+        }),
+      );
+      field.dataset.audioEffect = field.dataset.audioEffect || "effect";
+    });
+
+    field.addEventListener("input", () => {
+      window.dispatchEvent(
+        new CustomEvent("binario:audio-effect", {
+          detail: { type: "type" },
+        }),
+      );
+      triggerMatrixInputEffect(field);
+    });
+  });

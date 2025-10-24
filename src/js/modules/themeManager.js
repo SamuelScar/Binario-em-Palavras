@@ -48,6 +48,7 @@ export function applyTheme(themeName) {
     manageMatrixEffect(value);
     ensureBaseClasses();
     sessionStorage.setItem("theme", value);
+    notifyThemeChange(value);
     return;
   }
 
@@ -64,6 +65,7 @@ export function applyTheme(themeName) {
   manageMatrixEffect(value);
   sessionStorage.setItem("theme", value);
   currentThemeValue = value;
+  notifyThemeChange(value);
 }
 
 /**
@@ -183,6 +185,12 @@ function manageMatrixEffect(themeName) {
   }
 
   stopMatrixEffect();
+}
+
+function notifyThemeChange(themeName) {
+  const sanitized = sanitizeThemeKey(themeName);
+  const detail = { theme: sanitized };
+  document.dispatchEvent(new CustomEvent("binario:theme-change", { detail }));
 }
 
 function startMatrixEffect() {

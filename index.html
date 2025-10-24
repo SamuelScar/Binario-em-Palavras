@@ -182,6 +182,38 @@
       </section>
       <header class="app-header">
         <div class="app-toolbar">
+          <div class="matrix-audio-mini" data-matrix-audio>
+            <button
+              type="button"
+              class="matrix-audio-btn"
+              data-matrix-effects-toggle
+              data-audio-effect="toggle"
+              data-bs-toggle="popover"
+              data-bs-trigger="hover focus"
+              data-bs-placement="bottom"
+              data-bs-content="Ativar efeitos Matrix"
+              aria-label="Alternar efeitos sonoros Matrix"
+              aria-pressed="false"
+            >
+              <i class="bi bi-volume-mute" data-matrix-icon="effects" aria-hidden="true"></i>
+              <span class="visually-hidden">Efeitos Matrix</span>
+            </button>
+            <button
+              type="button"
+              class="matrix-audio-btn"
+              data-matrix-audio-toggle
+              data-audio-effect="toggle"
+              data-bs-toggle="popover"
+              data-bs-trigger="hover focus"
+              data-bs-placement="bottom"
+              data-bs-content="Ativar trilha Matrix"
+              aria-label="Alternar trilha de fundo Matrix"
+              aria-pressed="false"
+            >
+              <i class="bi bi-ban" data-matrix-icon="background" aria-hidden="true"></i>
+              <span class="visually-hidden">Trilha Matrix</span>
+            </button>
+          </div>
           <div class="dropdown theme-dropdown">
             <button
               class="theme-toggle dropdown-toggle"
@@ -369,7 +401,11 @@
               </p>
             </header>
 
-            <button id="clearButton" class="btn btn-custom-primary btn-lg w-100 mb-4">
+            <button
+              id="clearButton"
+              class="btn btn-custom-primary btn-lg w-100 mb-4"
+              data-audio-effect="clear"
+            >
               <strong>Limpar</strong>
               <i class="bi bi-stars" aria-hidden="true"></i>
             </button>
@@ -421,6 +457,7 @@
                     data-bs-target="#dictionaryCollapse"
                     aria-expanded="false"
                     aria-controls="dictionaryCollapse"
+                    data-audio-effect="toggle"
                   >
                     Dicionário
                     <i class="bi bi-book" aria-hidden="true"></i>
@@ -440,6 +477,7 @@
                     data-bs-target="#phrasesCollapse"
                     aria-expanded="false"
                     aria-controls="phrasesCollapse"
+                    data-audio-effect="toggle"
                   >
                     Frases/Palavras
                     <i class="bi bi-alphabet-uppercase" aria-hidden="true"></i>
@@ -463,6 +501,7 @@
             data-bs-target="#feedbackCollapse"
             aria-expanded="false"
             aria-controls="feedbackCollapse"
+            data-audio-effect="toggle"
           >
             <i class="bi bi-chat-dots" aria-hidden="true"></i>
             Compartilhe seu feedback

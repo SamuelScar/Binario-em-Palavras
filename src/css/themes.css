@@ -507,6 +507,52 @@ body.theme-matrix .btn-pill-red:hover {
         0 0 24px rgba(0, 255, 128, 0.35);
 }
 
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn {
+    background-color: rgba(0, 32, 0, 0.65);
+    color: var(--color-primary);
+    border-color: rgba(0, 255, 128, 0.45);
+    box-shadow: 0 0 14px rgba(0, 255, 128, 0.28);
+}
+
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn:hover,
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn:focus-visible,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn:hover,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn:focus-visible {
+    background-color: rgba(0, 40, 0, 0.85);
+    box-shadow:
+        0 0 22px rgba(0, 255, 128, 0.35),
+        0 0 12px rgba(0, 128, 0, 0.25);
+}
+
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn.is-active,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn.is-active {
+    background-color: rgba(0, 55, 0, 0.85);
+    border-color: rgba(0, 255, 128, 0.75);
+    box-shadow:
+        0 0 28px rgba(0, 255, 128, 0.45),
+        0 0 18px rgba(0, 128, 0, 0.28);
+}
+
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn:disabled,
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn[aria-disabled="true"],
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn:disabled,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn[aria-disabled="true"] {
+    background-color: rgba(0, 25, 0, 0.45);
+    border-color: rgba(0, 255, 128, 0.25);
+    box-shadow: none;
+    color: rgba(202, 255, 202, 0.35);
+}
+
+[data-theme="matrix"] .matrix-input-typing,
+body.theme-matrix .matrix-input-typing {
+    border-color: rgba(0, 255, 128, 0.7) !important;
+    box-shadow:
+        0 0 18px rgba(0, 255, 128, 0.35),
+        0 0 8px rgba(0, 128, 0, 0.25);
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
 [data-theme="matrix"] .btn-pill-blue:focus-visible,
 [data-theme="matrix"] .btn-pill-red:focus-visible,
 body.theme-matrix .btn-pill-blue:focus-visible,
