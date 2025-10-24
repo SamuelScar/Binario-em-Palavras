@@ -133,8 +133,13 @@
 }
 
 /* ---------- Controles de áudio compactos ---------- */
-.matrix-audio-mini {
+[data-theme="matrix"] .matrix-audio-mini,
+body.theme-matrix .matrix-audio-mini {
   display: inline-flex;
+}
+
+.matrix-audio-mini {
+  display: none;
   align-items: center;
   gap: 0.4rem;
   margin-left: 0.5rem;
@@ -189,6 +194,71 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+/* ---------- SweetAlert — integrado aos temas ---------- */
+body .swal2-popup {
+  background: var(--card-background, var(--background-color));
+  color: var(--text-color);
+  border: 1px solid var(--border-color, rgba(148, 163, 184, 0.45));
+  box-shadow:
+    0 16px 32px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(15, 23, 42, 0.06);
+  border-radius: 1rem;
+}
+
+body .swal2-title {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+body .swal2-html-container {
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+body .swal2-confirm {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--clear-button-text, #ffffff);
+  border-radius: 999px;
+  padding: 0.6rem 1.8rem;
+  font-weight: 600;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+body .swal2-confirm:hover,
+body .swal2-confirm:focus-visible {
+  transform: translateY(-1px);
+  background-color: var(--secondary-color, var(--primary-color));
+  box-shadow:
+    0 12px 22px rgba(15, 23, 42, 0.18),
+    0 0 0 2px rgba(15, 23, 42, 0.06);
+  outline: none;
+}
+
+body .swal2-icon {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.14);
+}
+
+body .swal2-icon.swal2-warning {
+  border-color: var(--secondary-color, var(--primary-color));
+  color: var(--secondary-color, var(--primary-color));
+}
+
+body .swal2-icon.swal2-success .swal2-success-ring {
+  border: 0.25em solid rgba(15, 23, 42, 0.08);
+}
+
+body .swal2-icon.swal2-success [class^="swal2-success-line"],
+body .swal2-icon.swal2-success [class*=" swal2-success-line"],
+body .swal2-icon.swal2-success .swal2-success-fix {
+  background-color: var(--primary-color);
 }
 
 /* ---------- Cartões e seções ---------- */
@@ -284,6 +354,26 @@
 .feedback-type-group .form-check-input:focus-visible + .form-check-label {
   outline: 2px solid rgba(59, 130, 246, 0.35);
   outline-offset: 2px;
+}
+
+.feedback-type-group .form-check-label i {
+  transition:
+    transform 0.3s ease,
+    text-shadow 0.3s ease,
+    color 0.3s ease;
+  font-size: 1.15rem;
+}
+
+.feedback-type-group .form-check-input:focus-visible + .form-check-label i {
+  transform: scale(1.05);
+}
+
+.feedback-type-group .form-check-input:checked + .form-check-label .bi-bug {
+  animation: bug-walk 1.8s ease-in-out infinite;
+}
+
+.feedback-type-group .form-check-input:checked + .form-check-label .bi-lightbulb {
+  animation: bulb-glow 1.6s ease-in-out infinite;
 }
 
 .feedback-trigger .btn {
@@ -626,6 +716,45 @@ body.theme-matrix .link-scanline:focus-visible,
   }
 }
 
+@keyframes bug-walk {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+    text-shadow: none;
+  }
+  25% {
+    transform: translateX(2px) rotate(4deg);
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+  }
+  50% {
+    transform: translateX(-1px) rotate(-4deg);
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+  }
+  75% {
+    transform: translateX(1px) rotate(3deg);
+  }
+}
+
+@keyframes bulb-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 6px rgba(255, 255, 204, 0.25);
+    color: inherit;
+  }
+  40% {
+    text-shadow:
+      0 0 8px rgba(255, 255, 140, 0.65),
+      0 0 18px rgba(255, 255, 90, 0.4);
+    color: #ffd54f;
+  }
+  60% {
+    text-shadow:
+      0 0 10px rgba(255, 255, 180, 0.75),
+      0 0 24px rgba(255, 255, 120, 0.45);
+    color: #fff176;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer::after {
     animation-duration: 0.01ms !important;
@@ -636,7 +765,8 @@ body.theme-matrix .link-scanline:focus-visible,
   body.theme-matrix .link-scanline,
   [data-theme="matrix"] .link-scanline,
   .conversion-stats,
-  .matrix-audio-btn {
+  .matrix-audio-btn,
+  body .swal2-confirm {
     transition-duration: 0.01ms !important;
   }
 
@@ -655,8 +785,17 @@ body.theme-matrix .link-scanline:focus-visible,
     transform: none !important;
   }
 
-  .matrix-audio-btn:hover {
+  .matrix-audio-btn:hover,
+  body .swal2-confirm:hover,
+  body .swal2-confirm:focus-visible {
     transform: none !important;
+  }
+
+  .feedback-type-group .form-check-input:checked + .form-check-label .bi-bug,
+  .feedback-type-group .form-check-input:checked + .form-check-label .bi-lightbulb {
+    animation: none !important;
+    transform: none !important;
+    text-shadow: none !important;
   }
 }
 

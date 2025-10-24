@@ -547,7 +547,12 @@ function setupBinaryValidation({ binaryInput }) {
   binaryInput.addEventListener("keypress", (event) => {
     if (!["0", "1", " "].includes(event.key)) {
       event.preventDefault();
-      alert("Apenas 0, 1 e espaços são permitidos!");
+      Swal.fire({
+        title: "Entrada inválida",
+        text: "Apenas 0, 1 e espaços são permitidos!",
+        icon: "warning",
+        confirmButtonText: "Entendi",
+      });
     }
   });
 }
