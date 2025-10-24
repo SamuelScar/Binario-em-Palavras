@@ -1,5 +1,5 @@
 import { phrases, dictionary, biblicalPhrases } from "./data/phrases.js";
-import { initThemeManager } from "./modules/themeManager.js";
+import { initThemeManager, applyTheme } from "./modules/themeManager.js";
 import { textToBinary, binaryToText } from "./modules/converter.js";
 import { initMatrixAudioManager } from "./modules/matrixAudioManager.js";
 import Swal from "sweetalert2";
@@ -12,6 +12,10 @@ import "../css/themes.css";
 window.bootstrap = bootstrap;
 
 document.addEventListener("DOMContentLoaded", initializeApplication);
+
+const MATRIX_SECRET_TEXT = "O ARQUITETO";
+const MATRIX_SECRET_BINARY = textToBinary(MATRIX_SECRET_TEXT);
+const MATRIX_SECRET_BINARY_NORMALIZED = normalizeBinarySequence(MATRIX_SECRET_BINARY);
 
 /**
  * Orquestra a inicialização da interface assim que o DOM estiver pronto.
@@ -509,6 +513,7 @@ function createAnimatedBinaryCounter(container) {
 function setupConverters({
   binaryInput,
   textInput,
+  mainContent,
   counterController = { update() {} },
   audioController = { playEffect() {} },
 }) {
@@ -522,6 +527,7 @@ function setupConverters({
     counterController.update(convertedText.length);
     triggerMatrixInputEffect(event.target);
     audioController.playEffect("type");
+    maybeUnlockMatrixTheme(binaryInput.value, mainContent);
   });
 
   textInput.addEventListener("input", (event) => {
@@ -530,6 +536,7 @@ function setupConverters({
     counterController.update(value.length);
     triggerMatrixInputEffect(event.target);
     audioController.playEffect("type");
+    maybeUnlockMatrixTheme(binaryInput.value, mainContent);
   });
 
   counterController.update(textInput.value.length);
@@ -817,6 +824,37 @@ function initializeAudioPopovers({ matrixAudioToggle, matrixEffectsToggle }) {
         placement: "bottom",
       });
     });
+}
+
+function normalizeBinarySequence(value = "") {
+  return String(value).replace(/[^01]/g, "");
+}
+
+function maybeUnlockMatrixTheme(binaryValue, mainContent) {
+  const normalizedInput = normalizeBinarySequence(binaryValue);
+
+  if (!normalizedInput) {
+    return;
+  }
+
+  if (normalizedInput !== MATRIX_SECRET_BINARY_NORMALIZED) {
+    return;
+  }
+
+  if (document.body.classList.contains("theme-matrix")) {
+    return;
+  }
+
+  applyTheme("matrix");
+
+  showAlert({
+    title: "Bem-vindo à Matrix",
+    text: "Código binário decifrado. Mantenha-se atento à chuva verde!",
+    icon: "success",
+    confirmButtonText: "Entrar",
+    shouldBlur: true,
+    target: mainContent,
+  });
 }
 
 /**

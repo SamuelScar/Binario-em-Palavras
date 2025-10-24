@@ -47,7 +47,7 @@ export function applyTheme(themeName) {
     setThemeAttribute(value);
     manageMatrixEffect(value);
     ensureBaseClasses();
-    sessionStorage.setItem("theme", value);
+    persistTheme(value);
     notifyThemeChange(value);
     return;
   }
@@ -63,7 +63,7 @@ export function applyTheme(themeName) {
   ensureBaseClasses();
   setThemeAttribute(value);
   manageMatrixEffect(value);
-  sessionStorage.setItem("theme", value);
+  persistTheme(value);
   currentThemeValue = value;
   notifyThemeChange(value);
 }
@@ -90,7 +90,9 @@ export function initThemeManager(options = {}) {
   trackedThemeSelect = themeSelect;
   trackedThemeOptions = themeOptions;
   trackedThemeToggle = themeToggle;
-  const savedTheme = sessionStorage.getItem("theme") || DEFAULT_THEME;
+  const storedTheme = sessionStorage.getItem("theme");
+  const savedTheme =
+    storedTheme && storedTheme !== MATRIX_THEME_VALUE ? storedTheme : DEFAULT_THEME;
 
   applyTheme(savedTheme);
   syncThemeSelect(themeSelect, savedTheme);
@@ -372,7 +374,11 @@ function formatThemeLabel(label) {
 }
 
 export function getActiveTheme() {
-  return sessionStorage.getItem("theme") || DEFAULT_THEME;
+  const stored = sessionStorage.getItem("theme");
+  if (!stored || stored === MATRIX_THEME_VALUE) {
+    return DEFAULT_THEME;
+  }
+  return stored;
 }
 
 export function setTheme(themeName) {
@@ -382,6 +388,14 @@ export function setTheme(themeName) {
   syncThemeSelect(trackedThemeSelect, value);
   updateThemeOptions(trackedThemeOptions, value);
   updateThemeToggle(trackedThemeToggle, value, trackedThemeOptions);
+}
+
+function persistTheme(themeName) {
+  if (themeName && themeName !== MATRIX_THEME_VALUE) {
+    sessionStorage.setItem("theme", themeName);
+  } else {
+    sessionStorage.removeItem("theme");
+  }
 }
 
 if (typeof window !== "undefined") {
