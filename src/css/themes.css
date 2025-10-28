@@ -1,0 +1,688 @@
+/* =============================================================================
+   themes.css — Declaração dos temas e tokens de cor da interface
+   -----------------------------------------------------------------------------
+   Define variáveis base e alternativas (dark, vintage, contraste) utilizadas
+   pela aplicação.
+   ========================================================================== */
+
+:root {
+    --primary-color: #7b0000; /* Vermelho escuro */
+    --secondary-color: #a67c52; /* Marrom dourado */
+    --background-color: #f5e6c8; /* Bege claro suavizado */
+    --input-background: #f0e0b8; /* Tom levemente mais escuro que o fundo */
+    --border-color: #8b5e3b; /* Marrom suave */
+    --text-color: #4c3318; /* Marrom escuro para legibilidade */
+    --card-background: #d7b98e; /* Bege médio para cartões */
+    --placeholder-color: rgba(76, 51, 24, 0.6);
+    --divider-color: rgba(139, 94, 59, 0.5);
+    --footer-background: #2d1a0d;
+    --footer-text: #fdf3de;
+    --clear-button-text: #ffffff;
+}
+
+/* Temas alternativos ----------------------------------------------------- */
+body.theme-dark,
+body.dark {
+    --primary-color: #ff4d4d;
+    --secondary-color: #d9a066;
+    --background-color: #222;
+    --input-background: #333;
+    --border-color: #555;
+    --text-color: #f5f5f5;
+    --card-background: #444;
+    --placeholder-color: rgba(245, 245, 245, 0.55);
+    --divider-color: rgba(255, 77, 77, 0.45);
+    --footer-background: #0f0f0f;
+    --footer-text: #f5f5f5;
+    --clear-button-text: #f5f5f5;
+}
+
+body.theme-vintage {
+    --primary-color: #704214;
+    --secondary-color: #c18f59;
+    --background-color: #f4ecd8;
+    --input-background: #e7d9c1;
+    --border-color: #b0855a;
+    --text-color: #3b2b1c;
+    --card-background: #d6c2a6;
+    --placeholder-color: rgba(59, 43, 28, 0.55);
+    --divider-color: rgba(112, 66, 20, 0.5);
+    --footer-background: #48311f;
+    --footer-text: #fdf3de;
+    --clear-button-text: #fdf3de;
+}
+
+body.theme-contrast {
+    --primary-color: yellow;
+    --secondary-color: white;
+    --background-color: black;
+    --input-background: #222;
+    --border-color: white;
+    --text-color: white;
+    --card-background: #111;
+    --placeholder-color: rgba(255, 255, 255, 0.6);
+    --divider-color: rgba(255, 255, 0, 0.55);
+    --footer-background: #000000;
+    --footer-text: #ffffff;
+    --clear-button-text: #000000;
+}
+
+[data-theme="matrix"],
+body.theme-matrix {
+    --color-bg: #000000;
+    --color-bg-alt: #020d07;
+    --color-fg: #00ff00;
+    --color-fg-muted: #1ade1a;
+    --color-primary: #00ff66;
+    --color-accent: #00c853;
+    --color-highlight: rgba(0, 255, 102, 0.15);
+    --btn-bg: rgba(0, 25, 0, 0.75);
+    --btn-fg: #00ff66;
+    --btn-border: rgba(0, 255, 102, 0.4);
+    --btn-pill-blue: #007bff;
+    --btn-pill-red: #ff0000;
+    --border: rgba(0, 255, 110, 0.45);
+    --shadow: 0 0 18px rgba(0, 255, 110, 0.35);
+    --matrix-font: "VT323", "IBM Plex Mono", "Fira Code", "SFMono-Regular", "Courier New", Courier, monospace;
+    --primary-color: var(--color-primary);
+    --secondary-color: var(--color-fg-muted);
+    --background-color: var(--color-bg);
+    --input-background: rgba(0, 40, 0, 0.65);
+    --border-color: var(--border);
+    --text-color: #caffca;
+    --card-background: rgba(0, 32, 0, 0.8);
+    --placeholder-color: rgba(0, 255, 128, 0.5);
+    --divider-color: rgba(0, 255, 128, 0.3);
+    --footer-background: rgba(0, 25, 0, 0.9);
+    --footer-text: #caffca;
+    --clear-button-text: #caffca;
+    color-scheme: dark;
+}
+
+/* Layout base ------------------------------------------------------------ */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+[data-theme="matrix"] body,
+body.theme-matrix {
+    background-color: var(--color-bg);
+    background-image:
+        radial-gradient(circle at top, rgba(0, 255, 128, 0.08), transparent 55%),
+        radial-gradient(circle at bottom, rgba(0, 128, 0, 0.12), transparent 65%),
+        repeating-linear-gradient(90deg, rgba(0, 50, 0, 0.45) 0px, rgba(0, 50, 0, 0.45) 1px, transparent 1px, transparent 4px);
+    color: var(--text-color);
+    font-family: var(--matrix-font);
+    letter-spacing: 0.025em;
+    text-shadow: 0 0 6px rgba(0, 255, 110, 0.25);
+    position: relative;
+    overflow-x: hidden;
+}
+
+[data-theme="matrix"] body::before,
+body.theme-matrix::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(0deg, rgba(0, 255, 110, 0.05), transparent 80%);
+    mix-blend-mode: screen;
+    z-index: -1;
+}
+
+body.bg-custom-page,
+body .bg-custom-page {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Botões personalizados -------------------------------------------------- */
+body .btn-custom-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+body .btn-custom-primary :is(h1, h2, h3, h4, h5, h6) {
+    color: inherit;
+}
+
+body .btn-custom-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+[data-theme="matrix"] .btn-custom-primary,
+body.theme-matrix .btn-custom-primary {
+    box-shadow: var(--shadow);
+    text-shadow: 0 0 4px rgba(0, 255, 110, 0.45);
+}
+
+[data-theme="matrix"] .btn-custom-primary:hover,
+body.theme-matrix .btn-custom-primary:hover {
+    box-shadow: 0 0 22px rgba(0, 255, 128, 0.55);
+    filter: brightness(1.05);
+}
+
+body .btn-custom-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+body .btn-custom-secondary:hover {
+    filter: brightness(1.05);
+}
+
+[data-theme="matrix"] .btn-custom-secondary,
+body.theme-matrix .btn-custom-secondary {
+    color: var(--btn-fg);
+    background-color: var(--btn-bg);
+    border-color: var(--btn-border);
+    box-shadow: var(--shadow);
+}
+
+[data-theme="matrix"] .btn-custom-secondary:hover,
+body.theme-matrix .btn-custom-secondary:hover {
+    box-shadow: 0 0 22px rgba(0, 255, 128, 0.45);
+}
+
+[data-theme="matrix"] .btn-pill-blue,
+body.theme-matrix .btn-pill-blue {
+    background-image: linear-gradient(135deg, rgba(0, 123, 255, 0.85), rgba(30, 150, 255, 0.95));
+    color: #e6f4ff;
+    border: 1px solid rgba(0, 180, 255, 0.65);
+    box-shadow:
+        0 0 22px rgba(0, 180, 255, 0.45),
+        0 0 12px rgba(0, 255, 128, 0.25);
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+[data-theme="matrix"] .btn-pill-red,
+body.theme-matrix .btn-pill-red {
+    background-image: linear-gradient(135deg, rgba(255, 32, 32, 0.85), rgba(255, 0, 0, 0.95));
+    color: #ffe6e6;
+    border: 1px solid rgba(255, 90, 90, 0.65);
+    box-shadow:
+        0 0 22px rgba(255, 60, 60, 0.45),
+        0 0 12px rgba(0, 255, 128, 0.25);
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+/* Acessibilidade do botão Limpar */
+#clearButton,
+#clearButton strong {
+    color: var(--clear-button-text, var(--text-color, #1f2937));
+}
+
+#clearButton.btn-success,
+#clearButton.btn-success strong {
+    color: #ffffff;
+}
+
+#clearButton:not(.btn-success):hover,
+#clearButton:not(.btn-success):active {
+    color: var(--text-color, #1f2937);
+}
+
+#clearButton:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+#clearButton:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
+/* Formulários e conteúdos ------------------------------------------------ */
+body .input-custom {
+    background-color: var(--input-background);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+body .card-custom {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+body .list-group-item-custom {
+    background-color: var(--input-background);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+body .list-group-item-custom:hover {
+    background-color: var(--card-background);
+}
+
+body blockquote {
+    color: var(--text-color);
+    border-left: 4px solid var(--primary-color);
+}
+
+body .text-primary {
+    color: var(--primary-color) !important;
+}
+
+body .text-secondary {
+    color: var(--text-color) !important;
+}
+
+body .blockquote-footer {
+    color: var(--text-color) !important;
+}
+
+body .bg-custom-dark {
+    background-color: var(--footer-background);
+    color: var(--footer-text);
+}
+
+body .bg-custom-dark a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+body .bg-custom-dark a:hover,
+body .bg-custom-dark a:focus-visible {
+    color: var(--secondary-color);
+}
+
+body .text-custom {
+    color: var(--footer-text) !important;
+}
+
+/* Tipografia ------------------------------------------------------------- */
+body h2,
+body h3,
+body h5,
+body h6 {
+    color: var(--text-color);
+}
+
+body h1,
+body h4 {
+    color: var(--primary-color);
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-default,
+body.theme-matrix #toolbox-title .toolbox-title-default {
+    display: none;
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-matrix,
+body.theme-matrix #toolbox-title .toolbox-title-matrix {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-matrix.glitch,
+body.theme-matrix #toolbox-title .toolbox-title-matrix.glitch {
+    animation-duration: 4.5s;
+    animation-timing-function: steps(14);
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-matrix.glitch::before,
+body.theme-matrix #toolbox-title .toolbox-title-matrix.glitch::before {
+    transform: translate3d(-1px, -0.5px, 0);
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-title-matrix.glitch::after,
+body.theme-matrix #toolbox-title .toolbox-title-matrix.glitch::after {
+    transform: translate3d(1px, 0.5px, 0);
+}
+
+#toolbox-title .toolbox-title-matrix {
+    display: none;
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-icon-default,
+body.theme-matrix #toolbox-title .toolbox-icon-default {
+    display: none;
+}
+
+[data-theme="matrix"] #toolbox-title .toolbox-icon-matrix,
+body.theme-matrix #toolbox-title .toolbox-icon-matrix {
+    display: inline-flex;
+    filter:
+        drop-shadow(0 0 6px rgba(0, 255, 128, 0.4))
+        drop-shadow(0 0 8px rgba(255, 0, 0, 0.35));
+}
+
+#toolbox-title .toolbox-icon-matrix {
+    display: none;
+}
+
+[data-theme="matrix"] h1,
+[data-theme="matrix"] h2,
+[data-theme="matrix"] h3,
+[data-theme="matrix"] h4,
+[data-theme="matrix"] h5,
+[data-theme="matrix"] h6,
+body.theme-matrix h1,
+body.theme-matrix h2,
+body.theme-matrix h3,
+body.theme-matrix h4,
+body.theme-matrix h5,
+body.theme-matrix h6 {
+    color: var(--color-fg);
+    text-shadow:
+        0 0 8px rgba(0, 255, 128, 0.35),
+        0 0 16px rgba(0, 255, 128, 0.2);
+    letter-spacing: 0.04em;
+}
+
+[data-theme="matrix"] h1.typing,
+body.theme-matrix h1.typing {
+    max-width: 100%;
+}
+
+/* Links ------------------------------------------------------------------ */
+body a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+body a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+[data-theme="matrix"] a,
+body.theme-matrix a {
+    color: var(--color-fg);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+[data-theme="matrix"] a:hover,
+[data-theme="matrix"] a:focus-visible,
+body.theme-matrix a:hover,
+body.theme-matrix a:focus-visible {
+    color: var(--color-primary);
+    text-decoration: none;
+    text-shadow: 0 0 15px rgba(0, 255, 128, 0.6);
+}
+
+/* Ajustes diversos ------------------------------------------------------- */
+body button,
+body .form-control,
+body .list-group-item {
+    border-radius: 8px;
+}
+
+body .texto-biblico {
+    font-style: italic;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.app-divider {
+    border: 0;
+    border-top: 2px solid var(--divider-color, rgba(0, 0, 0, 0.25));
+    opacity: 1;
+}
+
+/* Animações -------------------------------------------------------------- */
+body .btn-pulsante {
+    animation: pulse 1.5s infinite;
+}
+
+[data-theme="matrix"] .glitch,
+body.theme-matrix .glitch {
+    position: relative;
+    display: inline-block;
+    color: var(--color-fg);
+    text-shadow:
+        0 0 6px rgba(0, 255, 128, 0.4),
+        0 0 12px rgba(0, 255, 128, 0.2);
+    animation: matrixGlitch 2.75s infinite steps(12);
+}
+
+[data-theme="matrix"] .glitch::before,
+[data-theme="matrix"] .glitch::after,
+body.theme-matrix .glitch::before,
+body.theme-matrix .glitch::after {
+    content: attr(data-glitch);
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    mix-blend-mode: screen;
+    opacity: 0.65;
+}
+
+[data-theme="matrix"] .glitch::before,
+body.theme-matrix .glitch::before {
+    color: rgba(0, 255, 140, 0.8);
+    transform: translate3d(-2px, -1px, 0);
+    clip-path: inset(0 0 60% 0);
+}
+
+[data-theme="matrix"] .glitch::after,
+body.theme-matrix .glitch::after {
+    color: rgba(0, 200, 255, 0.55);
+    transform: translate3d(2px, 1px, 0);
+    clip-path: inset(40% 0 0 0);
+}
+
+[data-theme="matrix"] .typing,
+body.theme-matrix .typing {
+    display: inline-block;
+    overflow: hidden;
+    border-right: 0.15em solid var(--color-accent);
+    white-space: nowrap;
+    animation:
+        matrixType 3s steps(40, end),
+        matrixCaret 0.7s steps(1, end) infinite;
+}
+
+[data-theme="matrix"] .btn-pill-blue:hover,
+[data-theme="matrix"] .btn-pill-red:hover,
+body.theme-matrix .btn-pill-blue:hover,
+body.theme-matrix .btn-pill-red:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    box-shadow:
+        0 0 28px rgba(0, 255, 128, 0.3),
+        0 0 24px rgba(0, 255, 128, 0.35);
+}
+
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn {
+    background-color: rgba(0, 32, 0, 0.65);
+    color: var(--color-primary);
+    border-color: rgba(0, 255, 128, 0.45);
+    box-shadow: 0 0 14px rgba(0, 255, 128, 0.28);
+}
+
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn:hover,
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn:focus-visible,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn:hover,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn:focus-visible {
+    background-color: rgba(0, 40, 0, 0.85);
+    box-shadow:
+        0 0 22px rgba(0, 255, 128, 0.35),
+        0 0 12px rgba(0, 128, 0, 0.25);
+}
+
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn.is-active,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn.is-active {
+    background-color: rgba(0, 55, 0, 0.85);
+    border-color: rgba(0, 255, 128, 0.75);
+    box-shadow:
+        0 0 28px rgba(0, 255, 128, 0.45),
+        0 0 18px rgba(0, 128, 0, 0.28);
+}
+
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn:disabled,
+[data-theme="matrix"] .matrix-audio-mini .matrix-audio-btn[aria-disabled="true"],
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn:disabled,
+body.theme-matrix .matrix-audio-mini .matrix-audio-btn[aria-disabled="true"] {
+    background-color: rgba(0, 25, 0, 0.45);
+    border-color: rgba(0, 255, 128, 0.25);
+    box-shadow: none;
+    color: rgba(202, 255, 202, 0.35);
+}
+
+[data-theme="matrix"] .matrix-input-typing,
+body.theme-matrix .matrix-input-typing {
+    border-color: rgba(0, 255, 128, 0.7) !important;
+    box-shadow:
+        0 0 18px rgba(0, 255, 128, 0.35),
+        0 0 8px rgba(0, 128, 0, 0.25);
+    transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+[data-theme="matrix"] .btn-pill-blue:focus-visible,
+[data-theme="matrix"] .btn-pill-red:focus-visible,
+body.theme-matrix .btn-pill-blue:focus-visible,
+body.theme-matrix .btn-pill-red:focus-visible {
+    outline: 2px solid rgba(0, 255, 128, 0.75);
+    outline-offset: 4px;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 7px rgba(255, 0, 0, 0.8);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+}
+
+@keyframes matrixGlitch {
+    0%,
+    100% {
+        clip-path: inset(0 0 0 0);
+        transform: translate3d(0, 0, 0);
+    }
+    30% {
+        clip-path: inset(10% 0 85% 0);
+        transform: translate3d(2px, -2px, 0);
+    }
+    55% {
+        clip-path: inset(60% 0 15% 0);
+        transform: translate3d(-2px, 2px, 0);
+    }
+    80% {
+        clip-path: inset(20% 0 65% 0);
+        transform: translate3d(1px, -1px, 0);
+    }
+}
+
+@keyframes matrixType {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes matrixCaret {
+    0%,
+    50% {
+        border-color: transparent;
+    }
+    50.01%,
+    100% {
+        border-color: var(--color-accent);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-theme="matrix"] .glitch,
+    body.theme-matrix .glitch {
+        animation: none;
+    }
+
+    [data-theme="matrix"] .glitch::before,
+    [data-theme="matrix"] .glitch::after,
+    body.theme-matrix .glitch::before,
+    body.theme-matrix .glitch::after {
+        display: none;
+    }
+
+    [data-theme="matrix"] .typing,
+    body.theme-matrix .typing {
+        animation: none;
+        border-right: none;
+    }
+}
+
+/* Utilidades de acessibilidade ------------------------------------------ */
+body .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+}
+
+body .form-control::placeholder,
+body .input-custom::placeholder,
+body textarea::placeholder {
+    color: var(--placeholder-color, rgba(0, 0, 0, 0.45));
+}
+[data-theme="matrix"] .form-control:focus,
+[data-theme="matrix"] .input-custom:focus,
+body.theme-matrix .form-control:focus,
+body.theme-matrix .input-custom:focus {
+    background-color: var(--input-background);
+    color: var(--text-color);
+    border-color: rgba(0, 255, 128, 0.6);
+    box-shadow:
+        0 0 0 0.25rem rgba(0, 255, 128, 0.25),
+        0 0 12px rgba(0, 255, 128, 0.35);
+}
+
+[data-theme="matrix"] .form-control:focus::placeholder,
+[data-theme="matrix"] .input-custom:focus::placeholder,
+body.theme-matrix .form-control:focus::placeholder,
+body.theme-matrix .input-custom:focus::placeholder {
+    color: rgba(0, 255, 128, 0.6);
+}

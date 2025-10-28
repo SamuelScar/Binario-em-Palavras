@@ -1,0 +1,14 @@
+<tipo>(<escopo opcional>): <título curto no imperativo, sem ponto>
+
+- <bullet 1 objetivo>
+- <bullet 2 objetivo>
+- <bullet 3 objetivo>
+
+Contexto: <por que/como brevemente>
+Risco: BAIXO
+Validação: <como verificou>
+
+# Dicas
+# - Tipos: feat, fix, docs, refactor, chore, test, build, ci, perf
+# - Escopo: js, api, a11y, converter, theme, rain, audio, docs, styles (opcional)
+# - Ative o template localmente: `git config commit.template .gitmessage`

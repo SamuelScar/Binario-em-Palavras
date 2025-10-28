@@ -1,14 +1,13 @@
 export default {
-    root: "public",
-    build: {
-      outDir: "../dist",
-      emptyOutDir: true,
+  build: {
+    outDir: "dist",
+    emptyOutDir: true
+  },
+  publicDir: "public",
+  server: {
+    watch: {
+      usePolling: true,
     },
-    server: {
-      watch: {
-        usePolling: true,
-      },
-      open: true,
-    },
-  };
-  
+    open: true,
+  },
+};

@@ -1,0 +1,475 @@
+/* =============================================================================
+   accessibility.css — Painel e controles auxiliares de acessibilidade
+   -----------------------------------------------------------------------------
+   Define variáveis, botões flutuantes, painel lateral e ajustes responsivos
+   utilizados pelo módulo de acessibilidade.
+   ========================================================================== */
+
+/* ---------- Variáveis e estados globais ---------- */
+body {
+  --acc-z: 9999;
+  --acc-width: 320px;
+  --acc-toggle-top: 1.5rem;
+  --acc-toggle-left: 1.5rem;
+  --acc-toggle-right: auto;
+  --acc-toggle-translate-y: 0;
+  --acc-transition-duration: 0.3s;
+  --acc-backdrop-bg: rgba(17, 24, 39, 0.4);
+  --acc-panel-bg: #f7f9fc;
+  --acc-panel-color: #1f2933;
+  --acc-panel-border: #cfd8e3;
+  --acc-focus-ring: 0 0 0 3px rgba(0, 91, 187, 0.35);
+}
+
+body.is-open {
+  overflow: hidden;
+}
+
+/* ---------- Botão flutuante ---------- */
+.acc-toggle {
+  position: fixed;
+  top: var(--acc-toggle-top);
+  left: var(--acc-toggle-left);
+  right: var(--acc-toggle-right);
+  z-index: calc(var(--acc-z) + 2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 0;
+  background-color: #0b5ed7;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.25);
+  transform: translateY(var(--acc-toggle-translate-y));
+  transition:
+    transform var(--acc-transition-duration) ease,
+    box-shadow var(--acc-transition-duration) ease;
+}
+
+.acc-toggle:hover,
+.acc-toggle:focus {
+  transform: translateY(calc(var(--acc-toggle-translate-y) - 2px));
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.3);
+}
+
+.acc-toggle:focus {
+  outline: none;
+  box-shadow: var(--acc-focus-ring);
+}
+
+/* ---------- Backdrop ---------- */
+.acc-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: var(--acc-backdrop-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--acc-transition-duration) ease;
+  z-index: calc(var(--acc-z));
+}
+
+.acc-backdrop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.acc-backdrop[hidden],
+.acc-panel[hidden] {
+  display: none;
+}
+
+/* ---------- Painel lateral ---------- */
+.acc-panel {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(var(--acc-width), 100vw);
+  max-width: 100%;
+  background-color: var(--acc-panel-bg);
+  color: var(--acc-panel-color);
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.2);
+  border-right: 1px solid var(--acc-panel-border);
+  transform: translateX(-100%);
+  transition: transform var(--acc-transition-duration) ease;
+  z-index: calc(var(--acc-z) + 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.acc-panel.is-open {
+  transform: translateX(0);
+}
+
+.acc-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--acc-panel-border);
+}
+
+.acc-panel__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.acc-panel__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition:
+    background-color var(--acc-transition-duration) ease,
+    color var(--acc-transition-duration) ease;
+}
+
+.acc-panel__close:hover {
+  background-color: rgba(15, 23, 42, 0.08);
+}
+
+.acc-panel__close:focus {
+  outline: none;
+  border-color: rgba(11, 94, 215, 0.35);
+  box-shadow: var(--acc-focus-ring);
+}
+
+.acc-panel__body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.acc-panel__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--acc-panel-border);
+}
+
+/* ---------- Lista de ações ---------- */
+.acc-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.acc-list__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.acc-panel__hint {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: rgba(31, 41, 51, 0.75);
+}
+
+/* ---------- Botões ---------- */
+.acc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--acc-panel-border);
+  background-color: #ffffff;
+  color: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color var(--acc-transition-duration) ease,
+    box-shadow var(--acc-transition-duration) ease,
+    background-color var(--acc-transition-duration) ease;
+}
+
+.acc-btn:hover {
+  background-color: #edf2fb;
+  border-color: rgba(11, 94, 215, 0.35);
+}
+
+.acc-btn:focus {
+  outline: none;
+  box-shadow: var(--acc-focus-ring);
+  border-color: rgba(11, 94, 215, 0.35);
+}
+
+.acc-btn--active,
+.acc-btn[aria-pressed="true"] {
+  background-color: #0b5ed7;
+  color: #ffffff;
+  border-color: rgba(11, 94, 215, 0.45);
+}
+
+.acc-btn--active:hover,
+.acc-btn[aria-pressed="true"]:hover {
+  background-color: #0a53c1;
+}
+
+.acc-btn[disabled],
+.acc-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.acc-btn[disabled]:focus,
+.acc-btn[aria-disabled="true"]:focus {
+  box-shadow: none;
+}
+
+.acc-btn--secondary {
+  background-color: #0b5ed7;
+  color: #ffffff;
+}
+
+.acc-btn--secondary:hover {
+  background-color: #0a53c1;
+}
+
+.acc-btn--secondary:focus {
+  box-shadow: var(--acc-focus-ring);
+}
+
+.acc-btn--reset {
+  color: #c81e1e;
+  border-color: rgba(200, 30, 30, 0.25);
+}
+
+.acc-btn--reset:hover {
+  background-color: rgba(200, 30, 30, 0.08);
+  border-color: rgba(200, 30, 30, 0.4);
+}
+
+/* ---------- Slots opcionais e links ---------- */
+.acc-panel__slot {
+  min-height: 2.5rem;
+  border: 1px dashed var(--acc-panel-border);
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+}
+
+.acc-link {
+  color: #0b5ed7;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.acc-link:hover,
+.acc-link:focus {
+  text-decoration: underline;
+}
+
+a.is-acc-underlined {
+  text-decoration: underline !important;
+}
+
+/* ---------- Modos de cor ---------- */
+body.acc-mode--grayscale [data-acc-grayscale-target] {
+  filter: grayscale(100%);
+}
+
+body.acc-mode--high-contrast {
+  --primary-color: #ffd400;
+  --secondary-color: #ffffff;
+  --background-color: #000000;
+  --input-background: #000000;
+  --border-color: #ffd400;
+  --text-color: #ffd400;
+  --card-background: #000000;
+  --placeholder-color: rgba(255, 212, 0, 0.7);
+  --divider-color: rgba(255, 212, 0, 0.6);
+  --footer-background: #000000;
+  --footer-text: #ffffff;
+  --clear-button-text: #000000;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.acc-mode--negative-contrast {
+  --primary-color: #ffffff;
+  --secondary-color: #d0d0d0;
+  --background-color: #1a1a1a;
+  --input-background: #262626;
+  --border-color: #3d3d3d;
+  --text-color: #f5f5f5;
+  --card-background: #212121;
+  --placeholder-color: rgba(245, 245, 245, 0.6);
+  --divider-color: rgba(255, 255, 255, 0.35);
+  --footer-background: #111111;
+  --footer-text: #f5f5f5;
+  --clear-button-text: #f5f5f5;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.acc-mode--light-background {
+  --primary-color: #1a56db;
+  --secondary-color: #2563eb;
+  --background-color: #f8fafc;
+  --input-background: #ffffff;
+  --border-color: #cbd5f5;
+  --text-color: #111827;
+  --card-background: #ffffff;
+  --placeholder-color: rgba(15, 23, 42, 0.5);
+  --divider-color: rgba(148, 163, 184, 0.6);
+  --footer-background: #e2e8f0;
+  --footer-text: #0f172a;
+  --clear-button-text: #0f172a;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.acc-mode--high-contrast .bg-custom-page,
+body.acc-mode--negative-contrast .bg-custom-page,
+body.acc-mode--light-background .bg-custom-page {
+  background-color: var(--card-background);
+  color: var(--text-color);
+}
+
+body.acc-mode--high-contrast a,
+body.acc-mode--negative-contrast a,
+body.acc-mode--light-background a {
+  color: var(--primary-color);
+}
+
+body.acc-mode--high-contrast .acc-panel__hint,
+body.acc-mode--negative-contrast .acc-panel__hint,
+body.acc-mode--light-background .acc-panel__hint {
+  color: var(--text-color);
+}
+
+body.acc-mode--high-contrast .acc-toggle,
+body.acc-mode--negative-contrast .acc-toggle {
+  background-color: var(--primary-color);
+  color: #000000;
+}
+
+body.acc-mode--light-background .acc-toggle {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+body.acc-mode--negative-contrast .btn-custom-primary,
+body.acc-mode--negative-contrast .btn-custom-primary:hover,
+body.acc-mode--negative-contrast .btn-custom-primary:focus,
+body.acc-mode--negative-contrast .btn-custom-primary:active,
+body.acc-mode--negative-contrast .btn-custom-secondary,
+body.acc-mode--negative-contrast .btn-custom-secondary:hover,
+body.acc-mode--negative-contrast .btn-custom-secondary:focus,
+body.acc-mode--negative-contrast .btn-custom-secondary:active {
+  color: #0f0f0f;
+}
+
+body.acc-mode--negative-contrast .btn-custom-primary strong,
+body.acc-mode--negative-contrast .btn-custom-secondary strong,
+body.acc-mode--negative-contrast .btn-custom-primary span,
+body.acc-mode--negative-contrast .btn-custom-secondary span,
+body.acc-mode--negative-contrast .btn-custom-primary i,
+body.acc-mode--negative-contrast .btn-custom-secondary i {
+  color: currentColor;
+}
+
+body.acc-mode--negative-contrast #clearButton,
+body.acc-mode--negative-contrast #clearButton:hover,
+body.acc-mode--negative-contrast #clearButton:focus {
+  color: #0f0f0f;
+}
+body.acc-mode--negative-contrast #clearButton strong,
+body.acc-mode--negative-contrast #clearButton span,
+body.acc-mode--negative-contrast #clearButton i {
+  color: #0f0f0f;
+}
+
+body.acc-mode--negative-contrast .btn-success,
+body.acc-mode--negative-contrast .btn-success:hover,
+body.acc-mode--negative-contrast .btn-success:focus,
+body.acc-mode--negative-contrast .btn-success:active {
+  color: #ffffff;
+}
+
+body.acc-mode--negative-contrast .btn-success strong,
+body.acc-mode--negative-contrast .btn-success span,
+body.acc-mode--negative-contrast .btn-success i {
+  color: currentColor;
+}
+
+body.acc-mode--light-background .btn-custom-primary,
+body.acc-mode--light-background .btn-custom-secondary,
+body.acc-mode--light-background .btn-custom-primary:hover,
+body.acc-mode--light-background .btn-custom-secondary:hover,
+body.acc-mode--light-background .btn-custom-primary:focus,
+body.acc-mode--light-background .btn-custom-secondary:focus,
+body.acc-mode--light-background .btn-custom-primary:active,
+body.acc-mode--light-background .btn-custom-secondary:active {
+  color: #ffffff;
+}
+
+body.acc-mode--light-background #clearButton,
+body.acc-mode--light-background #clearButton:hover,
+body.acc-mode--light-background #clearButton:focus {
+  color: var(--clear-button-text);
+}
+
+body.acc-mode--high-contrast .btn-outline-secondary {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+body.acc-mode--high-contrast .btn-outline-secondary:hover,
+body.acc-mode--high-contrast .btn-outline-secondary:focus-visible {
+  background-color: rgba(255, 212, 0, 0.2);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+body.acc-mode--negative-contrast .btn-outline-secondary {
+  border-color: rgba(255, 255, 255, 0.65);
+  color: inherit;
+}
+
+body.acc-mode--negative-contrast .btn-outline-secondary:hover,
+body.acc-mode--negative-contrast .btn-outline-secondary:focus-visible {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.85);
+  color: inherit;
+}
+
+body.acc-mode--light-background .btn-outline-secondary {
+  border-color: rgba(148, 163, 184, 0.6);
+  color: var(--text-color);
+}
+
+body.acc-mode--light-background .btn-outline-secondary:hover,
+body.acc-mode--light-background .btn-outline-secondary:focus-visible {
+  background-color: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.7);
+  color: var(--text-color);
+}
+
+/* ---------- Preferências do usuário ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .acc-toggle,
+  .acc-backdrop,
+  .acc-panel,
+  .acc-btn {
+    transition: none;
+  }
+}
