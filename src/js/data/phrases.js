@@ -1,5 +1,10 @@
+/**
+ * Mapeamento de caracteres ASCII para cadeias binárias (UTF-8, 8 bits).
+ * Usado pela interface para compor conversões e o dicionário interativo.
+ * Mantido simples para leitura e interoperabilidade no front-end.
+ * @type {Record<string, string>}
+ */
 export const dictionary = {
-  // Letras minúsculas
   a: "01100001", b: "01100010", c: "01100011", d: "01100100",
   e: "01100101", f: "01100110", g: "01100111", h: "01101000",
   i: "01101001", j: "01101010", k: "01101011", l: "01101100",
@@ -8,7 +13,6 @@ export const dictionary = {
   u: "01110101", v: "01110110", w: "01110111", x: "01111000",
   y: "01111001", z: "01111010",
 
-  // Letras maiúsculas
   A: "01000001", B: "01000010", C: "01000011", D: "01000100",
   E: "01000101", F: "01000110", G: "01000111", H: "01001000",
   I: "01001001", J: "01001010", K: "01001011", L: "01001100",
@@ -17,12 +21,10 @@ export const dictionary = {
   U: "01010101", V: "01010110", W: "01010111", X: "01011000",
   Y: "01011001", Z: "01011010",
 
-  // Números
   "0": "00110000", "1": "00110001", "2": "00110010", "3": "00110011",
   "4": "00110100", "5": "00110101", "6": "00110110", "7": "00110111",
   "8": "00111000", "9": "00111001",
 
-  // Símbolos comuns
   " ": "00100000", "!": "00100001", "\"": "00100010", "#": "00100011",
   "$": "00100100", "%": "00100101", "&": "00100110", "'": "00100111",
   "(": "00101000", ")": "00101001", "*": "00101010", "+": "00101011",
@@ -35,6 +37,10 @@ export const dictionary = {
 };
 
   
+/**
+ * Frases rápidas utilizadas como sugestões na interface.
+ * @type {string[]}
+ */
 export const phrases = [
   "Deus",
   "Fé",
@@ -106,6 +112,10 @@ export const phrases = [
 ];
 
 
+/**
+ * Trechos bíblicos usados para demonstração e inspiração na interface.
+ * @type {string[]}
+ */
 export const biblicalPhrases = [
   "Provérbios 15:1 - A resposta branda desvia o furor, mas a palavra dura suscita a ira.",
   "Provérbios 18:21 - A morte e a vida estão no poder da língua; quem bem a utiliza come do seu fruto.",

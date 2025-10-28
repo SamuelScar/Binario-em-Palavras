@@ -2,9 +2,11 @@ const nodemailer = require("nodemailer");
 
 /**
  * Vercel serverless function responsável por enviar e-mails com o feedback dos usuários.
- * Espera um corpo em JSON com os campos:
- * - type: "bug" | "suggestion" (string obrigatória)
- * - name, email, message, page, userAgent
+ * Espera um corpo em JSON com os campos: type ("bug"|"suggestion"), name, email,
+ * message, page e userAgent. Mantém o comportamento e contratos existentes.
+ * @param {import('http').IncomingMessage & { method?: string, body?: any }} req
+ * @param {import('http').ServerResponse & { setHeader(name: string, value: string|string[]): void, status(code: number): any, json(payload: any): void }} res
+ * @returns {Promise<void>}
  */
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -51,6 +53,11 @@ module.exports = async function handler(req, res) {
   }
 };
 
+/**
+ * Cria um transporter do nodemailer a partir de variáveis de ambiente.
+ * @returns {import('nodemailer').Transporter}
+ * @throws {Error} Quando variáveis obrigatórias não estão configuradas.
+ */
 function createTransporter() {
   const host = process.env.SMTP_HOST;
   const port = Number(process.env.SMTP_PORT || 587);
@@ -77,6 +84,11 @@ function createTransporter() {
   });
 }
 
+/**
+ * Monta o payload de e-mail (assunto, texto e HTML) com sanitização simples.
+ * @param {{type: string, name?: string, email?: string, message: string, page?: string, userAgent?: string}} params
+ * @returns {import('nodemailer').SendMailOptions}
+ */
 function buildEmailPayload({
   type,
   name,
@@ -129,6 +141,11 @@ function buildEmailPayload({
   };
 }
 
+/**
+ * Sanitiza valores para evitar HTML injection básico no e-mail.
+ * @param {unknown} value
+ * @returns {string}
+ */
 function sanitize(value) {
   if (!value) {
     return "";

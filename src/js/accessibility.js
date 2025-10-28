@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Painel de Acessibilidade (IIFE):
+ * fornece ajustes de fonte, contraste, sublinhado de links e integração com
+ * o gerenciador de temas. Implementação focada em compatibilidade ampla
+ * (sem bundlers) e sem dependências externas além de Bootstrap para popover.
+ */
 (function () {
   'use strict';
 
