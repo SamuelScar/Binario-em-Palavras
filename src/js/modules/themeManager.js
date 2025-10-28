@@ -1,3 +1,9 @@
+/**
+ * Gerenciamento de temas da aplicação (padrão, dark e Matrix), incluindo
+ * sincronização com controles de UI, atributo data-theme e efeito visual Matrix.
+ * As funções expostas mantêm compatibilidade com chamadas existentes.
+ * @module ThemeManager
+ */
 const DEFAULT_THEME = "default";
 const MATRIX_THEME_VALUE = "matrix";
 const MATRIX_THEME_CLASS = "theme-matrix";
@@ -40,6 +46,12 @@ function ensureBaseClasses() {
  * Aplica o tema selecionado ao body do documento.
  * @param {string} themeName - Classe de tema ou "default" para os estilos base.
  */
+/**
+ * Aplica o tema selecionado ao documento e sincroniza UI/estado persistente.
+ * Não altera contratos públicos nem classes externas além das previstas.
+ * @param {string} themeName Nome do tema (por exemplo: "default", "dark", "matrix" ou classes iniciadas por "theme-").
+ * @returns {void}
+ */
 export function applyTheme(themeName) {
   const value = themeName || DEFAULT_THEME;
 
@@ -72,6 +84,12 @@ export function applyTheme(themeName) {
  * Configura o controle de temas via elemento select. A escolha do usuário é
  * salva em sessionStorage e reaplicada ao recarregar a página.
  * @param {{ selectId?: string }} [options] - Objeto de configuração.
+ */
+/**
+ * Inicializa o gerenciador de temas, conectando select/opções/toggle da interface.
+ * Persiste a seleção (exceto Matrix) via sessionStorage e reidrata ao carregar.
+ * @param {{ selectId?: string, optionSelector?: string, toggleSelector?: string }} [options]
+ * @returns {void}
  */
 export function initThemeManager(options = {}) {
   const {
@@ -124,6 +142,11 @@ export function initThemeManager(options = {}) {
   }
 }
 
+/**
+ * Resolve a classe CSS correspondente a um valor de tema.
+ * @param {string} themeName Valor lógico do tema.
+ * @returns {string|null} Classe a aplicar no body ou null para o tema padrão.
+ */
 function resolveThemeClass(themeName) {
   if (!themeName || themeName === DEFAULT_THEME) {
     return null;
@@ -140,6 +163,11 @@ function resolveThemeClass(themeName) {
   return themeName;
 }
 
+/**
+ * Normaliza o valor do tema para uso no atributo data-theme.
+ * @param {string} themeName
+ * @returns {string}
+ */
 function sanitizeThemeKey(themeName) {
   if (!themeName) {
     return DEFAULT_THEME;
@@ -160,6 +188,11 @@ function sanitizeThemeKey(themeName) {
   return themeName;
 }
 
+/**
+ * Define ou remove o atributo data-theme no elemento root do documento.
+ * @param {string} themeName
+ * @returns {void}
+ */
 function setThemeAttribute(themeName) {
   const root = document.documentElement;
 
@@ -177,6 +210,11 @@ function setThemeAttribute(themeName) {
   root.setAttribute(DATA_THEME_ATTR, sanitized);
 }
 
+/**
+ * Inicia ou encerra o efeito Matrix conforme o tema ativo.
+ * @param {string} themeName
+ * @returns {void}
+ */
 function manageMatrixEffect(themeName) {
   const sanitized = sanitizeThemeKey(themeName);
   shouldRunMatrixEffect = sanitized === MATRIX_THEME_VALUE;
@@ -189,12 +227,22 @@ function manageMatrixEffect(themeName) {
   stopMatrixEffect();
 }
 
+/**
+ * Emite evento personalizado notificando mudança de tema.
+ * @param {string} themeName
+ * @returns {void}
+ */
 function notifyThemeChange(themeName) {
   const sanitized = sanitizeThemeKey(themeName);
   const detail = { theme: sanitized };
   document.dispatchEvent(new CustomEvent("binario:theme-change", { detail }));
 }
 
+/**
+ * Carrega sob demanda e inicializa o efeito visual Matrix.
+ * Respeita preferência já ativa para evitar múltiplas inicializações.
+ * @returns {void}
+ */
 function startMatrixEffect() {
   if (isMatrixEffectActive) {
     return;
@@ -233,6 +281,11 @@ function startMatrixEffect() {
   }
 }
 
+/**
+ * Interrompe o efeito visual Matrix e remove listeners associados.
+ * Opera de forma idempotente quando o módulo ainda estiver carregando.
+ * @returns {void}
+ */
 function stopMatrixEffect() {
   if (matrixRainModulePromise) {
     matrixRainModulePromise
@@ -262,12 +315,22 @@ function stopMatrixEffect() {
   isMatrixEffectActive = false;
 }
 
+/**
+ * Mantém o elemento select sincronizado com o tema ativo.
+ * @param {HTMLSelectElement|null} themeSelect
+ * @param {string} value
+ */
 function syncThemeSelect(themeSelect, value) {
   if (themeSelect && themeSelect.value !== value) {
     themeSelect.value = value;
   }
 }
 
+/**
+ * Atualiza estado visual de botões/opções de tema.
+ * @param {HTMLElement[]} themeOptions Lista de botões/opções.
+ * @param {string} activeTheme Tema ativo.
+ */
 function updateThemeOptions(themeOptions, activeTheme) {
   if (!themeOptions.length) {
     return;
@@ -282,6 +345,12 @@ function updateThemeOptions(themeOptions, activeTheme) {
   });
 }
 
+/**
+ * Ajusta rótulos ARIA e popover do controle de seleção de tema.
+ * @param {HTMLElement|null} themeToggle
+ * @param {string} activeTheme
+ * @param {HTMLElement[]} themeOptions
+ */
 function updateThemeToggle(themeToggle, activeTheme, themeOptions) {
   if (!themeToggle) {
     return;
@@ -296,6 +365,12 @@ function updateThemeToggle(themeToggle, activeTheme, themeOptions) {
   updateThemeTogglePopover(themeToggle, friendlyLabel);
 }
 
+/**
+ * Recria o Popover do Bootstrap com o rótulo do tema atual.
+ * Evita vazamento mantendo uma única instância por gatilho.
+ * @param {HTMLElement|null} themeToggle
+ * @param {string} currentThemeLabel
+ */
 function updateThemeTogglePopover(themeToggle, currentThemeLabel) {
   if (!themeToggle || typeof bootstrap === "undefined" || !bootstrap.Popover) {
     return;
@@ -336,6 +411,12 @@ function updateThemeTogglePopover(themeToggle, currentThemeLabel) {
   }
 }
 
+/**
+ * Deriva rótulo amigável a partir dos botões de tema.
+ * @param {HTMLElement[]} themeOptions
+ * @param {string} themeValue
+ * @returns {string}
+ */
 function resolveThemeLabel(themeOptions, themeValue) {
   const activeOption = themeOptions.find(
     (option) => getThemeValue(option) === themeValue,
@@ -352,10 +433,20 @@ function resolveThemeLabel(themeOptions, themeValue) {
   );
 }
 
+/**
+ * Obtém o valor lógico do tema de um botão/opção.
+ * @param {HTMLElement} option
+ * @returns {string}
+ */
 function getThemeValue(option) {
   return option.dataset.themeOption || option.value || "";
 }
 
+/**
+ * Formata um rótulo de tema (ex.: "theme-vintage" -> "Vintage").
+ * @param {string} label
+ * @returns {string}
+ */
 function formatThemeLabel(label) {
   if (!label) {
     return "";
@@ -373,6 +464,10 @@ function formatThemeLabel(label) {
   return label;
 }
 
+/**
+ * Obtém o tema persistido, padronizando para "default" quando for Matrix.
+ * @returns {string}
+ */
 export function getActiveTheme() {
   const stored = sessionStorage.getItem("theme");
   if (!stored || stored === MATRIX_THEME_VALUE) {
@@ -381,6 +476,11 @@ export function getActiveTheme() {
   return stored;
 }
 
+/**
+ * API pública para alterar o tema e sincronizar UI relacionada.
+ * @param {string} themeName
+ * @returns {void}
+ */
 export function setTheme(themeName) {
   const value = themeName || DEFAULT_THEME;
 
@@ -390,6 +490,10 @@ export function setTheme(themeName) {
   updateThemeToggle(trackedThemeToggle, value, trackedThemeOptions);
 }
 
+/**
+ * Persiste o tema selecionado no sessionStorage, exceto Matrix.
+ * @param {string} themeName
+ */
 function persistTheme(themeName) {
   if (themeName && themeName !== MATRIX_THEME_VALUE) {
     sessionStorage.setItem("theme", themeName);

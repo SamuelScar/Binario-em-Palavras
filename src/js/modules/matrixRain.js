@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Efeito visual de "chuva" estilo Matrix em canvas 2D, com
+ * suporte a prefers-reduced-motion e pausa por visibilidade. Todas as funções
+ * preservam o comportamento atual e não expõem APIs públicas além de init/cleanup.
+ */
 const CHARACTER_SET = "01ABCDEFGHIJKLMNPQRSTUVWXYZ";
 const FONT_SIZE = 18;
 const TRAIL_OPACITY = 0.08;
@@ -155,6 +160,12 @@ function handleMotionPreferenceChange(event) {
   animationFrameId = window.requestAnimationFrame(drawFrame);
 }
 
+/**
+ * Inicializa o efeito Matrix no container indicado (padrão: body).
+ * É idempotente: não duplica canvas se já estiver anexado.
+ * @param {{container?: HTMLElement}} [options]
+ * @returns {void}
+ */
 export function init(options = {}) {
   if (typeof window === "undefined" || typeof document === "undefined") {
     return;
@@ -209,6 +220,11 @@ export function init(options = {}) {
   animationFrameId = window.requestAnimationFrame(drawFrame);
 }
 
+/**
+ * Remove o canvas, listeners e cancela animações, liberando recursos.
+ * É seguro chamar múltiplas vezes.
+ * @returns {void}
+ */
 export function cleanup() {
   if (typeof window === "undefined") {
     return;
